@@ -17,10 +17,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       theme: ThemeData(
-          primarySwatch: Colors.blue, // 主题颜色
-          splashColor: Colors.transparent, // 取消水波纹特效
-          highlightColor: Colors.transparent // 取消水波纹特效
-          ),
+        scaffoldBackgroundColor: Colors.white, //Scaffold的默认背景颜色
+        splashColor: Colors.transparent, // 取消水波纹特效
+        highlightColor: Colors.transparent, // 取消水波纹特效
+        backgroundColor: const Color.fromRGBO(229, 229, 229, 1),
+        bottomNavigationBarTheme:
+            BottomNavigationBarThemeData(backgroundColor: Colors.transparent),
+      ),
       home: HomeMenu(),
     );
   }

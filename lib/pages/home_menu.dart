@@ -3,6 +3,7 @@ import 'package:flutter_track/pages/discover.dart';
 import 'package:flutter_track/pages/user.dart';
 import 'package:flutter_track/pages/project.dart';
 import 'package:flutter_track/pages/information.dart';
+import './discover/news_page.dart';
 
 class HomeMenu extends StatefulWidget {
   HomeMenu({Key? key}) : super(key: key);
@@ -12,33 +13,91 @@ class HomeMenu extends StatefulWidget {
 }
 
 class _HomeMenuState extends State<HomeMenu> {
-  int index = 0;
+  int _index = 0;
   final List _pageList = [
     ProjectPage(),
     DiscoverPage(),
     InformationPage(),
     UserPage()
   ];
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pageList[index],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: index,
-        onTap: (int index) {
+
+  // 导航栏按钮样式
+
+  Widget _menuItem(IconData icon, int index, String title) {
+    return InkWell(
+        onTap: () {
           setState(() {
-            this.index = index;
+            _index = index;
           });
         },
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.schedule), label: '计划'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: '发现'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.data_saver_off), label: '数据'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: '个人'),
-        ],
-      ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 17.5, right: 17.5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                color: _index == index ? Colors.blue : Colors.white,
+                size: 40,
+              ),
+              Text(
+                title,
+                style: const TextStyle(
+                    color: Color.fromRGBO(255, 255, 255, 1), fontSize: 10),
+              )
+            ],
+          ),
+        ));
+  }
+
+  // 导航栏透明度
+  var _isNavShow = true;
+  String i = '1';
+  // 导航栏
+  Widget navigatorBar() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          height: 64,
+          width: 320,
+          decoration: BoxDecoration(
+              color: _isNavShow
+                  ? const Color.fromRGBO(43, 43, 43, 0.95)
+                  : const Color.fromRGBO(43, 43, 43, 0.2),
+              borderRadius: const BorderRadius.all(Radius.circular(43.3125))),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _menuItem(Icons.ac_unit, 0, '计划'),
+                _menuItem(Icons.ac_unit, 1, '发现'),
+                _menuItem(Icons.ac_unit, 2, '数据'),
+                _menuItem(
+                    const IconData(0xe60f, fontFamily: 'MyIcons'), 3, '个人'),
+              ]),
+        ),
+      ],
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double _phoneWidth = MediaQuery.of(context).size.width;
+    double distance = (_phoneWidth - 320) / 2;
+    return Scaffold(
+        body: NotificationListener<NavNotification>(
+      onNotification: (n) {
+        // print(n.isNavShow);
+        setState(() {
+          _isNavShow = n.isNavShow;
+        });
+        return true;
+      },
+      child: Stack(children: [
+        _pageList[_index],
+        Positioned(
+            left: distance, right: distance, bottom: 34, child: navigatorBar())
+      ]),
+    ));
   }
 }
