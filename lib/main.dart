@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'config/app_theme.dart';
 import './pages/reg_and_log.dart';
 import './pages/home_menu.dart';
 
@@ -15,16 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // 去除debug标签
       debugShowCheckedModeBanner: false,
-
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white, //Scaffold的默认背景颜色
-        splashColor: Colors.transparent, // 取消水波纹特效
-        highlightColor: Colors.transparent, // 取消水波纹特效
-        backgroundColor: const Color.fromRGBO(229, 229, 229, 1),
-        bottomNavigationBarTheme:
-            BottomNavigationBarThemeData(backgroundColor: Colors.transparent),
-      ),
-      home: HomeMenu(),
+      theme: theme,
+      home: const RegPageAndLogPage(),
+      // home: HomeMenu(),
     );
   }
 }
