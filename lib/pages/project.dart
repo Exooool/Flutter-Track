@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'components/custom_appbar.dart';
 
 class ProjectPage extends StatefulWidget {
   ProjectPage({Key? key}) : super(key: key);
@@ -11,9 +12,9 @@ class _ProjectPageState extends State<ProjectPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('计划'),
-        centerTitle: true,
+      appBar: CustomAppbar(
+        'infoPage',
+        title: '计划',
       ),
     );
   }

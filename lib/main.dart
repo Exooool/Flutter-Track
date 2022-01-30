@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'config/app_theme.dart';
 import './pages/reg_and_log.dart';
 import './pages/home_menu.dart';
+import 'pages/log/verify.dart';
+import 'pages/log/first_userinfo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +19,13 @@ class MyApp extends StatelessWidget {
       // 去除debug标签
       debugShowCheckedModeBanner: false,
       theme: theme,
-      home: const RegPageAndLogPage(),
+      initialRoute: '/log',
+      routes: {
+        '/log': (context) => const RegPageAndLogPage(),
+        '/home': (context) => HomeMenu(),
+        '/verify': (context) => VerifyPage(),
+        '/first_userinfo': (context) => FirstUserInfoPage(),
+      },
       // home: HomeMenu(),
     );
   }

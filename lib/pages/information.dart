@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'components/custom_appbar.dart';
 
 class InformationPage extends StatefulWidget {
   InformationPage({Key? key}) : super(key: key);
@@ -11,10 +12,9 @@ class _InformationPageState extends State<InformationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('数据'),
-        centerTitle: true,
-      ),
-    );
+        appBar: CustomAppbar(
+      'infoPage',
+      title: '数据',
+    ));
   }
 }

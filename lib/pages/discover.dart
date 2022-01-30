@@ -15,7 +15,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
-          appBar: createAppbar('discover'),
+          appBar: CustomAppbar('discover'),
           body: TabBarView(children: <Widget>[
             NewsComponent(),
             Center(
