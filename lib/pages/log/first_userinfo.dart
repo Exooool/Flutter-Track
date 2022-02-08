@@ -1,85 +1,65 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../components/custom_appbar.dart';
-import './interest_tag.dart';
 import '../components/custom_button.dart';
+import './userinfo_form/userinfo_form.dart';
 
 class FirstUserInfoPage extends StatefulWidget {
-  FirstUserInfoPage({Key? key}) : super(key: key);
+  const FirstUserInfoPage({Key? key}) : super(key: key);
 
   @override
   State<FirstUserInfoPage> createState() => _FirstUserInfoPageState();
 }
 
 class _FirstUserInfoPageState extends State<FirstUserInfoPage> {
-  List interest = [
-    '校园',
-    '语言',
-    '升学',
-    '心理',
-    '文学',
-    '生活',
-    '运动',
-    '读书',
-    '哲学',
-    '法学',
-    '经济学',
-    '艺术学',
-    '教育学',
-    '历史学',
-    '理学',
-    '工学',
-    '农学',
-    '医学',
-    '管理学',
-    '其它',
-  ];
-
-  // 兴趣列表
-  interstTag() {
-    return GridView.builder(
-      //解决无限高度问题
-      shrinkWrap: true,
-      //禁用滑动事件
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: interest.length,
-      itemBuilder: (BuildContext context, int index) {
-        return TagSelector(interest[index]);
-      },
-      padding: const EdgeInsets.only(left: 52, right: 52),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          //横轴三个子widget
-          mainAxisSpacing: 39,
-          crossAxisSpacing: 15,
-          childAspectRatio: 2),
-    );
-  }
-
-  // 基本信息
-  basicInfo() {
-    return Container(
-      child: Text('123'),
-    );
+  late List stepList;
+  late int stepindex;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    stepList = [
+      {'page': const SexSelector(), 'title': '您的性别'},
+      {'page': const InterestTag(), 'title': '您的兴趣'},
+      {'page': const BasicInfo(), 'title': '基本信息'}
+    ];
+    stepindex = 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    List pageList = [interstTag(), basicInfo()];
-    int pageindex = 0;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppbar(
         'firstUserInfoPage',
-        title: '您的性别',
+        title: stepList[stepindex]['title'],
+        leading: InkWell(
+          onTap: () {
+            setState(() {
+              if (stepindex > 0) {
+                stepindex -= 1;
+              }
+            });
+          },
+          child: const Text('返回'),
+        ),
       ),
       body: Column(children: <Widget>[
         const SizedBox(
           height: 80,
+          width: 10,
         ),
-        pageList[pageindex],
+        stepList[stepindex]['page'],
+        // BasicInfo(),
         CustomButton(
           '下一步',
           onpressed: () {
-            print('123');
+            print(stepindex);
+            if (stepindex + 1 < stepList.length) {
+              setState(() {
+                stepindex += 1;
+              });
+            }
           },
         )
       ]),

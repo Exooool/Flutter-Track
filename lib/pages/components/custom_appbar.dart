@@ -25,11 +25,14 @@ var discoverTitle = const SizedBox(
 );
 
 class CustomAppbar extends AppBar {
-  CustomAppbar(String page, {Key? key, String title = ''})
+  CustomAppbar(String page, {Key? key, String title = '', Widget? leading})
       : super(
           key: key,
           // 去除阴影
           // elevation: 0,
+          leading: Center(
+            child: leading,
+          ),
           // 设置appbar底部左右圆角边框
           shape: const RoundedRectangleBorder(
               side: BorderSide.none,

@@ -110,13 +110,15 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
               const SizedBox(
                 height: 200,
               ),
+
               Neumorphic(
                 style: const NeumorphicStyle(
                     depth: -3,
                     color: Color.fromRGBO(238, 238, 246, 1),
                     // color: Color(0xffEFECF0),
-                    boxShape: NeumorphicBoxShape.stadium()),
-                child: Container(
+                    boxShape: NeumorphicBoxShape.stadium(),
+                    lightSource: LightSource.topLeft),
+                child: SizedBox(
                   width: 300,
                   height: 56,
                   child: Form(
