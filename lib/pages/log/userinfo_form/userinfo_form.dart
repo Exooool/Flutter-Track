@@ -15,66 +15,65 @@ class BasicInfo extends StatefulWidget {
 class _BasicInfoState extends State<BasicInfo> {
   final ImagePicker _picker = ImagePicker();
   XFile? image;
-  Widget buildInput() {
-    List<Widget> list = [];
-    Widget content;
-    List inputList = ['昵称', '学校', '专业', '邮箱'];
-    for (var item in inputList) {
-      list.add(Padding(
-        padding: const EdgeInsets.only(top: 6, bottom: 6),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.only(
-                  top: 11, bottom: 11, left: 24, right: 24),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(90),
-                  gradient: const LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [
-                        Color.fromRGBO(107, 101, 244, 1),
-                        Color.fromRGBO(51, 84, 244, 1)
-                      ])),
-              child: Text(
-                item,
+  // 表单
+  final _formKey = GlobalKey<FormState>();
+
+  // 表单列
+  Widget formRow(String title, Function saveMethod) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6, bottom: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            padding:
+                const EdgeInsets.only(top: 11, bottom: 11, left: 24, right: 24),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(90),
+                gradient: const LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Color.fromRGBO(107, 101, 244, 1),
+                      Color.fromRGBO(51, 84, 244, 1)
+                    ])),
+            child: Text(
+              // 标题
+              title,
+              style: const TextStyle(
+                  color: Color.fromRGBO(240, 242, 243, 1), fontSize: 16),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Neumorphic(
+            style: const NeumorphicStyle(
+                depth: -2,
+                color: Color.fromRGBO(238, 238, 246, 1),
+                // color: Color(0xffEFECF0),
+                boxShape: NeumorphicBoxShape.stadium()),
+            child: SizedBox(
+              height: 44,
+              width: 273,
+              child: TextFormField(
+                onSaved: (value) {
+                  saveMethod(value);
+                },
                 style: const TextStyle(
-                    color: Color.fromRGBO(240, 242, 243, 1), fontSize: 16),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromRGBO(0, 0, 0, 1)),
+                textDirection: TextDirection.rtl,
+                decoration: const InputDecoration(
+                    hintText: '请输入',
+                    hintTextDirection: TextDirection.rtl,
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: 36, right: 36)),
               ),
             ),
-            const SizedBox(width: 12),
-            Neumorphic(
-              style: const NeumorphicStyle(
-                  depth: -2,
-                  color: Color.fromRGBO(238, 238, 246, 1),
-                  // color: Color(0xffEFECF0),
-                  boxShape: NeumorphicBoxShape.stadium()),
-              child: SizedBox(
-                height: 44,
-                width: 273,
-                child: TextFormField(
-                  style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(0, 0, 0, 1)),
-                  textDirection: TextDirection.rtl,
-                  decoration: const InputDecoration(
-                      hintText: '请输入',
-                      hintTextDirection: TextDirection.rtl,
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(left: 36, right: 36)),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ));
-    }
-    content = Column(
-      children: list,
+          ),
+        ],
+      ),
     );
-    return content;
   }
 
   _getImage() async {
@@ -96,32 +95,54 @@ class _BasicInfoState extends State<BasicInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Neumorphic(
-          style: const NeumorphicStyle(
-              depth: -2,
-              color: Color.fromRGBO(238, 238, 246, 1),
-              // color: Color(0xffEFECF0),
-              boxShape: NeumorphicBoxShape.stadium()),
-          child: SizedBox(
-              height: 88,
-              width: 88,
-              child: InkWell(
-                onTap: _getImage,
-                child: image == null
-                    ? const Icon(Icons.ac_unit)
-                    : Image.file(
-                        File(image!.path),
-                        fit: BoxFit.cover,
-                      ),
-              )),
-        ),
-        const Text('头像'),
-        const SizedBox(height: 68),
-        buildInput()
-      ],
-    );
+    return Column(children: <Widget>[
+      Neumorphic(
+        style: const NeumorphicStyle(
+            depth: -2,
+            color: Color.fromRGBO(238, 238, 246, 1),
+            // color: Color(0xffEFECF0),
+            boxShape: NeumorphicBoxShape.stadium()),
+        child: SizedBox(
+            height: 88,
+            width: 88,
+            child: InkWell(
+              onTap: _getImage,
+              child: image == null
+                  ? const SizedBox()
+                  : Image.file(
+                      File(image!.path),
+                      fit: BoxFit.cover,
+                    ),
+            )),
+      ),
+      const Text('头像'),
+      const SizedBox(height: 68),
+      Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              formRow('昵称', (value) {
+                print('昵称:$value');
+              }),
+              formRow('学校', (value) {
+                print('学校:$value');
+              }),
+              formRow('专业', (value) {
+                print('专业:$value');
+              }),
+              formRow('邮箱', (value) {
+                print('邮箱:$value');
+              }),
+            ],
+          )),
+      // ElevatedButton(
+      //     onPressed: () {
+      //       print('点击获取');
+      //       var _state = _formKey.currentState;
+      //       _state!.save();
+      //     },
+      //     child: const Text('获取'))
+    ]);
   }
 }
 
@@ -135,27 +156,35 @@ class InterestTag extends StatefulWidget {
 
 class _InterestTagState extends State<InterestTag> {
   List interest = [
-    '校园',
-    '语言',
-    '升学',
-    '心理',
-    '文学',
-    '生活',
-    '运动',
-    '读书',
-    '哲学',
-    '法学',
-    '经济学',
-    '艺术学',
-    '教育学',
-    '历史学',
-    '理学',
-    '工学',
-    '农学',
-    '医学',
-    '管理学',
-    '其它',
+    {'name': '校园', 'isSelected': false},
+    {'name': '语言', 'isSelected': false},
+    {'name': '升学', 'isSelected': false},
+    {'name': '心理', 'isSelected': false},
+    {'name': '文学', 'isSelected': false},
+    {'name': '生活', 'isSelected': false},
+    {'name': '运动', 'isSelected': false},
+    {'name': '读书', 'isSelected': false},
+    {'name': '哲学', 'isSelected': false},
+    {'name': '法学', 'isSelected': false},
+    {'name': '经济学', 'isSelected': false},
+    {'name': '艺术学', 'isSelected': false},
+    {'name': '教育学', 'isSelected': false},
+    {'name': '历史学', 'isSelected': false},
+    {'name': '理学', 'isSelected': false},
+    {'name': '工学', 'isSelected': false},
+    {'name': '农学', 'isSelected': false},
+    {'name': '医学', 'isSelected': false},
+    {'name': '管理学', 'isSelected': false},
+    {'name': '其它', 'isSelected': false},
   ];
+
+  refresh(value) {
+    print('子组件传值：$value');
+    setState(() {
+      interest[value]['isSelected'] = !interest[value]['isSelected'];
+    });
+    // print(interest);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +197,14 @@ class _InterestTagState extends State<InterestTag> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: interest.length,
           itemBuilder: (BuildContext context, int index) {
-            return TagSelector(interest[index]);
+            return TagSelector(
+              interest[index]['name'],
+              index,
+              isSelected: interest[index]['isSelected'],
+              changeValue: (e) {
+                refresh(e);
+              },
+            );
           },
           padding: const EdgeInsets.only(left: 52, right: 52),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -184,7 +220,7 @@ class _InterestTagState extends State<InterestTag> {
             '最多选择三个',
             style: TextStyle(color: Color.fromRGBO(158, 158, 158, 1)),
           ),
-        )
+        ),
       ],
     );
   }

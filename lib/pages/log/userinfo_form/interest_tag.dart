@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class TagSelector extends StatefulWidget {
   String title;
   bool isSelected;
-
-  TagSelector(this.title, {Key? key, this.isSelected = false})
+  int index;
+  Function changeValue;
+  TagSelector(this.title, this.index,
+      {Key? key, this.isSelected = false, required this.changeValue})
       : super(key: key);
 
   @override
@@ -16,8 +18,10 @@ class _TagSelectorState extends State<TagSelector> {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          // 取向相反值
-          widget.isSelected = !widget.isSelected;
+          // widget.isSelected = !widget.isSelected;
+          // var value = {'index': widget.index, 'isSelected': widget.isSelected};
+          // 传出index 改变当前抱歉的选择状态
+          widget.changeValue(widget.index);
           setState(() {});
         },
         child: Container(

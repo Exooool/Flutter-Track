@@ -60,28 +60,14 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                 InkWell(
                   onTap: () {},
                   child: const Icon(
-                    Icons.ac_unit,
+                    IconData(0xe667, fontFamily: 'MyIcons'),
                     size: 28,
                   ),
                 ),
                 InkWell(
                   onTap: () {},
                   child: const Icon(
-                    Icons.ac_unit,
-                    size: 28,
-                  ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: const Icon(
-                    Icons.ac_unit,
-                    size: 28,
-                  ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: const Icon(
-                    Icons.ac_unit,
+                    IconData(0xe607, fontFamily: 'MyIcons'),
                     size: 28,
                   ),
                 ),
@@ -113,6 +99,8 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
 
               Neumorphic(
                 style: const NeumorphicStyle(
+                    shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
+                    shadowLightColorEmboss: Color.fromRGBO(255, 255, 255, 1),
                     depth: -3,
                     color: Color.fromRGBO(238, 238, 246, 1),
                     // color: Color(0xffEFECF0),
@@ -121,16 +109,38 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                 child: SizedBox(
                   width: 300,
                   height: 56,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: <Widget>[
-                        TextFormField(
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(left: 21, right: 10),
+                        child: const Center(
+                          child: Text(
+                            '+86',
+                            style: TextStyle(
+                                color: Color.fromRGBO(60, 60, 67, 0.6)),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 38.5,
+                        width: 2,
+                        color: const Color.fromRGBO(8, 52, 84, 0.15),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 42),
+                        width: 198,
+                        child: TextFormField(
+                          maxLength: 11,
                           focusNode: _focusNodeUserName,
                           decoration: const InputDecoration(
-
+                              // maxLength设置长度后在左下角出现的计时器字符
+                              counterText: '',
                               // labelText: '手机',
                               hintText: '请输入手机号',
+                              hintStyle: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color.fromRGBO(60, 60, 67, 0.6)),
                               border: InputBorder.none),
                           onSaved: (v) {
                             _number = v;
@@ -142,8 +152,8 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                             return null;
                           },
                         ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
               ),

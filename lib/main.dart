@@ -3,7 +3,7 @@ import 'config/app_theme.dart';
 import './pages/reg_and_log.dart';
 import './pages/home_menu.dart';
 import 'pages/log/verify.dart';
-import 'pages/log/first_userinfo.dart';
+import 'pages/log/fill_userinfo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,12 +19,12 @@ class MyApp extends StatelessWidget {
       // 去除debug标签
       debugShowCheckedModeBanner: false,
       theme: theme,
-      initialRoute: '/first_userinfo',
+      initialRoute: '/log',
       routes: {
         '/log': (context) => const RegPageAndLogPage(),
         '/home': (context) => HomeMenu(),
         '/verify': (context) => VerifyPage(),
-        '/first_userinfo': (context) => FirstUserInfoPage(),
+        '/fill_userinfo': (context) => const FillUserInfoPage(),
       },
       // home: HomeMenu(),
     );

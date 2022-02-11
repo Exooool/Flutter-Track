@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 class NewsPage extends StatefulWidget {
@@ -39,10 +37,15 @@ class _NewsPageState extends State<NewsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(controller: scrollController, children: widget.list);
+    return ListView(
+      controller: scrollController,
+      children: widget.list,
+      physics: const AlwaysScrollableScrollPhysics(),
+    );
   }
 }
 
+// 传递Nav导航栏显示状态
 class NavNotification extends Notification {
   bool isNavShow;
   NavNotification(this.isNavShow);

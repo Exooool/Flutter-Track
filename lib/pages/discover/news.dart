@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import './news_page.dart';
 
 class NewsComponent extends StatefulWidget {
@@ -14,14 +14,12 @@ class _NewsComponentState extends State<NewsComponent>
 
   // 自定义tab样式
   Widget _customTab(String content) {
-    return Container(
-      child: Padding(
-        padding:
-            const EdgeInsets.only(top: 5.5, bottom: 5.5, left: 14, right: 14),
-        child: Text(
-          content,
-          style: const TextStyle(fontSize: 16),
-        ),
+    return Padding(
+      padding:
+          const EdgeInsets.only(top: 5.5, bottom: 5.5, left: 14, right: 14),
+      child: Text(
+        content,
+        style: const TextStyle(fontSize: 16),
       ),
     );
   }
@@ -57,26 +55,70 @@ class _NewsComponentState extends State<NewsComponent>
   List<Widget> _getNewsArticle() {
     List<Widget> list = [];
     for (int i = 0; i < 10; i++) {
-      list.add(Container(
-        margin: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-        height: 156,
-        decoration:
-            const BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1)),
-        child: Column(
-          children: <Widget>[
-            Title(color: Colors.black, child: Text('如何快速提高你的版式设计'))
-          ],
-        ),
-      ));
+      list.add(Padding(
+          padding:
+              const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+          child: Neumorphic(
+              style: NeumorphicStyle(
+                  shadowLightColor: const Color.fromRGBO(255, 255, 255, 1),
+                  shadowDarkColor: const Color.fromRGBO(174, 174, 192, 0.5),
+                  boxShape:
+                      NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
+                  depth: 6,
+                  color: Color.fromRGBO(240, 240, 243, 1)),
+              child: SizedBox(
+                height: 156,
+                child: Column(
+                  children: <Widget>[
+                    Title(
+                        color: Colors.black, child: const Text('如何快速提高你的版式设计'))
+                  ],
+                ),
+              ))));
     }
     return list;
   }
 
+  //
   List<Widget> _tabContent() {
     List<Widget> list = _tabList.map((e) {
       return NewsPage(_getNewsArticle(), e);
     }).toList();
     return list;
+  }
+
+  // 标签分类排序
+  showSortTabItem() {
+    // 底部弹窗
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          height: 500,
+          width: 500,
+          decoration: const BoxDecoration(
+              color: Color.fromRGBO(234, 236, 239, 1),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40), topRight: Radius.circular(40))),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const <Widget>[
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                '长按拖动排序',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Color.fromRGBO(0, 0, 0, 0.5)),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -103,33 +145,76 @@ class _NewsComponentState extends State<NewsComponent>
         elevation: 0,
         // 让此Scaffold的appbar的高度为零
         toolbarHeight: 0,
-        bottom: TabBar(
-          padding: const EdgeInsets.only(left: 10),
-          labelColor: const Color.fromRGBO(240, 242, 243, 1),
-          labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
-          unselectedLabelColor: const Color.fromRGBO(0, 0, 0, 1),
-          // 更改指示点样式
-          indicator: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-              gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    Color.fromRGBO(107, 101, 244, 1),
-                    Color.fromRGBO(51, 84, 244, 1)
-                  ])),
-          // indicatorSize: TabBarIndicatorSize.label,
+        bottom: PreferredSize(
+          // 设置高度
+          preferredSize: const Size.fromHeight(80),
+          child: Column(
+            children: <Widget>[
+              // tabbar栏
+              Stack(
+                alignment: AlignmentDirectional.center,
+                children: <Widget>[
+                  Container(
+                      padding: const EdgeInsets.only(left: 10, right: 46),
+                      child: TabBar(
+                        physics: const BouncingScrollPhysics(),
+                        // padding: const EdgeInsets.all(0),
+                        labelColor: const Color.fromRGBO(240, 242, 243, 1),
+                        labelStyle:
+                            const TextStyle(fontWeight: FontWeight.bold),
+                        unselectedLabelStyle:
+                            const TextStyle(fontWeight: FontWeight.normal),
+                        unselectedLabelColor: const Color.fromRGBO(0, 0, 0, 1),
+                        // 更改指示点样式
+                        indicator: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  Color.fromRGBO(107, 101, 244, 1),
+                                  Color.fromRGBO(51, 84, 244, 1)
+                                ])),
+                        // indicatorSize: TabBarIndicatorSize.label,
 
-          labelPadding: const EdgeInsets.all(0),
-          isScrollable: true,
-          tabs: _tabList.map((e) {
-            return _customTab(e);
-          }).toList(),
-          controller: _tabController,
+                        labelPadding: const EdgeInsets.all(0),
+                        isScrollable: true,
+                        tabs: _tabList.map((e) {
+                          return _customTab(e);
+                        }).toList(),
+                        controller: _tabController,
+                      )),
+                  // 菜单按钮
+                  Positioned(
+                    right: 26,
+                    child: InkWell(
+                        onTap: () {
+                          showSortTabItem();
+                        },
+                        child: Container(
+                          color: Colors.white,
+                          child: const Icon(Icons.menu),
+                        )),
+                  )
+                ],
+              ),
+              // 搜索框
+              Container(
+                height: 24,
+                margin: const EdgeInsets.only(top: 12),
+                child: const TextField(
+                  decoration: InputDecoration(border: InputBorder.none),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      body: TabBarView(controller: _tabController, children: _tabContent()),
+      body: TabBarView(
+        controller: _tabController,
+        children: _tabContent(),
+        physics: const BouncingScrollPhysics(),
+      ),
     );
   }
 }
