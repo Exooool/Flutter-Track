@@ -38,6 +38,8 @@ class _FillUserInfoPageState extends State<FillUserInfoPage> {
             setState(() {
               if (stepindex > 0) {
                 stepindex -= 1;
+              } else if (stepindex == 0) {
+                Navigator.pop(context);
               }
             });
           },

@@ -74,6 +74,8 @@ class _VerifyInputState extends State<VerifyInput> {
       margin: const EdgeInsets.only(left: 4, right: 4),
       child: Neumorphic(
           style: NeumorphicStyle(
+              shadowDarkColorEmboss: const Color.fromRGBO(8, 52, 84, 0.4),
+              shadowLightColorEmboss: const Color.fromRGBO(255, 255, 255, 1),
               depth: -3,
               color: const Color.fromRGBO(238, 238, 246, 1),
               boxShape:

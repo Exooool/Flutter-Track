@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       // 去除debug标签
       debugShowCheckedModeBanner: false,
       theme: theme,
-      initialRoute: '/log',
+      initialRoute: '/home',
       routes: {
         '/log': (context) => const RegPageAndLogPage(),
         '/home': (context) => HomeMenu(),

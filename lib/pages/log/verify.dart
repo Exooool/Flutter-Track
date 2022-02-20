@@ -72,7 +72,7 @@ class _VerifyPageState extends State<VerifyPage> {
             '登录',
             onpressed: () {
               print(_code);
-              Navigator.pushReplacementNamed(context, '/first_userinfo');
+              Navigator.pushReplacementNamed(context, '/fill_userinfo');
             },
           ),
           Container(

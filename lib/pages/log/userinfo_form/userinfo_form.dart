@@ -47,7 +47,9 @@ class _BasicInfoState extends State<BasicInfo> {
           const SizedBox(width: 12),
           Neumorphic(
             style: const NeumorphicStyle(
-                depth: -2,
+                shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
+                shadowLightColorEmboss: Color.fromRGBO(255, 255, 255, 1),
+                depth: -3,
                 color: Color.fromRGBO(238, 238, 246, 1),
                 // color: Color(0xffEFECF0),
                 boxShape: NeumorphicBoxShape.stadium()),
@@ -98,7 +100,9 @@ class _BasicInfoState extends State<BasicInfo> {
     return Column(children: <Widget>[
       Neumorphic(
         style: const NeumorphicStyle(
-            depth: -2,
+            shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
+            shadowLightColorEmboss: Color.fromRGBO(255, 255, 255, 1),
+            depth: -3,
             color: Color.fromRGBO(238, 238, 246, 1),
             // color: Color(0xffEFECF0),
             boxShape: NeumorphicBoxShape.stadium()),

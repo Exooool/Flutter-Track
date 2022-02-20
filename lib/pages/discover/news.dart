@@ -1,5 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+
 import './news_page.dart';
+import './news_card.dart';
+
+import 'package:flutter_track/model/news_model.dart';
+import 'package:flutter_track/assets/test.dart';
 
 class NewsComponent extends StatefulWidget {
   NewsComponent({Key? key}) : super(key: key);
@@ -36,46 +43,17 @@ class _NewsComponentState extends State<NewsComponent>
     '读书',
     '哲学'
   ];
-  // final List<Tab> _tabList = const [
-  //   Tab(text: '关注'),
-  //   Tab(text: '推荐'),
-  //   Tab(text: '生活'),
-  //   Tab(text: '心理'),
-  //   Tab(text: '运动'),
-  //   Tab(text: '语言'),
-  //   Tab(text: '升学'),
-  //   Tab(text: '校园'),
-  //   Tab(text: '读书'),
-  //   Tab(text: '哲学'),
-  // ];
 
   List dataList = [];
 
   // 获取资讯列表
   List<Widget> _getNewsArticle() {
     List<Widget> list = [];
-    for (int i = 0; i < 10; i++) {
-      list.add(Padding(
-          padding:
-              const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-          child: Neumorphic(
-              style: NeumorphicStyle(
-                  shadowLightColor: const Color.fromRGBO(255, 255, 255, 1),
-                  shadowDarkColor: const Color.fromRGBO(174, 174, 192, 0.5),
-                  boxShape:
-                      NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-                  depth: 6,
-                  color: Color.fromRGBO(240, 240, 243, 1)),
-              child: SizedBox(
-                height: 156,
-                child: Column(
-                  children: <Widget>[
-                    Title(
-                        color: Colors.black, child: const Text('如何快速提高你的版式设计'))
-                  ],
-                ),
-              ))));
-    }
+    var json = data['data'] as Map;
+    var l = json['news'] as List<dynamic>;
+    list = l.map((e) {
+      return NewsCard(Article.fromMap(e));
+    }).toList();
     return list;
   }
 
@@ -90,6 +68,7 @@ class _NewsComponentState extends State<NewsComponent>
   // 标签分类排序
   showSortTabItem() {
     // 底部弹窗
+    // 对tab栏进行排序
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -147,7 +126,7 @@ class _NewsComponentState extends State<NewsComponent>
         toolbarHeight: 0,
         bottom: PreferredSize(
           // 设置高度
-          preferredSize: const Size.fromHeight(80),
+          preferredSize: const Size.fromHeight(90),
           child: Column(
             children: <Widget>[
               // tabbar栏
@@ -192,7 +171,7 @@ class _NewsComponentState extends State<NewsComponent>
                           showSortTabItem();
                         },
                         child: Container(
-                          color: Colors.white,
+                          color: Colors.transparent,
                           child: const Icon(Icons.menu),
                         )),
                   )
@@ -201,9 +180,31 @@ class _NewsComponentState extends State<NewsComponent>
               // 搜索框
               Container(
                 height: 24,
-                margin: const EdgeInsets.only(top: 12),
-                child: const TextField(
-                  decoration: InputDecoration(border: InputBorder.none),
+                margin: const EdgeInsets.only(top: 12, left: 24, right: 24),
+                decoration: const BoxDecoration(
+                    color: Color.fromRGBO(0, 0, 0, 0.05),
+                    borderRadius: BorderRadius.all(Radius.circular(60))),
+                // 不进行搜索功能 点击后跳转到搜索页
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    const Icon(Icons.search),
+                    Expanded(
+                        child: TextField(
+                      onTap: () {
+                        print('跳转搜索页');
+                      },
+                      style: const TextStyle(fontSize: 12),
+                      decoration: const InputDecoration.collapsed(
+                        // isDense: true,
+                        enabled: true,
+                        hintText: '关于如何提高自己的管理能力',
+
+                        hintStyle: TextStyle(fontSize: 12),
+                      ),
+                    ))
+                  ],
                 ),
               ),
             ],
