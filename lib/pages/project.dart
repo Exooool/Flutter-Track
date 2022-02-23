@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:percent_indicator/percent_indicator.dart';
 
 import 'package:flutter/material.dart';
 import 'components/custom_appbar.dart';
+import 'package:flutter_track/model/project_model.dart';
+
+// 测试数据
+import 'package:flutter_track/assets/test.dart';
 
 class ProjectPage extends StatefulWidget {
   ProjectPage({Key? key}) : super(key: key);
@@ -52,9 +58,10 @@ class _ProjectPageState extends State<ProjectPage>
   }
 
   // 计划卡片
-  Widget _projectCard(IconData icon, String title, String time) {
+  Widget _projectCard(Project e) {
     return Container(
       height: 72,
+      margin: const EdgeInsets.only(top: 6, bottom: 6),
       padding: const EdgeInsets.only(left: 16, right: 32),
       decoration: const BoxDecoration(
           boxShadow: [
@@ -80,8 +87,8 @@ class _ProjectPageState extends State<ProjectPage>
             children: <Widget>[
               // 头像
               CircleAvatar(
-                backgroundColor: const Color.fromRGBO(128, 255, 255, 1),
-                child: Icon(icon),
+                backgroundColor: tfColor[e.iconInfo.color],
+                child: const Icon(Icons.ac_unit),
               ),
               // 计划信息
               Padding(
@@ -91,7 +98,7 @@ class _ProjectPageState extends State<ProjectPage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      title,
+                      e.projectTtile,
                       style: const TextStyle(fontSize: 18, color: Colors.white),
                     ),
                     const Text('(已加入小组)',
@@ -99,7 +106,7 @@ class _ProjectPageState extends State<ProjectPage>
                             fontSize: 10,
                             color: Color.fromRGBO(240, 242, 243, 0.5))),
                     Text(
-                      time,
+                      e.stageList[0].reminderTime,
                       style: const TextStyle(fontSize: 12, color: Colors.white),
                     )
                   ],
@@ -122,7 +129,7 @@ class _ProjectPageState extends State<ProjectPage>
                 ),
               ),
               startAngle: 270.0,
-              progressColor: const Color.fromRGBO(128, 255, 255, 1),
+              progressColor: tfColor[e.iconInfo.color],
               backgroundColor: const Color.fromRGBO(240, 242, 243, 0.5),
               footer: const Text(
                 '剩余270天',
@@ -136,6 +143,71 @@ class _ProjectPageState extends State<ProjectPage>
         ],
       ),
     );
+  }
+
+  // 颜色对应
+  Map<String, Color> tfColor = const {
+    "fColor1": Color.fromRGBO(255, 128, 128, 1),
+    "fColor2": Color.fromRGBO(255, 191, 128, 1),
+    "fColor3": Color.fromRGBO(255, 255, 128, 1),
+    "fColor4": Color.fromRGBO(191, 255, 128, 1),
+    "fColor5": Color.fromRGBO(128, 255, 128, 1),
+    "fColor6": Color.fromRGBO(128, 255, 191, 1),
+    "fColor7": Color.fromRGBO(128, 255, 255, 1),
+    "fColor8": Color.fromRGBO(128, 191, 255, 1),
+    "fColor9": Color.fromRGBO(128, 128, 255, 1),
+    "fColor10": Color.fromRGBO(191, 128, 255, 1),
+    "fColor11": Color.fromRGBO(255, 128, 255, 1),
+    "fColor12": Color.fromRGBO(255, 128, 191, 1),
+    "fColor13": Color.fromRGBO(0, 0, 0, 1),
+    "fColor14": Color.fromRGBO(255, 255, 255, 1),
+  };
+
+  // 添加按钮
+  Widget projectAddButton() {
+    return Opacity(
+        opacity: 0.6,
+        child: Container(
+            height: 72,
+            margin: const EdgeInsets.only(top: 6, bottom: 6),
+            decoration: const BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(56, 86, 244, 0.4), // 阴影的颜色
+                    offset: Offset(0, 6), // 阴影与容器的距离
+                    blurRadius: 10, // 高斯的标准偏差与盒子的形状卷积。
+                    spreadRadius: 0, // 在应用模糊之前，框应该膨胀的量。
+                  ),
+                ],
+                borderRadius: BorderRadius.all(Radius.circular(60)),
+                gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Color.fromRGBO(107, 101, 244, 1),
+                      Color.fromRGBO(51, 84, 244, 1)
+                    ])),
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/add_project');
+              },
+              child: const Icon(
+                Icons.add,
+                color: Color.fromRGBO(240, 242, 243, 1),
+                size: 36,
+              ),
+            )));
+  }
+
+  // 获取计划
+  List<Widget> _getProject() {
+    List<Widget> list = [];
+    var l = projectData['project'] as List<dynamic>;
+    list = l.map((e) {
+      return _projectCard(Project.fromMap(e));
+    }).toList();
+    list.add(projectAddButton());
+    return list;
   }
 
   @override
@@ -223,11 +295,9 @@ class _ProjectPageState extends State<ProjectPage>
                             controller: _tabInteriorController,
                             children: <Widget>[
                           ListView(
-                            padding: const EdgeInsets.only(left: 24, right: 24),
-                            children: <Widget>[
-                              _projectCard(
-                                  Icons.ac_unit_outlined, '健身计划', '周末 06:30')
-                            ],
+                            padding: const EdgeInsets.only(
+                                left: 24, right: 24, bottom: 100),
+                            children: _getProject(),
                           ),
                           const Text('2'),
                           const Text('2')

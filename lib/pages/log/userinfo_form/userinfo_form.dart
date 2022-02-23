@@ -78,6 +78,7 @@ class _BasicInfoState extends State<BasicInfo> {
     );
   }
 
+  // 获取照片
   _getImage() async {
     //选择相册
     final pickerImages = await _picker.pickImage(source: ImageSource.gallery);

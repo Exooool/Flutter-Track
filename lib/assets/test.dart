@@ -91,4 +91,71 @@ var data = {
   }
 };
 
-var b = '{"title": "这是标题", "name": "123"}';
+var projectData = {
+  "project": [
+    {
+      "iconInfo": {"icon": "Icons.person", "color": "fColor7"},
+      "projectId": "001",
+      "projectTtile": "健身计划",
+      "userId": "001",
+      "endTime": "2022/6/10",
+      "isJoin": true,
+      "stageList": [
+        {
+          "content": "进行减脂运动",
+          "endTime": "2022/4/10",
+          "frequency": "",
+          "reminderTime": "周末 06:30",
+        }
+      ]
+    },
+    {
+      "iconInfo": {"icon": "Icons.person", "color": "fColor7"},
+      "projectId": "001",
+      "projectTtile": "沉浸式学习C4D",
+      "userId": "001",
+      "endTime": "2022/6/10",
+      "isJoin": true,
+      "stageList": [
+        {
+          "content": "练习人物建模",
+          "endTime": "2022/4/10",
+          "frequency": "",
+          "reminderTime": "周六 14:00",
+        }
+      ]
+    },
+    {
+      "iconInfo": {"icon": "Icons.person", "color": "fColor1"},
+      "projectId": "001",
+      "projectTtile": "总结每日成果",
+      "userId": "001",
+      "endTime": "2022/6/10",
+      "isJoin": false,
+      "stageList": [
+        {
+          "content": "去完成当天课程的学习成果总结",
+          "endTime": "2022/4/10",
+          "frequency": "每天",
+          "reminderTime": "每天 23:00",
+        }
+      ]
+    },
+    {
+      "iconInfo": {"icon": "Icons.person", "color": "fColor14"},
+      "projectId": "001",
+      "projectTtile": "睡前阅读计划",
+      "userId": "001",
+      "endTime": "2022/6/10",
+      "isJoin": true,
+      "stageList": [
+        {
+          "content": "去完成当天课程的学习成果总结",
+          "endTime": "2022/4/10",
+          "frequency": "每天",
+          "reminderTime": "每天 23:00",
+        }
+      ]
+    }
+  ]
+};
