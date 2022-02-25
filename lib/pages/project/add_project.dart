@@ -1,71 +1,21 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-
+import 'package:get/get.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 
-import 'package:toggle_switch/toggle_switch.dart';
-
-import '../components/custom_appbar.dart';
 import '../components/lineargradient_text.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import 'component/form_datetime_picker.dart';
 
-class AddProject extends StatefulWidget {
+import '../components/custom_appbar.dart';
+
+import 'add_project_controller.dart';
+
+class AddProject extends StatelessWidget {
   AddProject({Key? key}) : super(key: key);
-
-  @override
-  State<AddProject> createState() => _AddProjectState();
-}
-
-class _AddProjectState extends State<AddProject> {
-  final ImagePicker _picker = ImagePicker();
-  XFile? image;
-
-  // 表单数据
-  var endTime;
-  // 分阶段
-  int isDivide = 0;
-  // 互助小组
-  int isJoin = 0;
-  // 匹配方式
-  int isMacth = 0;
-
-  // 阶段
-  var stageList = [
-    {},
-  ];
-
-  var stageCH = [
-    '阶段一',
-    '阶段二',
-    '阶段三',
-    '阶段四',
-    '阶段五',
-    '阶段六',
-    '阶段七',
-    '阶段八',
-    '阶段九',
-    '阶段十'
-  ];
-
-  _getImage() async {
-    //选择相册
-    final pickerImages = await _picker.pickImage(source: ImageSource.gallery);
-    if (mounted) {
-      setState(() {
-        if (pickerImages != null) {
-          image = pickerImages;
-          setState(() {});
-          print('选择了一张照片');
-          print(image?.path);
-        } else {
-          print('没有照片可以选择');
-        }
-      });
-    }
-  }
+  final AddProjectController c = Get.put(AddProjectController());
 
   // 表单输入框
-  Widget formInput(String title, {Widget? component}) {
+  Widget formInput(String title, {Widget? component, Function? onChanged}) {
     return Padding(
         padding: const EdgeInsets.only(left: 24, right: 24, top: 6, bottom: 6),
         child: Neumorphic(
@@ -95,7 +45,9 @@ class _AddProjectState extends State<AddProject> {
                             child: component,
                           )
                         : TextFormField(
-                            onSaved: (value) {},
+                            onChanged: (value) {
+                              onChanged!(value);
+                            },
                             style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -133,11 +85,11 @@ class _AddProjectState extends State<AddProject> {
       labels: [on, off],
       onToggle: (index) {
         onChange(index);
-        setState(() {});
       },
     );
   }
 
+  // 分阶段模板
   Widget columnModel(int stage) {
     return Column(
       children: <Widget>[
@@ -145,7 +97,7 @@ class _AddProjectState extends State<AddProject> {
           children: [
             Container(
               alignment: Alignment.center,
-              child: GradientText(stageCH[stage]),
+              child: GradientText(c.stageCH[stage]),
             ),
             Container(
               padding: const EdgeInsets.only(right: 48),
@@ -153,41 +105,66 @@ class _AddProjectState extends State<AddProject> {
               child: stage != 0
                   ? InkWell(
                       onTap: () {
-                        stageList.removeAt(stage);
-                        setState(() {});
+                        c.stageList.removeAt(stage);
                       },
                       child: const Icon(Icons.close))
                   : null,
             )
           ],
         ),
-        formInput('完成内容'),
-        formInput('截止时间',
-            component: FormDateTimePicker((e) {
-              stageList[stage]['endTime'] = e.substring(0, 10);
-              setState(() {});
-              print(stageList);
-            }, stageList[stage]['endTime'])),
-        formInput('完成频率',
-            component: FormDateTimePicker((e) {
-              stageList[stage]['frequency'] = e.substring(11, 16);
-              setState(() {});
-              print(stageList);
-            }, stageList[stage]['frequency'], type: 1)),
-        formInput('提醒时间',
-            component: FormDateTimePicker((e) {
-              stageList[stage]['reminderTime'] = e;
-              setState(() {});
-              print(stageList);
-            }, stageList[stage]['reminderTime'], type: 2)),
+        formInput('完成内容', onChanged: (e) {
+          c.stageList[stage]['content'] = e;
+        }),
+        GetBuilder<AddProjectController>(
+            builder: (_) => Column(
+                  children: <Widget>[
+                    formInput('截止时间',
+                        component: FormDateTimePicker((e) {
+                          // c.stageList[stage]['endTime'] = e;
+                          c.stageListMethod(stage, 'endTime', e);
+                          print(c.stageList);
+                        }, c.stageList[stage]['endTime'])),
+                    formInput('完成频率',
+                        component: FormDateTimePicker((e) {
+                          // c.stageList[stage]['frequency'] = e;
+                          c.stageListMethod(stage, 'frequency', e);
+                          print(c.stageList);
+                        }, frequencytoString(c.stageList[stage]['frequency']),
+                            type: 1)),
+                    formInput('提醒时间',
+                        component: FormDateTimePicker((e) {
+                          // c.stageList[stage]['reminderTime'] = e;
+                          c.stageListMethod(stage, 'reminderTime', e);
+                          print(c.stageList);
+                        },
+                            reminderTimetoString(
+                                c.stageList[stage]['reminderTime']),
+                            type: 2)),
+                  ],
+                ))
       ],
     );
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  // 转换提醒时间为字符串
+  reminderTimetoString(value) {
+    if (value != null) {
+      return c.ahead[value];
+    }
+  }
+
+  // 转换频率为字符串
+  frequencytoString(value) {
+    if (value != null) {
+      String temp = '';
+      // 先转换周期
+      temp = value['week'].map((e) {
+        String temp = '';
+        return (temp + c.weekList[e]);
+      }).toString();
+
+      return temp += value['time'];
+    }
   }
 
   @override
@@ -198,100 +175,141 @@ class _AddProjectState extends State<AddProject> {
         title: '添加计划',
         leading: InkWell(
           onTap: () {
-            Navigator.pop(context);
+            Get.back();
           },
           child: const Text('返回',
               style: TextStyle(color: Color.fromRGBO(240, 242, 243, 0.8))),
         ),
         ending: InkWell(
-          onTap: () {},
+          onTap: () {
+            // 集合所有数据
+            var data = {
+              'endTime': c.endTime.value,
+              'isDivide': c.isDivide.value,
+              'isJoin': c.isJoin.value,
+              'isMatch': c.isMatch.value,
+              'projectTitle': c.projectTitle.value,
+              'frequency': c.frequency,
+              'reminderTime': c.reminderTime.value,
+              'stageList': c.stageList
+            };
+            print(data);
+            Get.toNamed('/match');
+          },
           child: const Text(
             '确定',
             style: TextStyle(color: Color.fromRGBO(240, 242, 243, 0.8)),
           ),
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.only(bottom: 109),
-        children: <Widget>[
-          const SizedBox(height: 15),
-          // 头像
-          Column(
-            children: [
-              Neumorphic(
-                style: const NeumorphicStyle(
-                    shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
-                    shadowLightColorEmboss: Color.fromRGBO(255, 255, 255, 1),
-                    depth: -3,
-                    color: Color.fromRGBO(238, 238, 246, 1),
-                    // color: Color(0xffEFECF0),
-                    boxShape: NeumorphicBoxShape.stadium()),
-                child: SizedBox(
-                    height: 88,
-                    width: 88,
-                    child: InkWell(
-                      onTap: _getImage,
-                      child: image == null
-                          ? const SizedBox()
-                          : Image.file(
-                              File(image!.path),
-                              fit: BoxFit.cover,
-                            ),
-                    )),
-              ),
-              const Padding(
-                  padding: EdgeInsets.only(top: 6),
-                  child: Text('点击选择头像',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500)))
-            ],
-          ),
-          // 列表
-          formInput('计划名称'),
-          formInput('截止时间',
-              component: FormDateTimePicker((e) {
-                endTime = e;
-                setState(() {});
-              }, endTime)),
-          formInput('分阶段完成',
-              component: formSwitch('是', '否', isDivide, (index) {
-                isDivide = index;
-                print('分阶段完成：$isDivide');
-              })),
-          // 分阶段
-          Visibility(
-              visible: isDivide == 0 ? true : false,
-              child: Column(
-                children: <Widget>[
-                  ListView.builder(
-                      shrinkWrap: true, //范围内进行包裹（内容多高ListView就多高）
-                      physics: const NeverScrollableScrollPhysics(), //禁止滚动
-                      itemCount: stageList.length,
-                      itemBuilder: (context, index) {
-                        return columnModel(index);
-                      }),
-                  InkWell(
-                    onTap: () {
-                      if (stageList.length < 10) {
-                        stageList.add({});
-                        setState(() {});
-                      } else {}
-                    },
-                    child: Icon(Icons.add),
-                  )
+      body: GetX<AddProjectController>(
+        builder: (controller) {
+          return ListView(
+            padding: const EdgeInsets.only(bottom: 109),
+            children: <Widget>[
+              const SizedBox(height: 15),
+              // 头像
+              Column(
+                children: [
+                  Neumorphic(
+                    style: const NeumorphicStyle(
+                        shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
+                        shadowLightColorEmboss:
+                            Color.fromRGBO(255, 255, 255, 1),
+                        depth: -3,
+                        color: Color.fromRGBO(238, 238, 246, 1),
+                        // color: Color(0xffEFECF0),
+                        boxShape: NeumorphicBoxShape.stadium()),
+                    child: SizedBox(
+                        height: 88,
+                        width: 88,
+                        child: InkWell(
+                          onTap: c.selectImage,
+                          child: c.image == null
+                              ? const SizedBox()
+                              : Image.file(
+                                  File(c.image!.path),
+                                  fit: BoxFit.cover,
+                                ),
+                        )),
+                  ),
+                  const Padding(
+                      padding: EdgeInsets.only(top: 6),
+                      child: Text('点击选择头像',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500)))
                 ],
-              )),
-          formInput('是否加入互助小组',
-              component: formSwitch('是', '否', isJoin, (index) {
-                isJoin = index;
-                print('是否加入互助小组$isJoin');
-              })),
-          formInput('匹配方式',
-              component: formSwitch('系统匹配', '自行邀请', isMacth, (index) {
-                isMacth = index;
-                print('匹配方式$isMacth');
-              })),
-        ],
+              ),
+              // 列表
+              formInput('计划名称', onChanged: (e) {
+                c.projectTitle.value = e;
+              }),
+              formInput('截止时间',
+                  component: FormDateTimePicker((e) {
+                    c.endTime.value = e.substring(0, 10);
+                  }, c.endTime.value)),
+              formInput('分阶段完成',
+                  component: formSwitch('是', '否', c.isDivide.value, (index) {
+                    c.isDivide.value = index;
+                    print('分阶段完成：${c.isDivide}');
+                  })),
+              // 分阶段
+              Visibility(
+                  visible: c.isDivide.value == 0 ? true : false,
+                  child: Column(
+                    children: <Widget>[
+                      ListView.builder(
+                          shrinkWrap: true, //范围内进行包裹（内容多高ListView就多高）
+                          physics: const NeverScrollableScrollPhysics(), //禁止滚动
+                          itemCount: c.stageList.length,
+                          itemBuilder: (context, index) {
+                            return columnModel(index);
+                          }),
+                      InkWell(
+                        onTap: () {
+                          if (c.stageList.length < 10) {
+                            c.stageList.add({});
+                          } else {}
+                        },
+                        child: Icon(Icons.add),
+                      )
+                    ],
+                  )),
+              //  不分阶段
+              Visibility(
+                  visible: c.isDivide.value == 0 ? false : true,
+                  child: Column(
+                    children: <Widget>[
+                      formInput('完成频率',
+                          component: FormDateTimePicker((e) {
+                            c.frequency.value = e;
+
+                            print(c.stageList);
+                          }, frequencytoString(c.frequency.value), type: 1)),
+                      formInput('提醒时间',
+                          component: FormDateTimePicker((e) {
+                            c.reminderTime.value = e;
+                            print(c.stageList);
+                          }, reminderTimetoString(c.reminderTime.value),
+                              type: 2)),
+                    ],
+                  )),
+              formInput('是否加入互助小组',
+                  component: formSwitch('是', '否', c.isJoin.value, (index) {
+                    c.isJoin.value = index;
+                    print('是否加入互助小组${c.isJoin.value}');
+                  })),
+              Visibility(
+                  visible: c.isJoin.value == 0 ? true : false,
+                  child: formInput('匹配方式',
+                      component:
+                          formSwitch('系统匹配', '自行邀请', c.isMatch.value, (index) {
+                        c.isMatch.value = index;
+                        print('匹配方式${c.isMatch.value}');
+                      })))
+            ],
+          );
+        },
       ),
     );
   }

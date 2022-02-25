@@ -99,7 +99,7 @@ var projectData = {
       "projectTtile": "健身计划",
       "userId": "001",
       "endTime": "2022/6/10",
-      "isJoin": true,
+      "isJoin": 0,
       "stageList": [
         {
           "content": "进行减脂运动",
@@ -115,7 +115,7 @@ var projectData = {
       "projectTtile": "沉浸式学习C4D",
       "userId": "001",
       "endTime": "2022/6/10",
-      "isJoin": true,
+      "isJoin": 0,
       "stageList": [
         {
           "content": "练习人物建模",
@@ -131,7 +131,7 @@ var projectData = {
       "projectTtile": "总结每日成果",
       "userId": "001",
       "endTime": "2022/6/10",
-      "isJoin": false,
+      "isJoin": 1,
       "stageList": [
         {
           "content": "去完成当天课程的学习成果总结",
@@ -147,7 +147,7 @@ var projectData = {
       "projectTtile": "睡前阅读计划",
       "userId": "001",
       "endTime": "2022/6/10",
-      "isJoin": true,
+      "isJoin": 0,
       "stageList": [
         {
           "content": "去完成当天课程的学习成果总结",

@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 
+import '../../components/custom_checkbox.dart';
+
 class PickerWeekRow extends StatefulWidget {
   final String text;
   final Function onSelected;
-
-  PickerWeekRow(this.text, this.onSelected, {Key? key}) : super(key: key);
+  bool value = false;
+  PickerWeekRow(this.text, this.value, this.onSelected, {Key? key})
+      : super(key: key);
 
   @override
   State<PickerWeekRow> createState() => _PickerWeekRowState();
 }
 
 class _PickerWeekRowState extends State<PickerWeekRow> {
-  bool value = false;
   @override
   Widget build(BuildContext context) {
     return Container(
+        padding: const EdgeInsets.only(left: 70, right: 85, top: 6, bottom: 6),
         decoration: const BoxDecoration(
             border: Border(
                 top: BorderSide(
@@ -24,11 +27,15 @@ class _PickerWeekRowState extends State<PickerWeekRow> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(widget.text),
-            Checkbox(
-                value: value,
+            Text(
+              widget.text,
+              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+            ),
+            CustomCheckBox(
+                value: widget.value,
                 onChanged: (e) {
-                  value = e!;
+                  // print(e);
+                  widget.value = e;
                   widget.onSelected(e);
                   setState(() {});
                 })
