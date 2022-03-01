@@ -194,7 +194,11 @@ class AddProject extends StatelessWidget {
               'stageList': c.stageList
             };
             print(data);
-            Get.toNamed('/match');
+            if (c.isMatch.value == 0) {
+              Get.toNamed('/match_group');
+            } else {
+              Get.toNamed('/invite_group');
+            }
           },
           child: const Text(
             '确定',

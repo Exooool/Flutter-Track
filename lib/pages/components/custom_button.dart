@@ -1,28 +1,36 @@
 import 'package:flutter/material.dart';
 
-class CustomButton extends StatefulWidget {
-  String title;
-  var onpressed;
-  CustomButton(this.title, {Key? key, this.onpressed}) : super(key: key);
+class CustomButton extends StatelessWidget {
+  final String title;
+  final Function onPressed;
+  final double height;
+  final double width;
+  final EdgeInsetsGeometry margin;
+  final bool shadow;
+  CustomButton(this.title,
+      {Key? key,
+      required this.onPressed,
+      this.height = 56,
+      this.width = 300,
+      this.margin = const EdgeInsets.all(20),
+      this.shadow = true})
+      : super(key: key);
 
-  @override
-  State<CustomButton> createState() => _CustomButtonState();
-}
-
-class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(90),
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(56, 86, 244, 0.4), // 阴影的颜色
-              offset: Offset(0, 6), // 阴影与容器的距离
-              blurRadius: 10, // 高斯的标准偏差与盒子的形状卷积。
-              spreadRadius: 0, // 在应用模糊之前，框应该膨胀的量。
-            ),
-          ],
+          boxShadow: shadow
+              ? const [
+                  BoxShadow(
+                    color: Color.fromRGBO(56, 86, 244, 0.4), // 阴影的颜色
+                    offset: Offset(0, 6), // 阴影与容器的距离
+                    blurRadius: 10, // 高斯的标准偏差与盒子的形状卷积。
+                    spreadRadius: 0, // 在应用模糊之前，框应该膨胀的量。
+                  ),
+                ]
+              : null,
           gradient: const LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
@@ -30,16 +38,18 @@ class _CustomButtonState extends State<CustomButton> {
                 Color.fromRGBO(107, 101, 244, 1),
                 Color.fromRGBO(51, 84, 244, 1)
               ])),
-      margin: const EdgeInsets.all(20),
-      width: 300,
-      height: 56,
+      margin: margin,
+      width: width,
+      height: height,
       child: ElevatedButton(
         style: ButtonStyle(
             // 去除自身的背景色和阴影
             backgroundColor: MaterialStateProperty.all(Colors.transparent),
             elevation: MaterialStateProperty.all(0)),
-        child: Text(widget.title, style: const TextStyle(fontSize: 16)),
-        onPressed: widget.onpressed,
+        child: Text(title,
+            style: const TextStyle(
+                fontSize: 16, color: Color.fromRGBO(240, 242, 243, 1))),
+        onPressed: onPressed(),
         // () {
         //   // 调用表单中的onSaved方法
         //   // var state = _formKey.currentState as FormState;

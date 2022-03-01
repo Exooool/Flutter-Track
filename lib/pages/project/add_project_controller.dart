@@ -1,7 +1,8 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-
 import 'package:image_picker/image_picker.dart';
+
+import '../components/lineargradient_text.dart';
 
 class AddProjectController extends GetxController {
   // final ImagePicker _picker = ImagePicker();
@@ -64,11 +65,84 @@ class AddProjectController extends GetxController {
   //   }
   // }
 
+  Widget getItemContainer(int item) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      height: 5.0,
+      alignment: Alignment.center,
+      margin: const EdgeInsets.all(10),
+      child: Text(
+        '$item',
+        style: TextStyle(color: Colors.white, fontSize: 10),
+      ),
+      color: Colors.blue,
+    );
+  }
+
   // 选择头像
   selectImage() {
     Get.bottomSheet(Container(
       height: 500,
-      decoration: BoxDecoration(color: Color.fromRGBO(234, 236, 239, 1)),
+      decoration: const BoxDecoration(
+          color: Color.fromRGBO(234, 236, 239, 1),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () {},
+                child: const GradientText('取消'),
+                style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.only(top: 20, left: 36))),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: const GradientText('确认'),
+                style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.only(top: 20, right: 36))),
+              ),
+            ],
+          ),
+          Expanded(
+              child: ListView(
+            children: <Widget>[
+              GridView.builder(
+                  //解决无限高度问题
+                  shrinkWrap: true,
+                  //禁用滑动事件
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 20,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      //横轴元素个数
+                      crossAxisCount: 4,
+                      //纵轴间距
+                      mainAxisSpacing: 20.0,
+                      //横轴间距
+                      crossAxisSpacing: 10.0,
+                      //子组件宽高长度比例
+                      childAspectRatio: 1.0),
+                  itemBuilder: (BuildContext context, int index) {
+                    return getItemContainer(index);
+                  }),
+              SizedBox(
+                height: 50,
+                child: ListView.builder(
+                  itemCount: 20,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int index) {
+                    return getItemContainer(index);
+                  },
+                ),
+              )
+            ],
+          ))
+        ],
+      ),
     ));
   }
 }

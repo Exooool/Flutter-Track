@@ -1,17 +1,21 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:get/get.dart';
 
 import '../components/custom_appbar.dart';
 
-class Match extends StatelessWidget {
-  const Match({Key? key}) : super(key: key);
+class MatchGroup extends StatelessWidget {
+  const MatchGroup({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppbar('match',
+            title: '匹配中',
             leading: InkWell(
-                onTap: () {},
+                onTap: () {
+                  Get.back();
+                },
                 child: const Text('返回',
                     style:
                         TextStyle(color: Color.fromRGBO(240, 242, 243, 0.8))))),

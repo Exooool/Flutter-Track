@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'components/custom_appbar.dart';
-import 'components/custom_button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../components/custom_appbar.dart';
+import '../components/custom_button.dart';
 
 class RegPageAndLogPage extends StatefulWidget {
   const RegPageAndLogPage({Key? key}) : super(key: key);
@@ -81,6 +84,14 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQueryData.fromWindow(window).size.width,
+            maxHeight: MediaQueryData.fromWindow(window).size.height),
+        designSize: const Size(414, 896),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     return Scaffold(
         // 可以通过设置这个属性防止键盘覆盖内容或者键盘撑起内容
         resizeToAvoidBottomInset: false,
@@ -182,8 +193,8 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
               // ),
               CustomButton(
                 '获取验证码',
-                onpressed: () {
-                  Navigator.pushNamed(context, '/verify');
+                onPressed: () {
+                  // Navigator.pushNamed(context, '/verify');
                 },
               ),
               // 随便逛逛
@@ -192,7 +203,7 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                 children: <Widget>[
                   InkWell(
                     onTap: () {
-                      Navigator.pushReplacementNamed(context, '/home');
+                      // Navigator.pushReplacementNamed(context, '/home');
                     },
                     child: const Text(
                       '随便逛逛',

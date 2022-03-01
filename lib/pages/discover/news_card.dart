@@ -91,6 +91,9 @@ class _NewsCardState extends State<NewsCard> {
                         widget.news.contentImg,
                         width: 158,
                         fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Text('未找到图片');
+                        },
                       )
                     ],
                   )

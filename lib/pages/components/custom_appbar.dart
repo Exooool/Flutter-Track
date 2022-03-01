@@ -49,8 +49,8 @@ class CustomAppbar extends AppBar {
           shape: const RoundedRectangleBorder(
               side: BorderSide.none,
               borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30))),
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20))),
           // 弹性空间 设置appbar背景渐变色
           flexibleSpace: Container(
             // 设置内部container的圆角
@@ -64,8 +64,8 @@ class CustomAppbar extends AppBar {
                   ),
                 ],
                 borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30)),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20)),
                 // 设置线性渐变
                 gradient: LinearGradient(
                     begin: Alignment.centerLeft,

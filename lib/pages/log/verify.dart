@@ -70,7 +70,7 @@ class _VerifyPageState extends State<VerifyPage> {
           ),
           CustomButton(
             '登录',
-            onpressed: () {
+            onPressed: () {
               print(_code);
               Navigator.pushReplacementNamed(context, '/fill_userinfo');
             },

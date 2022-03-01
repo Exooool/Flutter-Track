@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_track/pages/discover.dart';
-import 'package:flutter_track/pages/user.dart';
-import 'package:flutter_track/pages/project.dart';
-import 'package:flutter_track/pages/information.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/pages/discover/discover.dart';
+import 'package:flutter_track/pages/user/user.dart';
+import 'package:flutter_track/pages/project/project.dart';
+import 'package:flutter_track/pages/information/information.dart';
 import './discover/news_page.dart';
 
 class HomeMenu extends StatefulWidget {
@@ -13,7 +16,7 @@ class HomeMenu extends StatefulWidget {
 }
 
 class _HomeMenuState extends State<HomeMenu> {
-  int _index = 1;
+  int _index = 2;
   final List _pageList = [
     ProjectPage(),
     DiscoverPage(),
@@ -84,6 +87,16 @@ class _HomeMenuState extends State<HomeMenu> {
   Widget build(BuildContext context) {
     double _phoneWidth = MediaQuery.of(context).size.width;
     double distance = (_phoneWidth - 320) / 2;
+
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQueryData.fromWindow(window).size.width,
+            maxHeight: MediaQueryData.fromWindow(window).size.height),
+        designSize: const Size(414, 896),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
+
     return Scaffold(
         body: NotificationListener<NavNotification>(
       onNotification: (n) {

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import 'package:flutter/material.dart';
-import 'components/custom_appbar.dart';
+import '../components/custom_appbar.dart';
 import 'package:flutter_track/model/project_model.dart';
 
 // 测试数据

@@ -9,7 +9,7 @@ class Project {
   late String projectTtile;
   late String endTime;
   late List<Stage> stageList;
-  late bool isJoin;
+  late int isJoin;
   Project.fromMap(Map<String, dynamic> json) {
     iconInfo = IconInfo.fromMap(json['iconInfo']);
     projectId = json['projectId'];

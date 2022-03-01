@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './discover/news.dart';
-import 'components/custom_appbar.dart';
+import 'news.dart';
+import '../components/custom_appbar.dart';
 
 class DiscoverPage extends StatefulWidget {
   DiscoverPage({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomCheckBox extends StatefulWidget {
+class CustomCheckBox extends StatelessWidget {
   bool value;
 
   Function(bool) onChanged;
@@ -8,15 +8,10 @@ class CustomCheckBox extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<CustomCheckBox> createState() => _CustomCheckBoxState();
-}
-
-class _CustomCheckBoxState extends State<CustomCheckBox> {
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          widget.onChanged(!widget.value);
+          onChanged(!value);
         },
         child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -39,7 +34,7 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
                 decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(60))),
-                child: widget.value
+                child: value
                     ? Container(
                         height: 6,
                         width: 6,
