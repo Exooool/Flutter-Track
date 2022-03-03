@@ -16,7 +16,7 @@ class HomeMenu extends StatefulWidget {
 }
 
 class _HomeMenuState extends State<HomeMenu> {
-  int _index = 2;
+  int _index = 3;
   final List _pageList = [
     ProjectPage(),
     DiscoverPage(),

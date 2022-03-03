@@ -9,6 +9,7 @@ final ThemeData theme = ThemeData(
     bottomNavigationBarTheme:
         const BottomNavigationBarThemeData(backgroundColor: Colors.transparent),
     appBarTheme: AppBarTheme(),
+    primaryColor: Colors.blue,
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.transparent),

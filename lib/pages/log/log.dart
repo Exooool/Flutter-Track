@@ -192,7 +192,7 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
               //   ],
               // ),
               CustomButton(
-                '获取验证码',
+                title: '获取验证码',
                 onPressed: () {
                   // Navigator.pushNamed(context, '/verify');
                 },

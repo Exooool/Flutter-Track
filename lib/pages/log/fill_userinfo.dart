@@ -57,7 +57,7 @@ class _FillUserInfoPageState extends State<FillUserInfoPage> {
             ),
             stepList[stepindex]['page'],
             CustomButton(
-              '下一步',
+              title: '下一步',
               onPressed: () {
                 // var high = MediaQuery.of(context).viewInsets.bottom;
                 // print('键盘高度$high');

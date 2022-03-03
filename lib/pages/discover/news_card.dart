@@ -90,11 +90,36 @@ class _NewsCardState extends State<NewsCard> {
                       Image.network(
                         widget.news.contentImg,
                         width: 158,
-                        fit: BoxFit.contain,
+                        height: 110,
+                        fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return const Text('未找到图片');
                         },
                       )
+                    ],
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.news.tag,
+                        style: TextStyle(fontSize: 10),
+                      ),
+                      Row(children: const [
+                        Text(
+                          '观看数',
+                          style: TextStyle(fontSize: 9),
+                        ),
+                        Text(
+                          '评论数',
+                          style: TextStyle(fontSize: 9),
+                        ),
+                        Text(
+                          '点赞数',
+                          style: TextStyle(fontSize: 9),
+                        ),
+                      ])
                     ],
                   )
                 ],

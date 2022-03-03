@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomButton extends StatelessWidget {
   final String title;
   final Function onPressed;
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
+  final double? fontSize;
+  final Widget? child;
   final EdgeInsetsGeometry margin;
   final bool shadow;
-  CustomButton(this.title,
+  const CustomButton(
       {Key? key,
+      this.title = '',
       required this.onPressed,
-      this.height = 56,
-      this.width = 300,
+      this.height,
+      this.width,
+      this.child,
+      this.fontSize = 16,
       this.margin = const EdgeInsets.all(20),
       this.shadow = true})
       : super(key: key);
@@ -20,10 +26,10 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(90),
+          borderRadius: BorderRadius.circular(22),
           boxShadow: shadow
-              ? const [
-                  BoxShadow(
+              ? [
+                  const BoxShadow(
                     color: Color.fromRGBO(56, 86, 244, 0.4), // 阴影的颜色
                     offset: Offset(0, 6), // 阴影与容器的距离
                     blurRadius: 10, // 高斯的标准偏差与盒子的形状卷积。
@@ -44,11 +50,14 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         style: ButtonStyle(
             // 去除自身的背景色和阴影
+            padding: MaterialStateProperty.all(EdgeInsets.zero),
             backgroundColor: MaterialStateProperty.all(Colors.transparent),
             elevation: MaterialStateProperty.all(0)),
-        child: Text(title,
-            style: const TextStyle(
-                fontSize: 16, color: Color.fromRGBO(240, 242, 243, 1))),
+        child: child ??
+            Text(title,
+                style: TextStyle(
+                    fontSize: fontSize,
+                    color: const Color.fromRGBO(240, 242, 243, 1))),
         onPressed: onPressed(),
         // () {
         //   // 调用表单中的onSaved方法

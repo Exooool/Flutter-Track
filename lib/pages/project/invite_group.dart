@@ -32,14 +32,16 @@ class InviteGroup extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CustomButton('短信邀请',
+              CustomButton(
+                  title: '短信邀请',
                   shadow: false,
                   height: 44,
                   width: 112,
                   margin: const EdgeInsets.only(
                       left: 6, right: 6, top: 12, bottom: 12),
                   onPressed: () {}),
-              CustomButton('复制链接',
+              CustomButton(
+                  title: '复制链接',
                   shadow: false,
                   height: 44,
                   width: 112,

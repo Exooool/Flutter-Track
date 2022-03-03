@@ -9,6 +9,9 @@ import 'package:flutter_track/model/project_model.dart';
 // 测试数据
 import 'package:flutter_track/assets/test.dart';
 
+// 样式导入
+import 'package:flutter_track/common/style/myStyle.dart';
+
 class ProjectPage extends StatefulWidget {
   ProjectPage({Key? key}) : super(key: key);
 
@@ -34,25 +37,12 @@ class _ProjectPageState extends State<ProjectPage>
               left: isMini ? 16 : 22,
               right: isMini ? 16 : 22),
           decoration: const BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromRGBO(56, 86, 244, 0.4), // 阴影的颜色
-                  offset: Offset(0, 6), // 阴影与容器的距离
-                  blurRadius: 10, // 高斯的标准偏差与盒子的形状卷积。
-                  spreadRadius: 0, // 在应用模糊之前，框应该膨胀的量。
-                ),
-              ],
-              borderRadius: BorderRadius.all(Radius.circular(60)),
-              gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    Color.fromRGBO(107, 101, 244, 1),
-                    Color.fromRGBO(51, 84, 244, 1)
-                  ])),
+              boxShadow: [MyWidgetStyle.mainBoxShadow],
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+              gradient: MyWidgetStyle.mainLinearGradient),
           child: Text(
             content,
-            style: const TextStyle(fontSize: 14),
+            style: MyFontStyle.projectTab,
           ),
         ));
   }
@@ -64,22 +54,9 @@ class _ProjectPageState extends State<ProjectPage>
       margin: const EdgeInsets.only(top: 6, bottom: 6),
       padding: const EdgeInsets.only(left: 16, right: 32),
       decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromRGBO(56, 86, 244, 0.4), // 阴影的颜色
-              offset: Offset(0, 6), // 阴影与容器的距离
-              blurRadius: 10, // 高斯的标准偏差与盒子的形状卷积。
-              spreadRadius: 0, // 在应用模糊之前，框应该膨胀的量。
-            ),
-          ],
+          boxShadow: [MyWidgetStyle.mainBoxShadow],
           borderRadius: BorderRadius.all(Radius.circular(60)),
-          gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                Color.fromRGBO(107, 101, 244, 1),
-                Color.fromRGBO(51, 84, 244, 1)
-              ])),
+          gradient: MyWidgetStyle.mainLinearGradient),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -99,15 +76,19 @@ class _ProjectPageState extends State<ProjectPage>
                   children: <Widget>[
                     Text(
                       e.projectTtile,
-                      style: const TextStyle(fontSize: 18, color: Colors.white),
+                      style: const TextStyle(
+                          fontSize: MyFontSize.font18,
+                          color: MyColor.fontWhite),
                     ),
                     const Text('(已加入小组)',
                         style: TextStyle(
-                            fontSize: 10,
-                            color: Color.fromRGBO(240, 242, 243, 0.5))),
+                            fontSize: MyFontSize.font10,
+                            color: MyColor.fontWhiteO5)),
                     Text(
                       e.stageList[0].reminderTime,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
+                      style: const TextStyle(
+                          fontSize: MyFontSize.font12,
+                          color: MyColor.fontWhite),
                     )
                   ],
                 ),
@@ -123,7 +104,7 @@ class _ProjectPageState extends State<ProjectPage>
               center: const Text(
                 "10%",
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: MyFontSize.font10,
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
                 ),
@@ -134,9 +115,9 @@ class _ProjectPageState extends State<ProjectPage>
               footer: const Text(
                 '剩余270天',
                 style: TextStyle(
-                    fontSize: 10,
+                    fontSize: MyFontSize.font10,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white),
+                    color: MyColor.fontWhite),
               ),
             ),
           )
@@ -171,29 +152,16 @@ class _ProjectPageState extends State<ProjectPage>
             height: 72,
             margin: const EdgeInsets.only(top: 6, bottom: 6),
             decoration: const BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Color.fromRGBO(56, 86, 244, 0.4), // 阴影的颜色
-                    offset: Offset(0, 6), // 阴影与容器的距离
-                    blurRadius: 10, // 高斯的标准偏差与盒子的形状卷积。
-                    spreadRadius: 0, // 在应用模糊之前，框应该膨胀的量。
-                  ),
-                ],
+                boxShadow: [MyWidgetStyle.mainBoxShadow],
                 borderRadius: BorderRadius.all(Radius.circular(60)),
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      Color.fromRGBO(107, 101, 244, 1),
-                      Color.fromRGBO(51, 84, 244, 1)
-                    ])),
+                gradient: MyWidgetStyle.mainLinearGradient),
             child: InkWell(
               onTap: () {
                 Navigator.pushNamed(context, '/add_project');
               },
               child: const Icon(
                 Icons.add,
-                color: Color.fromRGBO(240, 242, 243, 1),
+                color: MyColor.fontWhite,
                 size: 36,
               ),
             )));

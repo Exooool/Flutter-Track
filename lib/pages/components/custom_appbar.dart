@@ -26,7 +26,11 @@ var discoverTitle = const SizedBox(
 
 class CustomAppbar extends AppBar {
   CustomAppbar(String page,
-      {Key? key, String title = '', Widget? leading, Widget? ending})
+      {Key? key,
+      String title = '',
+      Widget? titleWidget,
+      Widget? leading,
+      Widget? ending})
       : super(
           key: key,
           // 去除阴影
@@ -77,10 +81,11 @@ class CustomAppbar extends AppBar {
           ),
           title: page == 'discover'
               ? discoverTitle
-              : Text(
-                  title,
-                  style: const TextStyle(fontSize: 17),
-                ),
+              : titleWidget ??
+                  Text(
+                    title,
+                    style: const TextStyle(fontSize: 19),
+                  ),
           centerTitle: true,
         );
 }
