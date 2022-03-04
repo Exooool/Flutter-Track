@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 
 // 样式导入
-import 'package:flutter_track/common/style/myStyle.dart';
+import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/two_layer_tab.dart';
 import 'package:flutter_track/pages/user/user_controller.dart';
@@ -63,22 +63,35 @@ class UserPage extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppbar(
         'userPage',
-        leading: InkWell(
-          onTap: () {},
-          child: const Text(
-            '寻找好友',
-            style: TextStyle(),
-          ),
+        titleWidget: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(width: 26),
+            InkWell(
+              onTap: () {},
+              child: const Text(
+                '寻找好友',
+                style: TextStyle(
+                    fontSize: MyFontSize.font14, color: MyColor.fontWhiteO8),
+              ),
+            )
+          ],
         ),
         ending: Row(
           children: [
             InkWell(
               onTap: () {},
-              child: const Text('分享'),
+              child: const Text('分享',
+                  style: TextStyle(
+                      fontSize: MyFontSize.font14, color: MyColor.fontWhiteO8)),
             ),
+            const SizedBox(width: 6),
             InkWell(
               onTap: () {},
-              child: const Text('设置'),
+              child: const Text('设置',
+                  style: TextStyle(
+                      fontSize: MyFontSize.font14, color: MyColor.fontWhiteO8)),
             )
           ],
         ),
@@ -141,20 +154,27 @@ class UserPage extends StatelessWidget {
             ),
             // tab切换栏
             Expanded(
-                child: TwoLayerTab(
-              exteriorTabs: const [
-                {'title': '目标', 'nums': '08'},
-                {'title': '收藏', 'nums': '99+'},
-                {'title': '发布', 'nums': '12'}
-              ],
-              interiorTabs: const [
-                {'title': '全部'},
-                {'title': '对外可见'},
-                {'title': '自己可见'}
-              ],
-              exteriorViews: [],
-              interiorViews: [],
-            ))
+                child: Obx(() => TwoLayerTab(
+                      exteriorTabs: const [
+                        {'title': '目标', 'nums': '08'},
+                        {'title': '收藏', 'nums': '99+'},
+                        {'title': '发布', 'nums': '12'}
+                      ],
+                      interiorTabs: const [
+                        {'title': '全部'},
+                        {'title': '对外可见'},
+                        {'title': '自己可见'}
+                      ],
+                      // controller中的变量在数组中传递时 需要通过toList才可让Getx检测到
+                      exteriorViews: [c.collect.toList(), c.article.toList()],
+                      interiorViews: [c.target.toList()],
+                    ))),
+            // test
+            // FloatingActionButton(
+            //     onPressed: () {
+            //       c.target.removeAt(1);
+            //     },
+            //     child: const Text('删除'))
           ],
         ),
       ),

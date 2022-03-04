@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class MyColor {
   static const Color fontWhite = Color.fromRGBO(240, 242, 243, 1);
   static const Color fontWhiteO5 = Color.fromRGBO(240, 242, 243, 0.5);
+  static const Color fontWhiteO8 = Color.fromRGBO(240, 242, 243, 0.8);
   static const Color fontBlack = Color.fromRGBO(0, 0, 0, 1);
   static const Color mainColor = Color.fromRGBO(107, 101, 244, 1);
   static const Color secondColor = Color.fromRGBO(51, 84, 244, 1);

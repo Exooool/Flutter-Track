@@ -13,7 +13,7 @@ import './union_widget.dart';
 import '../components/custom_appbar.dart';
 
 // 样式导入
-import 'package:flutter_track/common/style/myStyle.dart';
+import 'package:flutter_track/common/style/my_style.dart';
 
 class InformationPage extends StatelessWidget {
   final InformationController c = Get.put(InformationController());

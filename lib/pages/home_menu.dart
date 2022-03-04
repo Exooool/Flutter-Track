@@ -26,7 +26,8 @@ class _HomeMenuState extends State<HomeMenu> {
 
   // 导航栏按钮样式
 
-  Widget _menuItem(IconData icon, int index, String title) {
+  Widget _menuItem(
+      String unselected, String selected, int index, String title) {
     return InkWell(
         onTap: () {
           setState(() {
@@ -38,10 +39,15 @@ class _HomeMenuState extends State<HomeMenu> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                color: _index == index ? Colors.blue : Colors.white,
-                size: 40,
+              // Icon(
+              //   icon,
+              //   color: _index == index ? Colors.blue : Colors.white,
+              //   size: 40,
+              // ),
+              Image.asset(
+                _index == index ? selected : unselected,
+                height: 40,
+                width: 40,
               ),
               Text(
                 title,
@@ -72,11 +78,14 @@ class _HomeMenuState extends State<HomeMenu> {
           child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _menuItem(Icons.ac_unit, 0, '计划'),
-                _menuItem(Icons.ac_unit, 1, '发现'),
-                _menuItem(Icons.ac_unit, 2, '数据'),
-                _menuItem(
-                    const IconData(0xe60f, fontFamily: 'MyIcons'), 3, '个人'),
+                _menuItem('lib/assets/images/icon5.png',
+                    'lib/assets/images/icon1.png', 0, '计划'),
+                _menuItem('lib/assets/images/icon6.png',
+                    'lib/assets/images/icon2.png', 1, '发现'),
+                _menuItem('lib/assets/images/icon7.png',
+                    'lib/assets/images/icon3.png', 2, '数据'),
+                _menuItem('lib/assets/images/icon8.png',
+                    'lib/assets/images/icon4.png', 3, '个人'),
               ]),
         ),
       ],

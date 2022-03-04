@@ -35,12 +35,14 @@ class CustomAppbar extends AppBar {
           key: key,
           // 去除阴影
           // elevation: 0,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 26),
-            child: Center(
-              child: leading,
-            ),
-          ),
+          leading: leading == null
+              ? null
+              : Padding(
+                  padding: const EdgeInsets.only(left: 26),
+                  child: Center(
+                    child: leading,
+                  ),
+                ),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 26),
@@ -79,6 +81,7 @@ class CustomAppbar extends AppBar {
                       Color.fromRGBO(51, 84, 244, 1)
                     ])),
           ),
+          titleSpacing: 0,
           title: page == 'discover'
               ? discoverTitle
               : titleWidget ??

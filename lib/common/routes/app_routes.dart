@@ -8,4 +8,5 @@ abstract class AppRoutes {
   static const addProject = '/add_project';
   static const matchGroup = '/match_group';
   static const inviteGroup = '/invite_group';
+  static const setting = '/setting';
 }

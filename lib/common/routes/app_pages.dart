@@ -1,3 +1,4 @@
+import 'package:flutter_track/pages/setting/setting.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter_track/pages/home_menu.dart';
@@ -21,5 +22,6 @@ class AppPages {
     GetPage(name: '/add_project', page: () => AddProject()),
     GetPage(name: '/match_group', page: () => const MatchGroup()),
     GetPage(name: '/invite_group', page: () => const InviteGroup()),
+    GetPage(name: '/setting', page: () => const SettingPage()),
   ];
 }

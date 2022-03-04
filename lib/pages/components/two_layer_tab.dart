@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 // 样式导入
-import 'package:flutter_track/common/style/myStyle.dart';
+import 'package:flutter_track/common/style/my_style.dart';
 
 class TwoLayerTab extends StatefulWidget {
   final List exteriorTabs;
   final List interiorTabs;
-  final List<Widget> exteriorViews;
-  final List<Widget> interiorViews;
-  TwoLayerTab({
+  final List exteriorViews;
+  final List interiorViews;
+  const TwoLayerTab({
     Key? key,
     required this.exteriorTabs,
     required this.interiorTabs,
@@ -101,9 +101,16 @@ class _TwoLayerTabState extends State<TwoLayerTab>
     return result;
   }
 
+  List<Widget> getList(List list) {
+    List<Widget> result;
+    result = list.map((item) {
+      return Text(item['title']);
+    }).toList();
+    return result;
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabExteriorController = TabController(
         length: widget.exteriorTabs.length, vsync: this, initialIndex: 0);
@@ -137,8 +144,8 @@ class _TwoLayerTabState extends State<TwoLayerTab>
                   children: <Widget>[
                 Column(
                   children: <Widget>[
-                    SizedBox(
-                      height: 60,
+                    Container(
+                      margin: const EdgeInsets.only(top: 12),
                       child: TabBar(
                           isScrollable: true,
                           onTap: (e) {
@@ -161,14 +168,31 @@ class _TwoLayerTabState extends State<TwoLayerTab>
                           ListView(
                             padding: const EdgeInsets.only(
                                 left: 24, right: 24, bottom: 100),
+                            children: getList(widget.interiorViews[0]),
                           ),
-                          const Text('2'),
-                          const Text('2')
+                          ListView(
+                            padding: const EdgeInsets.only(
+                                left: 24, right: 24, bottom: 100),
+                            children: getList(widget.interiorViews[0]),
+                          ),
+                          ListView(
+                            padding: const EdgeInsets.only(
+                                left: 24, right: 24, bottom: 100),
+                            children: getList(widget.interiorViews[0]),
+                          )
                         ]))
                   ],
                 ),
-                const Text('data'),
-                const Text('data'),
+                ListView(
+                  padding:
+                      const EdgeInsets.only(left: 24, right: 24, bottom: 100),
+                  children: getList(widget.exteriorViews[0]),
+                ),
+                ListView(
+                  padding:
+                      const EdgeInsets.only(left: 24, right: 24, bottom: 100),
+                  children: getList(widget.exteriorViews[1]),
+                ),
               ]))
         ],
       ),
