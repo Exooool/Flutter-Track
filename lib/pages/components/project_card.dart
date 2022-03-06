@@ -30,7 +30,7 @@ class ProjectCard extends StatelessWidget {
     return Container(
       height: 72,
       margin: const EdgeInsets.only(top: 6, bottom: 6),
-      padding: const EdgeInsets.only(left: 16, right: 32),
+      padding: const EdgeInsets.only(left: 6, right: 0),
       decoration: const BoxDecoration(
           boxShadow: [MyWidgetStyle.mainBoxShadow],
           borderRadius: BorderRadius.all(Radius.circular(60)),
@@ -41,13 +41,17 @@ class ProjectCard extends StatelessWidget {
           Row(
             children: <Widget>[
               // 头像
-              CircleAvatar(
-                backgroundColor: tfColor[project.iconInfo.color],
-                child: const Icon(Icons.ac_unit),
+              SizedBox(
+                height: 60,
+                width: 60,
+                child: CircleAvatar(
+                  backgroundColor: tfColor[project.iconInfo.color],
+                  child: const Icon(Icons.ac_unit),
+                ),
               ),
               // 计划信息
               Padding(
-                padding: const EdgeInsets.only(left: 18),
+                padding: const EdgeInsets.only(left: 6),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,9 +60,10 @@ class ProjectCard extends StatelessWidget {
                       project.projectTtile,
                       style: const TextStyle(
                           fontSize: MyFontSize.font18,
+                          fontWeight: FontWeight.w600,
                           color: MyColor.fontWhite),
                     ),
-                    const Text('(已加入小组)',
+                    const Text('已加入小组',
                         style: TextStyle(
                             fontSize: MyFontSize.font10,
                             color: MyColor.fontWhiteO5)),
@@ -66,6 +71,7 @@ class ProjectCard extends StatelessWidget {
                       project.stageList[0].reminderTime,
                       style: const TextStyle(
                           fontSize: MyFontSize.font12,
+                          fontWeight: FontWeight.w600,
                           color: MyColor.fontWhite),
                     )
                   ],
@@ -76,13 +82,13 @@ class ProjectCard extends StatelessWidget {
           Center(
             // 圆形进度条
             child: CircularPercentIndicator(
-              radius: 18.5,
-              lineWidth: 5.0,
+              radius: 36,
+              lineWidth: 10.0,
               percent: 0.1,
               center: const Text(
                 "10%",
                 style: TextStyle(
-                  fontSize: MyFontSize.font10,
+                  fontSize: MyFontSize.font16,
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
                 ),
@@ -90,13 +96,13 @@ class ProjectCard extends StatelessWidget {
               startAngle: 270.0,
               progressColor: tfColor[project.iconInfo.color],
               backgroundColor: const Color.fromRGBO(240, 242, 243, 0.5),
-              footer: const Text(
-                '剩余270天',
-                style: TextStyle(
-                    fontSize: MyFontSize.font10,
-                    fontWeight: FontWeight.w600,
-                    color: MyColor.fontWhite),
-              ),
+              // footer: const Text(
+              //   '剩余270天',
+              //   style: TextStyle(
+              //       fontSize: MyFontSize.font10,
+              //       fontWeight: FontWeight.w600,
+              //       color: MyColor.fontWhite),
+              // ),
             ),
           )
         ],

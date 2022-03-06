@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import '../components/custom_appbar.dart';
 import '../components/custom_button.dart';
 
@@ -193,8 +194,20 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
               // ),
               CustomButton(
                 title: '获取验证码',
+                height: 60,
+                width: 300,
+                margin: const EdgeInsets.only(top: 24, bottom: 24),
                 onPressed: () {
-                  // Navigator.pushNamed(context, '/verify');
+                  Get.toNamed('/verify');
+                },
+              ),
+              CustomButton(
+                title: '本机号码一键登录',
+                height: 60,
+                width: 300,
+                margin: const EdgeInsets.all(0),
+                onPressed: () {
+                  Get.toNamed('/verify');
                 },
               ),
               // 随便逛逛

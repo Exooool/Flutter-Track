@@ -7,7 +7,12 @@ class MyColor {
   static const Color fontBlack = Color.fromRGBO(0, 0, 0, 1);
   static const Color mainColor = Color.fromRGBO(107, 101, 244, 1);
   static const Color secondColor = Color.fromRGBO(51, 84, 244, 1);
+  static const Color mainColorO4 = Color.fromRGBO(107, 101, 244, 0.4);
+  static const Color secondColorO4 = Color.fromRGBO(51, 84, 244, 0.4);
   static const Color thirdColor = Color.fromRGBO(78, 92, 244, 1);
+  static const Color white = Color.fromRGBO(255, 255, 255, 1);
+  static const Color whiteO5 = Color.fromRGBO(255, 255, 255, 0.5);
+  static const Color transparent = Color.fromRGBO(255, 255, 255, 0);
 }
 
 class MyFontSize {
@@ -49,6 +54,29 @@ class MyWidgetStyle {
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
       colors: [MyColor.mainColor, MyColor.secondColor]);
+
+  static const LinearGradient mainLinearGradientO4 = LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [MyColor.mainColorO4, MyColor.secondColorO4]);
+
+  // 白色透明渐变
+  static const LinearGradient secondLinearGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      stops: [0.01, 0.99],
+      colors: [MyColor.whiteO5, MyColor.transparent]);
+  // 白色透明渐变边框
+  static const LinearGradient borderLinearGradient =
+      LinearGradient(begin: Alignment.topLeft, end: Alignment(-0.2, 1), stops: [
+    0.1,
+    0.6,
+    1
+  ], colors: [
+    Color.fromRGBO(255, 255, 255, 1),
+    Color.fromRGBO(255, 255, 255, 0),
+    Color.fromRGBO(255, 255, 255, 0.77)
+  ]);
 
   // 盒子或卡片背景阴影 用于计划卡片
   static const BoxShadow mainBoxShadow = BoxShadow(

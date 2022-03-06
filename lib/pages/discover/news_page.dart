@@ -38,6 +38,7 @@ class _NewsPageState extends State<NewsPage> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: const EdgeInsets.only(top: 17),
       controller: scrollController,
       children: widget.list,
       physics: const AlwaysScrollableScrollPhysics(),

@@ -9,14 +9,14 @@ import 'package:flutter_track/pages/information/information.dart';
 import './discover/news_page.dart';
 
 class HomeMenu extends StatefulWidget {
-  HomeMenu({Key? key}) : super(key: key);
+  const HomeMenu({Key? key}) : super(key: key);
 
   @override
   _HomeMenuState createState() => _HomeMenuState();
 }
 
 class _HomeMenuState extends State<HomeMenu> {
-  int _index = 3;
+  int _index = 0;
   final List _pageList = [
     ProjectPage(),
     DiscoverPage(),

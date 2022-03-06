@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomButton extends StatelessWidget {
   final String title;
-  final Function onPressed;
+  final Function() onPressed;
   final double? height;
   final double? width;
   final double? fontSize;
@@ -26,7 +26,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(30),
           boxShadow: shadow
               ? [
                   const BoxShadow(
@@ -58,7 +58,7 @@ class CustomButton extends StatelessWidget {
                 style: TextStyle(
                     fontSize: fontSize,
                     color: const Color.fromRGBO(240, 242, 243, 1))),
-        onPressed: onPressed(),
+        onPressed: onPressed,
         // () {
         //   // 调用表单中的onSaved方法
         //   // var state = _formKey.currentState as FormState;

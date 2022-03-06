@@ -1,4 +1,5 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 
@@ -173,33 +174,8 @@ class AddProject extends StatelessWidget {
       appBar: CustomAppbar(
         'addproject',
         title: '添加计划',
-        leading: InkWell(
-          onTap: () {
-            Get.back();
-          },
-          child: const Text('返回',
-              style: TextStyle(color: Color.fromRGBO(240, 242, 243, 0.8))),
-        ),
         ending: InkWell(
-          onTap: () {
-            // 集合所有数据
-            var data = {
-              'endTime': c.endTime.value,
-              'isDivide': c.isDivide.value,
-              'isJoin': c.isJoin.value,
-              'isMatch': c.isMatch.value,
-              'projectTitle': c.projectTitle.value,
-              'frequency': c.frequency,
-              'reminderTime': c.reminderTime.value,
-              'stageList': c.stageList
-            };
-            print(data);
-            if (c.isMatch.value == 0) {
-              Get.toNamed('/match_group');
-            } else {
-              Get.toNamed('/invite_group');
-            }
-          },
+          onTap: () {},
           child: const Text(
             '确定',
             style: TextStyle(color: Color.fromRGBO(240, 242, 243, 0.8)),
@@ -310,7 +286,28 @@ class AddProject extends StatelessWidget {
                           formSwitch('系统匹配', '自行邀请', c.isMatch.value, (index) {
                         c.isMatch.value = index;
                         print('匹配方式${c.isMatch.value}');
-                      })))
+                      }))),
+              CustomButton(
+                  title: '确定计划',
+                  onPressed: () {
+                    // 集合所有数据
+                    var data = {
+                      'endTime': c.endTime.value,
+                      'isDivide': c.isDivide.value,
+                      'isJoin': c.isJoin.value,
+                      'isMatch': c.isMatch.value,
+                      'projectTitle': c.projectTitle.value,
+                      'frequency': c.frequency,
+                      'reminderTime': c.reminderTime.value,
+                      'stageList': c.stageList
+                    };
+                    print(data);
+                    if (c.isMatch.value == 0) {
+                      Get.toNamed('/match_group');
+                    } else {
+                      Get.toNamed('/invite_group');
+                    }
+                  })
             ],
           );
         },
