@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:flutter_track/pages/components/lineargradient_text.dart';
 import 'package:get/get.dart';
 import './picker_week_row.dart';
 
@@ -32,14 +35,18 @@ class FormDateTimePicker extends StatelessWidget {
       double height = 280,
       Widget? footer}) {
     return Picker(
-        height: height,
         adapter: adapter,
         footer: footer,
         hideHeader: hideHeader,
-        confirmTextStyle: customTextStyle,
-        cancelTextStyle: customTextStyle,
+        confirmTextStyle: TextStyle(
+            fontSize: MyFontSize.font16,
+            foreground: MyFontStyle.textlinearForeground),
+        cancelTextStyle: TextStyle(
+            fontSize: MyFontSize.font16,
+            foreground: MyFontStyle.textlinearForeground),
         confirmText: confirmText,
         cancelText: '取消',
+        containerColor: Colors.transparent,
         selectionOverlay: Opacity(
           opacity: 0.1,
           child: Container(
@@ -53,11 +60,10 @@ class FormDateTimePicker extends StatelessWidget {
                 ])),
           ),
         ),
-        backgroundColor: const Color.fromRGBO(234, 236, 239, 1),
+        backgroundColor: Colors.transparent,
         headerDecoration: const BoxDecoration(
-            color: Color.fromRGBO(234, 236, 239, 1),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+          color: Colors.transparent,
+        ),
         onConfirm: onConfirm);
   }
 
@@ -65,15 +71,34 @@ class FormDateTimePicker extends StatelessWidget {
   showEndTimePicker(BuildContext context) {
     var datetime = DateTime.now();
     var year = datetime.year;
-    customPicker(
-      adapter:
-          DateTimePickerAdapter(isNumberMonth: true, type: 7, yearBegin: year),
-      onConfirm: (Picker picker, List value) {
-        onChange(picker.adapter.text.substring(0, 10));
-      },
-    ).showModal(context, backgroundColor: Colors.transparent);
+    Get.bottomSheet(
+        SizedBox(
+          height: 295.h,
+          child: Stack(children: [
+            //第二层高斯模糊
+            Positioned.fill(
+                child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+              child: Container(color: Colors.white.withOpacity(0.4)),
+            )),
+            //第三层
+            Positioned.fill(
+              child: PublicCard(
+                  radius: 10.r,
+                  widget: customPicker(
+                    adapter: DateTimePickerAdapter(
+                        isNumberMonth: true, type: 7, yearBegin: year),
+                    onConfirm: (Picker picker, List value) {
+                      onChange(picker.adapter.text.substring(0, 10));
+                    },
+                  ).makePicker()),
+            ),
+          ]),
+        ),
+        barrierColor: Colors.transparent);
   }
 
+  // 完成频率选择器
   showFrequencyPicker(BuildContext context) {
     Map<String, dynamic> frequency = {
       'week': [0, 1, 2, 3, 4, 5, 6]
@@ -177,8 +202,8 @@ class FormDateTimePicker extends StatelessWidget {
 
   showReminderTimePicker(BuildContext context) {
     Picker(
-            confirmTextStyle: customTextStyle,
-            cancelTextStyle: customTextStyle,
+            // confirmTextStyle: customTextStyle,
+            // cancelTextStyle: customTextStyle,
             confirmText: '确定',
             cancelText: '取消',
             backgroundColor: const Color.fromRGBO(234, 236, 239, 1),
@@ -227,8 +252,8 @@ class FormDateTimePicker extends StatelessWidget {
         child: Text(
           value == '' || value == null ? '请选择' : value!,
           textAlign: TextAlign.right,
-          style: const TextStyle(
-              color: Color.fromRGBO(0, 0, 0, 0.2), fontSize: 16),
+          style: TextStyle(
+              color: MyColor.fontBlackO2, fontSize: MyFontSize.font16),
         ));
   }
 }

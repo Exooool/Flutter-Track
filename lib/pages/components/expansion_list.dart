@@ -53,7 +53,7 @@ class _ExpansionListState extends State<ExpansionList> {
               children: <Widget>[
                 Text(
                   widget.title,
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: MyColor.fontWhite,
                       fontSize: MyFontSize.font16,
                       fontWeight: FontWeight.w600),

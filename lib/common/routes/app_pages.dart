@@ -15,9 +15,9 @@ class AppPages {
   static const initial = AppRoutes.home;
 
   static final routes = [
-    GetPage(name: '/home', page: () => HomeMenu()),
+    GetPage(name: '/home', page: () => const HomeMenu()),
     GetPage(name: '/log', page: () => const RegPageAndLogPage()),
-    GetPage(name: '/verify', page: () => VerifyPage()),
+    GetPage(name: '/verify', page: () => const VerifyPage()),
     GetPage(name: '/fill_userinfo', page: () => const FillUserInfoPage()),
     GetPage(name: '/add_project', page: () => AddProject()),
     GetPage(name: '/match_group', page: () => const MatchGroup()),

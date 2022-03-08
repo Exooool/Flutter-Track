@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/model/project_model.dart';
 import 'package:flutter_track/pages/components/project_card.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 import '../components/custom_appbar.dart';
 import '';
 
@@ -28,52 +30,72 @@ class _ProjectPageState extends State<ProjectPage>
   late TabController _tabInteriorController;
 
   // 自定义tab样式
-  Widget _customTab(String content,
-      {bool show = true, double opcity = 1, bool isMini = false}) {
-    return Opacity(
-        opacity: opcity,
-        child: Container(
-          padding: EdgeInsets.only(
-              top: isMini ? 8 : 14,
-              bottom: isMini ? 8 : 14,
-              left: isMini ? 16 : 22,
-              right: isMini ? 16 : 22),
-          decoration: show
-              ? BoxDecoration(
-                  boxShadow:
-                      opcity == 0.5 ? null : [MyWidgetStyle.mainBoxShadow],
-                  borderRadius: const BorderRadius.all(Radius.circular(30)),
-                  gradient: MyWidgetStyle.mainLinearGradient)
-              : null,
-          child: Text(
-            content,
-            style: MyFontStyle.projectTab,
-          ),
-        ));
+  Widget mainTab(String content, {bool show = true}) {
+    return show
+        ? PublicCard(
+            height: 48.h,
+            width: 124.w,
+            notWhite: true,
+            radius: 90.r,
+            widget: Center(
+              child: Text(
+                content,
+                style: MyFontStyle.projectTabSelected,
+              ),
+            ))
+        : Container(
+            height: 48.h,
+            width: 124.w,
+            alignment: Alignment.center,
+            child: Text(
+              content,
+              style: MyFontStyle.projectTabUnSelected,
+            ),
+          );
+  }
+
+  // 副tab
+  Widget subTab(String content, {bool show = true}) {
+    return show
+        ? PublicCard(
+            radius: 90.r,
+            height: 36.h,
+            width: 76.w,
+            widget: Center(
+              child: Text(
+                content,
+                style: TextStyle(
+                    fontSize: MyFontSize.font14, color: MyColor.fontBlack),
+              ),
+            ))
+        : Container(
+            height: 36.h,
+            width: 76.w,
+            alignment: Alignment.center,
+            child: Text(
+              content,
+              style: TextStyle(
+                  fontSize: MyFontSize.font14, color: MyColor.fontBlackO2),
+            ),
+          );
   }
 
   // 添加按钮
   Widget projectAddButton() {
-    return Opacity(
-        opacity: 0.6,
-        child: Container(
-            height: 72,
-            width: 72,
-            margin: const EdgeInsets.only(top: 6, bottom: 6),
-            decoration: const BoxDecoration(
-                boxShadow: [MyWidgetStyle.mainBoxShadow],
-                borderRadius: BorderRadius.all(Radius.circular(60)),
-                gradient: MyWidgetStyle.mainLinearGradient),
-            child: InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, '/add_project');
-              },
-              child: const Icon(
-                Icons.add,
-                color: MyColor.fontWhite,
-                size: 36,
-              ),
-            )));
+    return PublicCard(
+        height: 72.r,
+        width: 72.r,
+        radius: 60.r,
+        widget: InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, '/add_project');
+          },
+          child: const Icon(
+            Icons.add,
+            color: MyColor.fontBlack,
+            size: 36,
+          ),
+        ));
   }
 
   // 获取计划
@@ -92,7 +114,7 @@ class _ProjectPageState extends State<ProjectPage>
     _tabExteriorController =
         TabController(length: 2, vsync: this, initialIndex: 0);
     _tabInteriorController =
-        TabController(length: 3, vsync: this, initialIndex: 0);
+        TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
   @override
@@ -107,28 +129,26 @@ class _ProjectPageState extends State<ProjectPage>
         //       print(Article.fromMap(json['news'][0]));
         //     },
         //     child: Text('click'))
+
         Container(
           margin: EdgeInsets.only(
-              top: MediaQueryData.fromWindow(window).padding.top + 10),
-          height: 60,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(90)),
-              gradient: MyWidgetStyle.mainLinearGradientO4),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-            child: TabBar(
+              top: MediaQueryData.fromWindow(window).padding.top + 12.h),
+          child: PublicCard(
+            height: 60.h,
+            radius: 90.r,
+            widget: TabBar(
                 isScrollable: true,
                 onTap: (e) {
                   setState(() {});
                 },
-                labelPadding: const EdgeInsets.only(left: 6, right: 6),
+                labelPadding: EdgeInsets.only(left: 6.w, right: 6.w),
                 controller: _tabExteriorController,
                 indicator: const BoxDecoration(color: Colors.transparent),
                 indicatorWeight: 0,
                 tabs: [
-                  _customTab('计划列表',
+                  mainTab('计划列表',
                       show: _tabExteriorController.index == 0 ? true : false),
-                  _customTab('互助小组',
+                  mainTab('互助小组',
                       show: _tabExteriorController.index == 1 ? true : false),
                 ]),
           ),
@@ -139,10 +159,48 @@ class _ProjectPageState extends State<ProjectPage>
                 physics: const NeverScrollableScrollPhysics(),
                 controller: _tabExteriorController,
                 children: <Widget>[
+              // 计划列表
+              Stack(
+                children: [
+                  ListView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: EdgeInsets.only(
+                        top: 35.h, left: 24.w, right: 24.w, bottom: 100.h),
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(bottom: 20.h),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '即将开始',
+                          style: TextStyle(fontSize: MyFontSize.font20),
+                        ),
+                      ),
+                      Column(
+                        children: _getProject(),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '其余计划',
+                          style: TextStyle(fontSize: MyFontSize.font20),
+                        ),
+                      ),
+                      Column(
+                        children: _getProject(),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                      bottom: 140.h, right: 24.w, child: projectAddButton())
+                ],
+              ),
+
+              // 互助小组
               Column(
                 children: <Widget>[
                   SizedBox(
-                    height: 60,
+                    height: 60.h,
                     child: TabBar(
                       isScrollable: true,
                       onTap: (e) {
@@ -150,18 +208,17 @@ class _ProjectPageState extends State<ProjectPage>
                       },
                       indicator: const BoxDecoration(color: Colors.transparent),
                       indicatorWeight: 0,
-                      labelPadding: const EdgeInsets.only(left: 6, right: 6),
+                      labelPadding: EdgeInsets.only(left: 6.w, right: 6.w),
                       controller: _tabInteriorController,
                       tabs: [
-                        _customTab('进行中',
-                            opcity: _tabInteriorController.index == 0 ? 1 : 0.5,
-                            isMini: true),
-                        _customTab('已完成',
-                            opcity: _tabInteriorController.index == 1 ? 1 : 0.5,
-                            isMini: true),
-                        _customTab('全部',
-                            opcity: _tabInteriorController.index == 2 ? 1 : 0.5,
-                            isMini: true),
+                        subTab('匹配成功',
+                            show: _tabInteriorController.index == 0
+                                ? true
+                                : false),
+                        subTab('匹配中',
+                            show: _tabInteriorController.index == 1
+                                ? true
+                                : false),
                       ],
                     ),
                   ),
@@ -170,25 +227,9 @@ class _ProjectPageState extends State<ProjectPage>
                           // 禁止滑动
                           physics: const NeverScrollableScrollPhysics(),
                           controller: _tabInteriorController,
-                          children: <Widget>[
-                        ListView(
-                          padding: const EdgeInsets.only(
-                              left: 24, right: 24, bottom: 100),
-                          children: [
-                            Column(
-                              children: _getProject(),
-                            ),
-                            Column(
-                              children: [projectAddButton()],
-                            )
-                          ],
-                        ),
-                        const Text('2'),
-                        const Text('2')
-                      ]))
+                          children: <Widget>[const Text('1'), const Text('2')]))
                 ],
               ),
-              const Text('2')
             ])),
       ],
     );

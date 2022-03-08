@@ -1,9 +1,11 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 
-import '../components/lineargradient_text.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'component/form_datetime_picker.dart';
 
@@ -17,70 +19,63 @@ class AddProject extends StatelessWidget {
 
   // 表单输入框
   Widget formInput(String title, {Widget? component, Function? onChanged}) {
-    return Padding(
-        padding: const EdgeInsets.only(left: 24, right: 24, top: 6, bottom: 6),
-        child: Neumorphic(
-          style: const NeumorphicStyle(
-              shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
-              shadowLightColorEmboss: Color.fromRGBO(255, 255, 255, 1),
-              depth: -3,
-              color: Color.fromRGBO(238, 238, 246, 1),
-              // color: Color(0xffEFECF0),
-              boxShape: NeumorphicBoxShape.stadium()),
-          child: Container(
-            padding: const EdgeInsets.only(left: 24, right: 24),
-            height: 44,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(width: 36),
-                Expanded(
-                    child: component != null
-                        ? Container(
-                            alignment: Alignment.centerRight,
-                            child: component,
-                          )
-                        : TextFormField(
-                            onChanged: (value) {
-                              onChanged!(value);
-                            },
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromRGBO(0, 0, 0, 1)),
-                            textDirection: TextDirection.rtl,
-                            decoration: const InputDecoration(
-                                hintText: '请输入',
-                                hintStyle: TextStyle(
-                                    color: Color.fromRGBO(0, 0, 0, 0.2)),
-                                hintTextDirection: TextDirection.rtl,
-                                border: InputBorder.none)))
-              ],
-            ),
+    return Center(
+      child: PublicCard(
+        radius: 30.r,
+        height: 48.h,
+        width: 366.w,
+        margin: EdgeInsets.only(bottom: 12.h),
+        widget: Padding(
+          padding: EdgeInsets.only(left: 24.w, right: 24.w),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                title,
+                style: TextStyle(
+                    fontSize: MyFontSize.font16, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(width: 36.w),
+              Expanded(
+                  child: component != null
+                      ? Container(
+                          alignment: Alignment.centerRight,
+                          child: component,
+                        )
+                      : TextFormField(
+                          onChanged: (value) {
+                            onChanged!(value);
+                          },
+                          style: TextStyle(
+                              fontSize: MyFontSize.font16,
+                              fontWeight: FontWeight.w500,
+                              color: MyColor.fontBlack),
+                          textDirection: TextDirection.rtl,
+                          decoration: const InputDecoration(
+                              hintText: '请输入',
+                              hintStyle: TextStyle(color: MyColor.fontBlackO2),
+                              hintTextDirection: TextDirection.rtl,
+                              border: InputBorder.none)))
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   // 表单开关
   Widget formSwitch(String on, String off, int value, Function onChange) {
     return ToggleSwitch(
-      minWidth: on.length == 1 ? 34 : 88,
-      fontSize: 16,
-      minHeight: 25,
+      minWidth: on.length == 1 ? 40.sp : 100.sp,
+      fontSize: MyFontSize.font16,
+      minHeight: 25.h,
       radiusStyle: true,
-      cornerRadius: 60.0,
+      cornerRadius: 60.r,
       inactiveBgColor: Colors.transparent,
       activeFgColor: Colors.white,
-      inactiveFgColor: const Color.fromRGBO(0, 0, 0, 0.2),
-      activeBgColor: const [
-        Color.fromRGBO(107, 101, 244, 1),
-        Color.fromRGBO(51, 84, 244, 1)
-      ],
+      inactiveFgColor: MyColor.fontBlackO2,
+      activeBgColor: const [MyColor.mainColor, MyColor.secondColor],
       initialLabelIndex: value,
       totalSwitches: 2,
       labels: [on, off],
@@ -97,8 +92,15 @@ class AddProject extends StatelessWidget {
         Stack(
           children: [
             Container(
+              margin: EdgeInsets.only(bottom: 12.h),
               alignment: Alignment.center,
-              child: GradientText(c.stageCH[stage]),
+              child: Text(
+                c.stageCH[stage],
+                style: TextStyle(
+                    fontSize: MyFontSize.font16,
+                    fontWeight: FontWeight.w600,
+                    foreground: MyFontStyle.textlinearForeground),
+              ),
             ),
             Container(
               padding: const EdgeInsets.only(right: 48),
@@ -171,6 +173,7 @@ class AddProject extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: CustomAppbar(
         'addproject',
         title: '添加计划',
@@ -185,39 +188,32 @@ class AddProject extends StatelessWidget {
       body: GetX<AddProjectController>(
         builder: (controller) {
           return ListView(
-            padding: const EdgeInsets.only(bottom: 109),
+            padding: EdgeInsets.only(bottom: 109.h),
             children: <Widget>[
-              const SizedBox(height: 15),
               // 头像
               Column(
                 children: [
-                  Neumorphic(
-                    style: const NeumorphicStyle(
-                        shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
-                        shadowLightColorEmboss:
-                            Color.fromRGBO(255, 255, 255, 1),
-                        depth: -3,
-                        color: Color.fromRGBO(238, 238, 246, 1),
-                        // color: Color(0xffEFECF0),
-                        boxShape: NeumorphicBoxShape.stadium()),
-                    child: SizedBox(
-                        height: 88,
-                        width: 88,
-                        child: InkWell(
-                          onTap: c.selectImage,
-                          child: c.image == null
-                              ? const SizedBox()
-                              : Image.file(
-                                  File(c.image!.path),
-                                  fit: BoxFit.cover,
-                                ),
-                        )),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.h, bottom: 6.h),
+                    child: PublicCard(
+                      radius: 90.r,
+                      height: 88.r,
+                      width: 88.r,
+                      onTap: c.selectImage,
+                      widget: c.image == null
+                          ? const SizedBox()
+                          : Image.file(
+                              File(c.image!.path),
+                              fit: BoxFit.cover,
+                            ),
+                    ),
                   ),
-                  const Padding(
-                      padding: EdgeInsets.only(top: 6),
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 12.h),
                       child: Text('点击选择头像',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500)))
+                              fontSize: MyFontSize.font16,
+                              fontWeight: FontWeight.w500)))
                 ],
               ),
               // 列表
@@ -251,7 +247,9 @@ class AddProject extends StatelessWidget {
                             c.stageList.add({});
                           } else {}
                         },
-                        child: Icon(Icons.add),
+                        child: Container(
+                            margin: EdgeInsets.only(bottom: 12.h),
+                            child: Icon(Icons.add)),
                       )
                     ],
                   )),
@@ -287,27 +285,32 @@ class AddProject extends StatelessWidget {
                         c.isMatch.value = index;
                         print('匹配方式${c.isMatch.value}');
                       }))),
-              CustomButton(
-                  title: '确定计划',
-                  onPressed: () {
-                    // 集合所有数据
-                    var data = {
-                      'endTime': c.endTime.value,
-                      'isDivide': c.isDivide.value,
-                      'isJoin': c.isJoin.value,
-                      'isMatch': c.isMatch.value,
-                      'projectTitle': c.projectTitle.value,
-                      'frequency': c.frequency,
-                      'reminderTime': c.reminderTime.value,
-                      'stageList': c.stageList
-                    };
-                    print(data);
-                    if (c.isMatch.value == 0) {
-                      Get.toNamed('/match_group');
-                    } else {
-                      Get.toNamed('/invite_group');
-                    }
-                  })
+              Center(
+                child: CustomButton(
+                    title: '确定计划',
+                    fontSize: MyFontSize.font16,
+                    height: 48.h,
+                    width: 104.w,
+                    onPressed: () {
+                      // 集合所有数据
+                      var data = {
+                        'endTime': c.endTime.value,
+                        'isDivide': c.isDivide.value,
+                        'isJoin': c.isJoin.value,
+                        'isMatch': c.isMatch.value,
+                        'projectTitle': c.projectTitle.value,
+                        'frequency': c.frequency,
+                        'reminderTime': c.reminderTime.value,
+                        'stageList': c.stageList
+                      };
+                      print(data);
+                      if (c.isMatch.value == 0) {
+                        Get.toNamed('/match_group');
+                      } else {
+                        Get.toNamed('/invite_group');
+                      }
+                    }),
+              )
             ],
           );
         },

@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 
 class VerifyInput extends StatefulWidget {
   final bool isFocused;
@@ -23,7 +26,6 @@ class _VerifyInputState extends State<VerifyInput> {
   var focusedCell;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) {
@@ -49,7 +51,6 @@ class _VerifyInputState extends State<VerifyInput> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     timer.cancel();
   }
@@ -66,23 +67,20 @@ class _VerifyInputState extends State<VerifyInput> {
               colors: cursorColor)),
     );
 
-    unFocusedCell = Container(
-      child: Text(widget.text),
+    unFocusedCell = Text(
+      widget.text,
+      style: TextStyle(
+          fontSize: MyFontSize.font30,
+          foreground: MyFontStyle.textlinearForeground),
     );
 
-    return Container(
-      margin: const EdgeInsets.only(left: 4, right: 4),
-      child: Neumorphic(
-          style: NeumorphicStyle(
-              shadowDarkColorEmboss: const Color.fromRGBO(8, 52, 84, 0.4),
-              shadowLightColorEmboss: const Color.fromRGBO(255, 255, 255, 1),
-              depth: -3,
-              color: const Color.fromRGBO(238, 238, 246, 1),
-              boxShape:
-                  NeumorphicBoxShape.roundRect(BorderRadius.circular(90))),
-          child: Container(
-              height: 56,
-              width: 40,
+    return Padding(
+      padding: EdgeInsets.only(left: 6.w, right: 6.w),
+      child: PublicCard(
+          height: 60.h,
+          width: 40.w,
+          radius: 30.r,
+          widget: Container(
               alignment: Alignment.center,
               child: widget.isFocused ? focusedCell : unFocusedCell)),
     );

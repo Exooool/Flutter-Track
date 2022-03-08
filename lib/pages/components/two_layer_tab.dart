@@ -40,7 +40,7 @@ class _TwoLayerTabState extends State<TwoLayerTab>
           child: nums == null
               ? Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                       height: 1,
                       color: MyColor.fontWhite,
                       fontSize: MyFontSize.font14),
@@ -50,7 +50,7 @@ class _TwoLayerTabState extends State<TwoLayerTab>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(title,
-                        style: const TextStyle(
+                        style: TextStyle(
                             height: 1,
                             color: MyColor.fontWhite,
                             fontSize: MyFontSize.font16)),
@@ -63,7 +63,7 @@ class _TwoLayerTabState extends State<TwoLayerTab>
                       height: 14,
                     ),
                     Text(nums,
-                        style: const TextStyle(
+                        style: TextStyle(
                             height: 1,
                             color: MyColor.fontWhite,
                             fontSize: MyFontSize.font18))

@@ -93,7 +93,7 @@ class CustomAppbar extends AppBar {
               : titleWidget ??
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: MyFontSize.font19,
                         color: MyColor.fontBlack),

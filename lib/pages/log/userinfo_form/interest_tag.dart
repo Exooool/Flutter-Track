@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 
 class TagSelector extends StatefulWidget {
   String title;
@@ -24,29 +27,30 @@ class _TagSelectorState extends State<TagSelector> {
           widget.changeValue(widget.index);
           setState(() {});
         },
-        child: Container(
-          alignment: Alignment.center,
-          // margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(90),
-              gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: widget.isSelected
-                      ? const [
-                          Color.fromRGBO(107, 101, 244, 1),
-                          Color.fromRGBO(51, 84, 244, 1)
-                        ]
-                      : [Colors.transparent, Colors.transparent])),
-          child: Text(
-            widget.title,
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: widget.isSelected
-                    ? const Color.fromRGBO(240, 242, 243, 1)
-                    : const Color.fromRGBO(0, 0, 0, 1)),
-          ),
+        child: Center(
+          child: widget.isSelected
+              ? PublicCard(
+                  height: 36.h,
+                  width: 77.w,
+                  radius: 30.r,
+                  notWhite: true,
+                  widget: Center(
+                    child: Text(
+                      widget.title,
+                      style: TextStyle(
+                          fontSize: MyFontSize.font16,
+                          fontWeight: FontWeight.w600,
+                          color: MyColor.fontWhite),
+                    ),
+                  ),
+                )
+              : Text(
+                  widget.title,
+                  style: TextStyle(
+                      fontSize: MyFontSize.font16,
+                      fontWeight: FontWeight.w600,
+                      color: MyColor.fontBlack),
+                ),
         ));
   }
 }

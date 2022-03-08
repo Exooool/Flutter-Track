@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/model/news_model.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 
 class BorderGradientPainter extends CustomPainter {
   final Paint _paint = Paint();
@@ -50,125 +52,116 @@ class ArticleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding:
-            const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-        child: Container(
-            // padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                gradient: MyWidgetStyle.secondLinearGradient),
-            height: 190,
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                  sigmaX: 0.1, sigmaY: 0.1, tileMode: TileMode.decal),
-              child: CustomPaint(
-                painter: BorderGradientPainter(
-                    radius: 10,
-                    strokeWidth: 2,
-                    gradient: MyWidgetStyle.borderLinearGradient),
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
+        padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+        child: Center(
+          child: PublicCard(
+            radius: 10.r,
+            height: 223.h,
+            width: 366.w,
+            widget: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  // 标题行
+                  Row(
                     children: <Widget>[
-                      // 标题行
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                              child: Text(
-                            news.title,
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          )),
-                          InkWell(
-                            onTap: () {},
-                            child: const Icon(Icons.menu),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    ClipOval(
-                                      child: Image.network(
-                                        news.author.userImg,
-                                        height: 24,
-                                        width: 24,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Text(
-                                      news.author.userName,
-                                      style: const TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    Text(
-                                      news.postTime,
-                                      style: const TextStyle(
-                                          fontSize: 9,
-                                          fontWeight: FontWeight.w400),
-                                    )
-                                  ],
-                                ),
-                                Text(
-                                  news.content,
-                                  maxLines: 5,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 12),
-                                )
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Image.network(
-                            news.contentImg,
-                            width: 158,
-                            height: 110,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Text('未找到图片');
-                            },
-                          )
-                        ],
-                      ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            news.tag,
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          Row(children: const [
-                            Text(
-                              '观看数',
-                              style: TextStyle(fontSize: 9),
-                            ),
-                            Text(
-                              '评论数',
-                              style: TextStyle(fontSize: 9),
-                            ),
-                            Text(
-                              '点赞数',
-                              style: TextStyle(fontSize: 9),
-                            ),
-                          ])
-                        ],
+                      Expanded(
+                          child: Text(
+                        news.title,
+                        style: TextStyle(
+                            fontSize: MyFontSize.font18,
+                            fontWeight: FontWeight.w500),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+                      InkWell(
+                        onTap: () {},
+                        child: const Icon(Icons.menu),
                       )
                     ],
                   ),
-                ),
+                  // SizedBox(height: 8.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                ClipOval(
+                                  child: Image.network(
+                                    news.author.userImg,
+                                    height: 24.h,
+                                    width: 24.h,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Text(
+                                  news.author.userName,
+                                  style: TextStyle(
+                                      fontSize: MyFontSize.font12,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  news.postTime,
+                                  style: TextStyle(
+                                      fontSize: MyFontSize.font12,
+                                      fontWeight: FontWeight.w400),
+                                )
+                              ],
+                            ),
+                            Text(
+                              news.content,
+                              maxLines: 5,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: MyFontSize.font12),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 16.w),
+                      Image.network(
+                        news.contentImg,
+                        width: 158.w,
+                        height: 110.h,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Text('未找到图片');
+                        },
+                      )
+                    ],
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        news.tag,
+                        style: TextStyle(fontSize: MyFontSize.font10),
+                      ),
+                      Row(children: [
+                        Text(
+                          '观看数',
+                          style: TextStyle(fontSize: MyFontSize.font9),
+                        ),
+                        Text(
+                          '评论数',
+                          style: TextStyle(fontSize: MyFontSize.font9),
+                        ),
+                        Text(
+                          '点赞数',
+                          style: TextStyle(fontSize: MyFontSize.font9),
+                        ),
+                      ])
+                    ],
+                  )
+                ],
               ),
-            )));
+            ),
+          ),
+        ));
   }
 }

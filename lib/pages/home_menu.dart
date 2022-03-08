@@ -1,12 +1,15 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:flutter_track/pages/discover/discover.dart';
 import 'package:flutter_track/pages/user/user.dart';
 import 'package:flutter_track/pages/project/project.dart';
 import 'package:flutter_track/pages/information/information.dart';
 import './discover/news_page.dart';
+
+// 屏幕适配
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeMenu extends StatefulWidget {
   const HomeMenu({Key? key}) : super(key: key);
@@ -16,7 +19,7 @@ class HomeMenu extends StatefulWidget {
 }
 
 class _HomeMenuState extends State<HomeMenu> {
-  int _index = 0;
+  int _index = 1;
   final List _pageList = [
     ProjectPage(),
     DiscoverPage(),

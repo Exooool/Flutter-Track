@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:image_picker/image_picker.dart';
 import './interest_tag.dart';
 
@@ -21,58 +24,47 @@ class _BasicInfoState extends State<BasicInfo> {
   // 表单列
   Widget formRow(String title, Function saveMethod) {
     return Padding(
-      padding: const EdgeInsets.only(top: 6, bottom: 6),
+      padding: EdgeInsets.only(top: 6.h, bottom: 6.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            padding:
-                const EdgeInsets.only(top: 11, bottom: 11, left: 24, right: 24),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(90),
-                gradient: const LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      Color.fromRGBO(107, 101, 244, 1),
-                      Color.fromRGBO(51, 84, 244, 1)
-                    ])),
-            child: Text(
-              // 标题
-              title,
-              style: const TextStyle(
-                  color: Color.fromRGBO(240, 242, 243, 1), fontSize: 16),
-            ),
-          ),
+          PublicCard(
+              radius: 30.r,
+              height: 48.h,
+              width: 81.w,
+              notWhite: true,
+              widget: Center(
+                child: Text(
+                  // 标题
+                  title,
+                  style: TextStyle(
+                      color: MyColor.white, fontSize: MyFontSize.font16),
+                ),
+              )),
           const SizedBox(width: 12),
-          Neumorphic(
-            style: const NeumorphicStyle(
-                shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
-                shadowLightColorEmboss: Color.fromRGBO(255, 255, 255, 1),
-                depth: -3,
-                color: Color.fromRGBO(238, 238, 246, 1),
-                // color: Color(0xffEFECF0),
-                boxShape: NeumorphicBoxShape.stadium()),
-            child: SizedBox(
-              height: 44,
-              width: 273,
-              child: TextFormField(
+          PublicCard(
+              radius: 30.r,
+              height: 48.h,
+              width: 261.w,
+              widget: TextFormField(
                 onSaved: (value) {
                   saveMethod(value);
                 },
-                style: const TextStyle(
-                    fontSize: 16,
+                style: TextStyle(
+                    fontSize: MyFontSize.font16,
                     fontWeight: FontWeight.w500,
-                    color: Color.fromRGBO(0, 0, 0, 1)),
+                    color: MyColor.fontBlack),
                 textDirection: TextDirection.rtl,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                     hintText: '请输入',
                     hintTextDirection: TextDirection.rtl,
+                    hintStyle: TextStyle(
+                        fontSize: MyFontSize.font16,
+                        fontWeight: FontWeight.w500,
+                        color: MyColor.fontBlackO2),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(left: 36, right: 36)),
-              ),
-            ),
-          ),
+                    contentPadding: EdgeInsets.only(left: 36.w, right: 36.w)),
+              )),
         ],
       ),
     );
@@ -108,8 +100,8 @@ class _BasicInfoState extends State<BasicInfo> {
             // color: Color(0xffEFECF0),
             boxShape: NeumorphicBoxShape.stadium()),
         child: SizedBox(
-            height: 88,
-            width: 88,
+            height: 88.r,
+            width: 88.r,
             child: InkWell(
               onTap: _getImage,
               child: image == null
@@ -120,8 +112,12 @@ class _BasicInfoState extends State<BasicInfo> {
                     ),
             )),
       ),
-      const Text('头像'),
-      const SizedBox(height: 68),
+      Container(
+          margin: EdgeInsets.only(top: 8.h, bottom: 48.h),
+          child: Text(
+            '头像',
+            style: TextStyle(fontSize: MyFontSize.font16),
+          )),
       Form(
           key: _formKey,
           child: Column(
@@ -188,6 +184,7 @@ class _InterestTagState extends State<InterestTag> {
     setState(() {
       interest[value]['isSelected'] = !interest[value]['isSelected'];
     });
+    print(interest);
     // print(interest);
   }
 
@@ -211,7 +208,7 @@ class _InterestTagState extends State<InterestTag> {
               },
             );
           },
-          padding: const EdgeInsets.only(left: 52, right: 52),
+          padding: EdgeInsets.only(left: 52.w, right: 52.w),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4,
               //横轴三个子widget
@@ -220,10 +217,11 @@ class _InterestTagState extends State<InterestTag> {
               childAspectRatio: 2),
         ),
         Container(
-          margin: const EdgeInsets.only(top: 30),
-          child: const Text(
+          margin: EdgeInsets.only(top: 30.h),
+          child: Text(
             '最多选择三个',
-            style: TextStyle(color: Color.fromRGBO(158, 158, 158, 1)),
+            style:
+                TextStyle(fontSize: MyFontSize.font14, color: MyColor.fontGrey),
           ),
         ),
       ],

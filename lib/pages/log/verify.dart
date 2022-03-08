@@ -1,10 +1,12 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/common/style/my_style.dart';
 import './verify_input.dart';
 import '../components/custom_appbar.dart';
 import '../components/custom_button.dart';
 
 class VerifyPage extends StatefulWidget {
-  VerifyPage({Key? key}) : super(key: key);
+  const VerifyPage({Key? key}) : super(key: key);
 
   @override
   State<VerifyPage> createState() => _VerifyPageState();
@@ -25,18 +27,6 @@ class _VerifyPageState extends State<VerifyPage> {
       ));
     }
     return list;
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
   }
 
   @override
@@ -69,18 +59,22 @@ class _VerifyPageState extends State<VerifyPage> {
             ],
           ),
           CustomButton(
+            height: 60.h,
+            width: 300.w,
             title: '登录',
+            fontSize: MyFontSize.font16,
             onPressed: () {
               print(_code);
               Navigator.pushReplacementNamed(context, '/fill_userinfo');
             },
           ),
           Container(
-            margin: const EdgeInsets.only(top: 18),
-            child: const Text(
+            margin: EdgeInsets.only(top: 18.h),
+            child: Text(
               '重新发送 60s',
               style: TextStyle(
-                  fontSize: 14, color: Color.fromRGBO(158, 158, 158, 1)),
+                  fontSize: MyFontSize.font14,
+                  color: const Color.fromRGBO(158, 158, 158, 1)),
             ),
           )
         ],

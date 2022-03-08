@@ -2,8 +2,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../components/lineargradient_text.dart';
-
 class AddProjectController extends GetxController {
   // final ImagePicker _picker = ImagePicker();
   XFile? image;
@@ -94,14 +92,14 @@ class AddProjectController extends GetxController {
             children: <Widget>[
               ElevatedButton(
                 onPressed: () {},
-                child: const GradientText('取消'),
+                child: const Text('取消'),
                 style: ButtonStyle(
                     padding: MaterialStateProperty.all(
                         const EdgeInsets.only(top: 20, left: 36))),
               ),
               ElevatedButton(
                 onPressed: () {},
-                child: const GradientText('确认'),
+                child: const Text('确认'),
                 style: ButtonStyle(
                     padding: MaterialStateProperty.all(
                         const EdgeInsets.only(top: 20, right: 36))),

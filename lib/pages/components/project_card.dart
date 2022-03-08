@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/model/project_model.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ProjectCard extends StatelessWidget {
@@ -27,86 +29,77 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 72,
-      margin: const EdgeInsets.only(top: 6, bottom: 6),
-      padding: const EdgeInsets.only(left: 6, right: 0),
-      decoration: const BoxDecoration(
-          boxShadow: [MyWidgetStyle.mainBoxShadow],
-          borderRadius: BorderRadius.all(Radius.circular(60)),
-          gradient: MyWidgetStyle.mainLinearGradient),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
+    return PublicCard(
+        height: 72.h,
+        radius: 90.r,
+        margin: EdgeInsets.only(top: 6.h, bottom: 6.h),
+        widget: Padding(
+          padding: EdgeInsets.only(left: 6.w, right: 0.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              // 头像
-              SizedBox(
-                height: 60,
-                width: 60,
-                child: CircleAvatar(
-                  backgroundColor: tfColor[project.iconInfo.color],
-                  child: const Icon(Icons.ac_unit),
-                ),
-              ),
-              // 计划信息
-              Padding(
-                padding: const EdgeInsets.only(left: 6),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      project.projectTtile,
-                      style: const TextStyle(
-                          fontSize: MyFontSize.font18,
-                          fontWeight: FontWeight.w600,
-                          color: MyColor.fontWhite),
+              Row(
+                children: <Widget>[
+                  // 头像
+                  SizedBox(
+                    height: 60.r,
+                    width: 60.r,
+                    child: CircleAvatar(
+                      backgroundColor: tfColor[project.iconInfo.color],
+                      child: const Icon(Icons.ac_unit),
                     ),
-                    const Text('已加入小组',
-                        style: TextStyle(
-                            fontSize: MyFontSize.font10,
-                            color: MyColor.fontWhiteO5)),
-                    Text(
-                      project.stageList[0].reminderTime,
-                      style: const TextStyle(
-                          fontSize: MyFontSize.font12,
-                          fontWeight: FontWeight.w600,
-                          color: MyColor.fontWhite),
-                    )
-                  ],
+                  ),
+                  // 计划信息
+                  Padding(
+                    padding: EdgeInsets.only(left: 6.w),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          project.projectTtile,
+                          style: TextStyle(
+                              fontSize: MyFontSize.font18,
+                              fontWeight: FontWeight.w600,
+                              color: MyColor.fontBlack),
+                        ),
+                        Text('已加入小组',
+                            style: TextStyle(
+                                fontSize: MyFontSize.font10,
+                                color: MyColor.fontBlack)),
+                        Text(
+                          project.stageList[0].reminderTime,
+                          style: TextStyle(
+                              fontSize: MyFontSize.font12,
+                              fontWeight: FontWeight.w600,
+                              color: MyColor.fontBlack),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Center(
+                // 圆形进度条
+                child: CircularPercentIndicator(
+                  radius: 36.r,
+                  lineWidth: 10.r,
+                  percent: 0.1,
+                  center: Text(
+                    "10%",
+                    style: TextStyle(
+                      fontSize: MyFontSize.font16,
+                      color: MyColor.fontBlack,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  startAngle: 270.0,
+                  progressColor: tfColor[project.iconInfo.color],
+                  backgroundColor: const Color.fromRGBO(107, 101, 244, 0.2),
                 ),
               )
             ],
           ),
-          Center(
-            // 圆形进度条
-            child: CircularPercentIndicator(
-              radius: 36,
-              lineWidth: 10.0,
-              percent: 0.1,
-              center: const Text(
-                "10%",
-                style: TextStyle(
-                  fontSize: MyFontSize.font16,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              startAngle: 270.0,
-              progressColor: tfColor[project.iconInfo.color],
-              backgroundColor: const Color.fromRGBO(240, 242, 243, 0.5),
-              // footer: const Text(
-              //   '剩余270天',
-              //   style: TextStyle(
-              //       fontSize: MyFontSize.font10,
-              //       fontWeight: FontWeight.w600,
-              //       color: MyColor.fontWhite),
-              // ),
-            ),
-          )
-        ],
-      ),
-    );
+        ));
   }
 }

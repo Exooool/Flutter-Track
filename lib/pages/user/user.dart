@@ -1,9 +1,13 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 
 // 样式导入
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/components/two_layer_tab.dart';
 import 'package:flutter_track/pages/user/user_controller.dart';
 import 'package:get/get.dart';
@@ -22,7 +26,7 @@ class UserPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(title,
-                style: const TextStyle(
+                style: TextStyle(
                     height: 1,
                     color: MyColor.fontWhite,
                     fontSize: MyFontSize.font12)),
@@ -35,7 +39,7 @@ class UserPage extends StatelessWidget {
               height: 14,
             ),
             Text('$nums',
-                style: const TextStyle(
+                style: TextStyle(
                     height: 1,
                     color: MyColor.fontWhite,
                     fontSize: MyFontSize.font12))
@@ -70,7 +74,7 @@ class UserPage extends StatelessWidget {
             const SizedBox(width: 26),
             InkWell(
               onTap: () {},
-              child: const Text(
+              child: Text(
                 '寻找好友',
                 style: TextStyle(
                     fontSize: MyFontSize.font14, color: MyColor.fontWhiteO8),
@@ -82,14 +86,14 @@ class UserPage extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {},
-              child: const Text('分享',
+              child: Text('分享',
                   style: TextStyle(
                       fontSize: MyFontSize.font14, color: MyColor.fontWhiteO8)),
             ),
             const SizedBox(width: 6),
             InkWell(
               onTap: () {},
-              child: const Text('设置',
+              child: Text('设置',
                   style: TextStyle(
                       fontSize: MyFontSize.font14, color: MyColor.fontWhiteO8)),
             )
@@ -98,6 +102,7 @@ class UserPage extends StatelessWidget {
       ),
       body: Container(
         padding: const EdgeInsets.only(left: 24, right: 24),
+        color: Colors.transparent,
         child: Column(
           children: <Widget>[
             const SizedBox(height: 24),
