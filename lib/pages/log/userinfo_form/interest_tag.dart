@@ -23,7 +23,7 @@ class _TagSelectorState extends State<TagSelector> {
         onTap: () {
           // widget.isSelected = !widget.isSelected;
           // var value = {'index': widget.index, 'isSelected': widget.isSelected};
-          // 传出index 改变当前抱歉的选择状态
+          // 传出index 改变当前的选择状态
           widget.changeValue(widget.index);
           setState(() {});
         },

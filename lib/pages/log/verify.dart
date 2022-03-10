@@ -65,7 +65,7 @@ class _VerifyPageState extends State<VerifyPage> {
             fontSize: MyFontSize.font16,
             onPressed: () {
               print(_code);
-              Navigator.pushReplacementNamed(context, '/fill_userinfo');
+              Navigator.pushReplacementNamed(context, '/sex_info');
             },
           ),
           Container(

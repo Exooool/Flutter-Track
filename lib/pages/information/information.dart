@@ -2,14 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/assets/test.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:get/get.dart';
 
 import 'information_controller.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-import './union_widget.dart';
+import '../components/union_widget.dart';
 import '../components/custom_appbar.dart';
 
 // 样式导入
@@ -35,7 +37,7 @@ class InformationPage extends StatelessWidget {
     // print(timeList);
 
     var list = {
-      'textStyle': {'color': '#F0F2F3'},
+      'textStyle': {'color': 'rgba(0, 0, 0, 1)'},
       'tooltip': {'trigger': "axis"},
       'xAxis': {
         'type': 'category',
@@ -45,18 +47,18 @@ class InformationPage extends StatelessWidget {
       },
       'yAxis': {
         'min': 0,
-        'offset': 12,
+        'offset': 14.w,
         'axisTick': {
           'inside': true,
           'show': true,
-          'length': 12,
-          'lineStyle': {'color': "rgba(240, 242, 243, 0.1)"}
+          'length': 12.w,
+          'lineStyle': {'color': "rgba(0, 0, 0, 0.1)"}
         },
         'minorTick': {
           'show': true,
           'splitNumber': 3,
-          'length': 12,
-          'lineStyle': {'color': "rgba(240, 242, 243, 0.1)"}
+          'length': 12.w,
+          'lineStyle': {'color': "rgba(0, 0, 0, 0.1)"}
         },
         'splitLine': false,
         'type': 'value',
@@ -87,13 +89,13 @@ class InformationPage extends StatelessWidget {
           'showBackground': true,
           'backgroundStyle': {
             'borderWidth': 0.1,
-            'borderColor': "rgba(240, 242, 243, 1)",
+            'borderColor': "rgba(107, 101, 244, 1)",
             'borderRadius': [30, 30, 0, 0],
             'color': "rgba(255, 255, 255, 0)"
           },
           'itemStyle': {
             'normal': {
-              'color': '#F0F2F3',
+              'color': 'rgba(107, 101, 244, 1)',
               //柱形图圆角，初始化效果
               'barBorderRadius': [30, 30, 0, 0]
             }
@@ -118,14 +120,14 @@ class InformationPage extends StatelessWidget {
   // 排行榜
   Widget rankingList(int index, String userName, String school) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: 12.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
               Text('$index.', style: MyFontStyle.rankTitle),
-              const SizedBox(width: 22),
+              SizedBox(width: 22.w),
               const ClipOval(
                 child: Icon(Icons.person),
               ),
@@ -146,7 +148,6 @@ class InformationPage extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppbar(
         'infoPage',
-        title: '数据',
         ending: InkWell(
           onTap: () {},
           child: const Text('分享'),
@@ -158,73 +159,116 @@ class InformationPage extends StatelessWidget {
         builder: (_) {
           return ListView(
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.only(left: 24, right: 24),
+            padding: EdgeInsets.only(left: 24.w, right: 24.w),
             children: <Widget>[
               // 等级显示及签到按钮
               Row(
                 children: [
                   Expanded(
-                      child: Container(
-                    height: 42,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        gradient: const LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              Color.fromRGBO(107, 101, 244, 1),
-                              Color.fromRGBO(51, 84, 244, 1)
-                            ])),
-                    child: Row(
+                      child: PublicCard(
+                    radius: 10.r,
+                    height: 42.h,
+                    widget: Row(
                       children: [
                         const SizedBox(width: 24),
-                        const Text(
+                        Text(
                           '等级 Lv',
                           style: TextStyle(
-                              color: Color.fromRGBO(240, 242, 243, 1),
-                              fontSize: 16),
+                              color: MyColor.fontBlack,
+                              fontSize: MyFontSize.font16),
                         ),
                         Text(
                           '${informationData['level']}',
-                          style: const TextStyle(
-                              color: Color.fromRGBO(240, 242, 243, 1),
-                              fontSize: 19),
+                          style: TextStyle(
+                              color: MyColor.fontBlack,
+                              fontSize: MyFontSize.font19),
                         ),
                         Expanded(
                             child: LinearPercentIndicator(
-                          percent: 0.5,
-                          barRadius: const Radius.circular(48),
-                          progressColor: const Color.fromRGBO(255, 191, 128, 1),
-                        ))
+                                percent: 0.5,
+                                barRadius: const Radius.circular(48),
+                                // backgroundColor: Colors.transparent,
+                                linearGradient:
+                                    MyWidgetStyle.mainLinearGradient))
                       ],
                     ),
                   )),
                   CustomButton(
-                      title: '签到', height: 42, width: 80, onPressed: () {})
+                      title: '签到', height: 42.h, width: 80.w, onPressed: () {})
                 ],
               ),
 
+              UnionWidget(children: <Widget>[
+                Center(
+                  child: Column(
+                    children: <Widget>[
+                      Image.asset(
+                        'lib/assets/images/logo.png',
+                        height: 154.r,
+                        width: 154.r,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('5',
+                              style: TextStyle(
+                                  fontSize: MyFontSize.font28,
+                                  fontWeight: FontWeight.w600)),
+                          Text('小时',
+                              style: TextStyle(
+                                  fontSize: MyFontSize.font14,
+                                  fontWeight: FontWeight.w600)),
+                          Text('18',
+                              style: TextStyle(
+                                  fontSize: MyFontSize.font28,
+                                  fontWeight: FontWeight.w600)),
+                          Text('分钟',
+                              style: TextStyle(
+                                  fontSize: MyFontSize.font14,
+                                  fontWeight: FontWeight.w600))
+                        ],
+                      ),
+                      Text('已超越80%的用户',
+                          style: TextStyle(fontSize: MyFontSize.font12))
+                    ],
+                  ),
+                )
+              ], title: '今日累计', height: 276.h),
+
+              SizedBox(height: 24.h),
               UnionWidget(
-                  height: 300,
+                  height: 300.h,
                   index: c.dataBarIndex.value,
                   children: [
                     DefaultTextStyle(
-                        style: const TextStyle(
-                            color: Color.fromRGBO(240, 242, 243, 1)),
+                        style: const TextStyle(color: MyColor.fontBlack),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('平均每天', style: TextStyle(fontSize: 12)),
+                            Text('平均每天',
+                                style: TextStyle(fontSize: MyFontSize.font12)),
                             Row(
-                              children: const [
-                                Text('5', style: TextStyle(fontSize: 28)),
-                                Text('小时', style: TextStyle(fontSize: 14)),
-                                Text('18', style: TextStyle(fontSize: 28)),
-                                Text('分钟', style: TextStyle(fontSize: 14))
+                              children: [
+                                Text('5',
+                                    style: TextStyle(
+                                        fontSize: MyFontSize.font28,
+                                        fontWeight: FontWeight.w600)),
+                                Text('小时',
+                                    style: TextStyle(
+                                        fontSize: MyFontSize.font14,
+                                        fontWeight: FontWeight.w600)),
+                                Text('18',
+                                    style: TextStyle(
+                                        fontSize: MyFontSize.font28,
+                                        fontWeight: FontWeight.w600)),
+                                Text('分钟',
+                                    style: TextStyle(
+                                        fontSize: MyFontSize.font14,
+                                        fontWeight: FontWeight.w600))
                               ],
                             ),
-                            const Text('2022年1月16号至1月22号',
-                                style: TextStyle(fontSize: 12))
+                            Text('2022年1月16号至1月22号',
+                                style: TextStyle(fontSize: MyFontSize.font12))
                           ],
                         )),
                     Container(
@@ -235,7 +279,7 @@ class InformationPage extends StatelessWidget {
                       child: Echarts(
                         option: getData(),
                       ),
-                      height: 200,
+                      height: 200.h,
                     ),
                   ],
                   title: '数据呈现',
@@ -249,7 +293,7 @@ class InformationPage extends StatelessWidget {
                   onTapThree: () {
                     c.dataBarIndex.value = 2;
                   }),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               UnionWidget(
                   height: 600,
                   index: c.rankBarIndex.value,

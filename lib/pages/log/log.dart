@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
@@ -240,7 +243,7 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                   width: 300.w,
                   fontSize: MyFontSize.font16,
                   margin: EdgeInsets.only(top: 24.h, bottom: 24.h),
-                  onPressed: () {
+                  onPressed: () async {
                     Get.toNamed('/verify');
                   },
                 ),
@@ -348,13 +351,30 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
     jverify.setCustomAuthorizationView(true, uiConfig,
         landscapeConfig: uiConfig, widgets: widgetList);
 
-    jverify.addLoginAuthCallBackListener((event) {
+    jverify.addLoginAuthCallBackListener((event) async {
       setState(() {
         _result = "监听获取返回数据：[${event.code}] message = ${event.message}";
       });
       print(
           "通过添加监听，获取到 loginAuthSyncApi 接口返回数据，code=${event.code},message = ${event.message},operator = ${event.operator}");
-      Get.snackbar('错误提醒', '${event.code} ${event.message}');
+      Get.snackbar('提醒', '${event.code} ${event.message}');
+      print('${event.message}');
+      var appkey = '7c512da646446cc69f9c55a5';
+      var secret = '885269a543efece7e1458fce';
+      var basicAuth = 'Basic ' + base64Encode(utf8.encode('$appkey:$secret'));
+      print(basicAuth);
+
+      // api请求验证token
+      // var respone = await dio.Dio()
+      //     .post('https://api.verification.jpush.cn/v1/web/loginTokenVerify',
+      //         data: jsonEncode({"loginToken": '${event.message}'}),
+      //         options: dio.Options(
+      //           headers: {
+      //             'authorization': basicAuth,
+      //             'content-type': 'application/json'
+      //           },
+      //         ));
+      // Get.snackbar('结果', '$respone');
     });
 
     /// 再，执行同步的一键登录接口

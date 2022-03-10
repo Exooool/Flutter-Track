@@ -22,6 +22,7 @@ class MyColor {
 class MyFontSize {
   static double font32 = 32.sp;
   static double font30 = 30.sp;
+  static double font28 = 28.sp;
   static double font26 = 26.sp;
   static double font22 = 22.sp;
   static double font20 = 20.sp;
@@ -43,17 +44,17 @@ class MyFontStyle {
   // 数据页 排行榜标题
   static TextStyle rankTitle = TextStyle(
       fontWeight: FontWeight.w700,
-      color: MyColor.fontWhite,
+      color: MyColor.fontBlack,
       fontSize: MyFontSize.font19);
   // 数据页 排行榜用户
   static TextStyle rankUser = TextStyle(
       fontWeight: FontWeight.w600,
-      color: MyColor.fontWhite,
+      color: MyColor.fontBlack,
       fontSize: MyFontSize.font12);
   // 数据页 排行榜学校
   static TextStyle rankSchool = TextStyle(
       fontWeight: FontWeight.w600,
-      color: MyColor.fontWhite,
+      color: MyColor.fontBlack,
       fontSize: MyFontSize.font12);
 
   static Paint textlinearForeground = Paint()

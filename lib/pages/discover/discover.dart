@@ -25,8 +25,8 @@ class _DiscoverPageState extends State<DiscoverPage>
   // 自定义tab样式
   Widget _customTab(String content) {
     return Container(
-      height: 24,
-      width: 60,
+      height: 24.h,
+      width: 60.w,
       alignment: Alignment.center,
       child: Text(
         content,
@@ -127,107 +127,105 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-          top: MediaQueryData.fromWindow(window).padding.top + 12.h),
-      child: Column(
-        children: <Widget>[
-          // tab栏
-          Column(
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Padding(
+          padding: EdgeInsets.only(
+              top: MediaQueryData.fromWindow(window).padding.top + 12.h),
+          child: Column(
             children: <Widget>[
-              // tabbar栏
-              Stack(
-                alignment: AlignmentDirectional.center,
+              // tab栏
+              Column(
                 children: <Widget>[
-                  Container(
-                      padding: const EdgeInsets.only(left: 10, right: 46),
-                      child: TabBar(
-                        physics: const BouncingScrollPhysics(),
-                        // padding: const EdgeInsets.all(0),
-                        labelColor: const Color.fromRGBO(240, 242, 243, 1),
-                        labelStyle:
-                            const TextStyle(fontWeight: FontWeight.bold),
-                        unselectedLabelStyle:
-                            const TextStyle(fontWeight: FontWeight.normal),
-                        unselectedLabelColor: const Color.fromRGBO(0, 0, 0, 1),
-                        // 更改指示点样式
-                        indicator: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                            gradient: LinearGradient(
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [
-                                  Color.fromRGBO(107, 101, 244, 1),
-                                  Color.fromRGBO(51, 84, 244, 1)
-                                ])),
-                        // indicatorSize: TabBarIndicatorSize.label,
+                  // tabbar栏
+                  Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.only(left: 10.w, right: 46.w),
+                          child: TabBar(
+                            physics: const BouncingScrollPhysics(),
+                            // padding: const EdgeInsets.all(0),
+                            labelColor: const Color.fromRGBO(240, 242, 243, 1),
+                            labelStyle:
+                                const TextStyle(fontWeight: FontWeight.bold),
+                            unselectedLabelStyle:
+                                const TextStyle(fontWeight: FontWeight.normal),
+                            unselectedLabelColor:
+                                const Color.fromRGBO(0, 0, 0, 1),
+                            // 更改指示点样式
+                            indicator: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30.r)),
+                                gradient: MyWidgetStyle.mainLinearGradient),
+                            // indicatorSize: TabBarIndicatorSize.label,
 
-                        labelPadding: const EdgeInsets.all(0),
-                        isScrollable: true,
-                        tabs: _tabList.map((e) {
-                          return _customTab(e);
-                        }).toList(),
-                        controller: _tabController,
-                      )),
-                  // 菜单按钮
-                  Positioned(
-                    right: 26,
-                    child: InkWell(
-                        onTap: () {
-                          showSortTabItem();
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          child: const Icon(Icons.menu),
-                        )),
+                            labelPadding: const EdgeInsets.all(0),
+                            isScrollable: true,
+                            tabs: _tabList.map((e) {
+                              return _customTab(e);
+                            }).toList(),
+                            controller: _tabController,
+                          )),
+                      // 菜单按钮
+                      Positioned(
+                        right: 26.w,
+                        child: InkWell(
+                            onTap: () {
+                              showSortTabItem();
+                            },
+                            child: Container(
+                              color: Colors.transparent,
+                              child: const Icon(Icons.menu),
+                            )),
+                      )
+                    ],
+                  ),
+                  // 搜索框
+                  PublicCard(
+                    height: 30.h,
+                    margin: EdgeInsets.only(top: 12.h, left: 24.w, right: 24.w),
+                    radius: 60.r,
+                    widget: Padding(
+                      padding: EdgeInsets.only(left: 16.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.search,
+                            size: 14.sp,
+                          ),
+                          SizedBox(width: 10.w),
+                          Expanded(
+                              child: TextField(
+                            onTap: () {
+                              print('跳转搜索页');
+                            },
+                            style: TextStyle(fontSize: MyFontSize.font14),
+                            decoration: InputDecoration.collapsed(
+                              // isDense: true,
+                              enabled: true,
+                              hintText: '搜一搜',
+
+                              hintStyle: TextStyle(fontSize: MyFontSize.font14),
+                            ),
+                          ))
+                        ],
+                      ),
+                    ),
                   )
                 ],
               ),
-              // 搜索框
-              PublicCard(
-                height: 30.h,
-                margin: EdgeInsets.only(top: 12.h, left: 24.w, right: 24.w),
-                radius: 60.r,
-                widget: Padding(
-                  padding: EdgeInsets.only(left: 16.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.search,
-                        size: 14.sp,
-                      ),
-                      SizedBox(width: 10.w),
-                      Expanded(
-                          child: TextField(
-                        onTap: () {
-                          print('跳转搜索页');
-                        },
-                        style: TextStyle(fontSize: MyFontSize.font14),
-                        decoration: InputDecoration.collapsed(
-                          // isDense: true,
-                          enabled: true,
-                          hintText: '搜一搜',
-
-                          hintStyle: TextStyle(fontSize: MyFontSize.font14),
-                        ),
-                      ))
-                    ],
-                  ),
-                ),
-              )
+              // tabview显示
+              Expanded(
+                  child: TabBarView(
+                controller: _tabController,
+                children: _tabContent(),
+                physics: const BouncingScrollPhysics(),
+              ))
             ],
           ),
-          // tabview显示
-          Expanded(
-              child: TabBarView(
-            controller: _tabController,
-            children: _tabContent(),
-            physics: const BouncingScrollPhysics(),
-          ))
-        ],
-      ),
-    );
+        ));
   }
 }

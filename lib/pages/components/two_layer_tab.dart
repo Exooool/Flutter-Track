@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 // 样式导入
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/pages/components/union_widget.dart';
 
 class TwoLayerTab extends StatefulWidget {
   final List exteriorTabs;
@@ -32,11 +34,8 @@ class _TwoLayerTabState extends State<TwoLayerTab>
         opacity: opcity,
         child: Container(
           alignment: Alignment.center,
-          height: 36,
-          width: inner ? 75 : 108,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-              gradient: MyWidgetStyle.mainLinearGradient),
+          height: 36.h,
+          padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 10.h),
           child: nums == null
               ? Text(
                   title,
@@ -52,20 +51,12 @@ class _TwoLayerTabState extends State<TwoLayerTab>
                     Text(title,
                         style: TextStyle(
                             height: 1,
-                            color: MyColor.fontWhite,
+                            color: MyColor.fontBlack,
                             fontSize: MyFontSize.font16)),
-                    Container(
-                      margin: const EdgeInsets.only(left: 4, right: 4),
-                      decoration: const BoxDecoration(
-                          color: MyColor.fontWhiteO5,
-                          borderRadius: BorderRadius.all(Radius.circular(20))),
-                      width: 1,
-                      height: 14,
-                    ),
                     Text(nums,
                         style: TextStyle(
                             height: 1,
-                            color: MyColor.fontWhite,
+                            color: MyColor.fontBlack,
                             fontSize: MyFontSize.font18))
                   ],
                 ),
@@ -122,19 +113,24 @@ class _TwoLayerTabState extends State<TwoLayerTab>
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 12),
-      child: Column(
+      child: UnionTabView(
+        height: 400.h,
+        title: ['目标08', '', ''],
         children: <Widget>[
-          SizedBox(
-            child: TabBar(
-                isScrollable: true,
-                onTap: (e) {
-                  setState(() {});
-                },
-                labelPadding: const EdgeInsets.only(left: 6, right: 6),
-                controller: _tabExteriorController,
-                indicator: const BoxDecoration(color: Colors.transparent),
-                indicatorWeight: 0,
-                tabs: parseTabs(widget.exteriorTabs, true)),
+          Row(
+            children: [
+              TabBar(
+                  isScrollable: true,
+                  onTap: (e) {
+                    setState(() {});
+                  },
+                  padding: const EdgeInsets.all(0),
+                  labelPadding: const EdgeInsets.all(0),
+                  controller: _tabExteriorController,
+                  indicator: const BoxDecoration(color: Colors.transparent),
+                  indicatorWeight: 0,
+                  tabs: parseTabs(widget.exteriorTabs, true)),
+            ],
           ),
           Expanded(
               child: TabBarView(

@@ -144,15 +144,18 @@ class ArticleCard extends StatelessWidget {
                       ),
                       Row(children: [
                         Text(
-                          '观看数',
+                          '观看数' + news.viewNum.toString(),
                           style: TextStyle(fontSize: MyFontSize.font9),
                         ),
-                        Text(
-                          '评论数',
-                          style: TextStyle(fontSize: MyFontSize.font9),
+                        Padding(
+                          padding: EdgeInsets.only(left: 18.w, right: 12.w),
+                          child: Text(
+                            '评论数：' + news.comment.length.toString(),
+                            style: TextStyle(fontSize: MyFontSize.font9),
+                          ),
                         ),
                         Text(
-                          '点赞数',
+                          '点赞数：' + news.likeNum.toString(),
                           style: TextStyle(fontSize: MyFontSize.font9),
                         ),
                       ])

@@ -3,6 +3,8 @@ class Article {
   late String title;
   late User author;
   late String postTime;
+  late int viewNum;
+  late int likeNum;
   late String content;
   late String tag;
   late String contentImg;
@@ -10,23 +12,25 @@ class Article {
 
   // 定义命名构造函数
   Article.fromMap(Map<String, dynamic> json) {
-    newsId = json['newsId'];
-    title = json['title'];
+    newsId = json['news_id'];
+    title = json['news_title'];
     author = User.fromMap(json['author']);
-    postTime = json['postTime'];
+    postTime = json['news_time'];
+    viewNum = json['view_num'];
+    likeNum = json['like_num'];
     content = json['content'];
-    contentImg = json['contentImg'];
-    tag = json['tag'];
+    contentImg = json['content_img'];
+    tag = json['hashtag'];
     comment = (json["comment"] as List<dynamic>).map((item) {
       return Comment.fromMap(item);
     }).toList();
   }
 
-  @override
-  String toString() {
-    // TODO: implement toString
-    return "文章信息==>> id:$newsId,title:$title,author:$author,postTime:$postTime,tag:$tag,comment:$comment";
-  }
+  // @override
+  // String toString() {
+  //   // TODO: implement toString
+  //   return "文章信息==>> id:$newsId,title:$title,author:$author,postTime:$postTime,tag:$tag,comment:$comment";
+  // }
 }
 
 class Comment {

@@ -110,19 +110,23 @@ class _HomeMenuState extends State<HomeMenu> {
         orientation: Orientation.portrait);
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: NotificationListener<NavNotification>(
-      onNotification: (n) {
-        // print(n.isNavShow);
-        setState(() {
-          _isNavShow = n.isNavShow;
-        });
-        return true;
-      },
-      child: Stack(children: [
-        _pageList[_index],
-        Positioned(
-            left: distance, right: distance, bottom: 34, child: navigatorBar())
-      ]),
-    ));
+          onNotification: (n) {
+            // print(n.isNavShow);
+            setState(() {
+              _isNavShow = n.isNavShow;
+            });
+            return true;
+          },
+          child: Stack(children: [
+            _pageList[_index],
+            Positioned(
+                left: distance,
+                right: distance,
+                bottom: 34,
+                child: navigatorBar())
+          ]),
+        ));
   }
 }
