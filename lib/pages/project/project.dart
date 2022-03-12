@@ -6,8 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/model/project_model.dart';
 import 'package:flutter_track/pages/components/project_card.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
-import '../components/custom_appbar.dart';
-import '';
 
 // 测试数据
 import 'package:flutter_track/assets/test.dart';
@@ -227,7 +225,28 @@ class _ProjectPageState extends State<ProjectPage>
                           // 禁止滑动
                           physics: const NeverScrollableScrollPhysics(),
                           controller: _tabInteriorController,
-                          children: <Widget>[const Text('1'), const Text('2')]))
+                          children: <Widget>[
+                        ListView(
+                          children: const [
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                            ListTile(title: Text('123')),
+                          ],
+                        ),
+                        const Text('2')
+                      ]))
                 ],
               ),
             ])),

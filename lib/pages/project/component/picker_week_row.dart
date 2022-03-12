@@ -19,6 +19,7 @@ class _PickerWeekRowState extends State<PickerWeekRow> {
     return Container(
         padding: const EdgeInsets.only(left: 70, right: 85, top: 6, bottom: 6),
         decoration: const BoxDecoration(
+            color: Colors.transparent,
             border: Border(
                 top: BorderSide(
                     color: Color.fromRGBO(67, 89, 244, 0.1), width: 0.5),

@@ -105,15 +105,6 @@ class CustomButton extends StatelessWidget {
                         fontSize: fontSize,
                         color: const Color.fromRGBO(240, 242, 243, 1))),
             onPressed: onPressed,
-            // () {
-            //   // 调用表单中的onSaved方法
-            //   // var state = _formKey.currentState as FormState;
-            //   // state.save();
-            //   // if (state.validate()) {
-            //   //   print("手机号：$_number,密码：$_password");
-            //   // }
-            //   Navigator.pushNamed(context, '/verify');
-            // }
           ),
         ));
   }

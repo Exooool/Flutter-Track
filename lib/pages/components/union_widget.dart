@@ -114,7 +114,7 @@ class UionPainter extends CustomPainter {
     // 边框渐变填充
     Rect rectlinaer = Rect.fromLTWH(0, 0, size.width, size.height);
     _paint2.shader =
-        MyWidgetStyle.secondLinearGradient.createShader(rectlinaer);
+        MyWidgetStyle.borderLinearGradient.createShader(rectlinaer);
 
     // 右下角
     borderPath.moveTo(size.width - strokeMargin, size.height - round1);

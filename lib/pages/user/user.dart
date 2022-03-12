@@ -142,7 +142,6 @@ class UserPage extends StatelessWidget {
                         {'title': '发布', 'nums': '12'}
                       ],
                       interiorTabs: const [
-                        {'title': '全部'},
                         {'title': '对外可见'},
                         {'title': '自己可见'}
                       ],

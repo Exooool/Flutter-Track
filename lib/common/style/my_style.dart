@@ -95,13 +95,14 @@ class MyWidgetStyle {
       end: Alignment.bottomCenter,
       stops: [0.01, 0.99],
       colors: [MyColor.whiteO5, MyColor.transparent]);
+
   // 白色透明渐变边框
   static const LinearGradient borderLinearGradient = LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
+      begin: Alignment(-0.1, -1),
+      end: Alignment(0.6, 1),
       stops: [
         0.1,
-        0.6,
+        0.5,
         1
       ],
       colors: [
@@ -118,3 +119,59 @@ class MyWidgetStyle {
     spreadRadius: 0, // 在应用模糊之前，框应该膨胀的量。
   );
 }
+
+class BorderGradientPainter extends CustomPainter {
+  final Paint _paint = Paint();
+  final double radius;
+  final double strokeWidth;
+  final Gradient gradient;
+
+  BorderGradientPainter(
+      {required this.radius,
+      required this.strokeWidth,
+      required this.gradient});
+  @override
+  void paint(Canvas canvas, Size size) {
+    // create outer rectangle equals size
+    Rect outerRect = Offset.zero & size;
+    var outerRRect =
+        RRect.fromRectAndRadius(outerRect, Radius.circular(radius));
+
+    // create inner rectangle smaller by strokeWidth
+    Rect innerRect = Rect.fromLTWH(strokeWidth, strokeWidth,
+        size.width - strokeWidth * 2, size.height - strokeWidth * 2);
+    var innerRRect = RRect.fromRectAndRadius(
+        innerRect, Radius.circular(radius - strokeWidth));
+
+    // apply gradient shader
+    _paint.shader = gradient.createShader(outerRect);
+
+    // create difference between outer and inner paths and draw it
+    Path path1 = Path()..addRRect(outerRRect);
+    Path path2 = Path()..addRRect(innerRRect);
+    var path = Path.combine(PathOperation.difference, path1, path2);
+    canvas.drawPath(path, _paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+const Map<String, Color> tfColor = {
+  "fColor1": Color.fromRGBO(255, 128, 128, 1),
+  "fColor2": Color.fromRGBO(255, 191, 128, 1),
+  "fColor3": Color.fromRGBO(255, 255, 128, 1),
+  "fColor4": Color.fromRGBO(191, 255, 128, 1),
+  "fColor5": Color.fromRGBO(128, 255, 128, 1),
+  "fColor6": Color.fromRGBO(128, 255, 191, 1),
+  "fColor7": Color.fromRGBO(128, 255, 255, 1),
+  "fColor8": Color.fromRGBO(128, 191, 255, 1),
+  "fColor9": Color.fromRGBO(128, 128, 255, 1),
+  "fColor10": Color.fromRGBO(191, 128, 255, 1),
+  "fColor11": Color.fromRGBO(255, 128, 255, 1),
+  "fColor12": Color.fromRGBO(255, 128, 191, 1),
+  "fColor13": Color.fromRGBO(0, 0, 0, 1),
+  "fColor14": Color.fromRGBO(255, 255, 255, 1),
+};

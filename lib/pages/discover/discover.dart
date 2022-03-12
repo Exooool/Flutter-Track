@@ -6,6 +6,8 @@ import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/article_card.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 
+import 'package:flutter_track/pages/components/drag_grid.dart';
+
 import './news_page.dart';
 
 import 'package:flutter_track/model/news_model.dart';
@@ -38,14 +40,26 @@ class _DiscoverPageState extends State<DiscoverPage>
   final _tabList = const [
     '关注',
     '推荐',
-    '生活',
-    '心理',
-    '运动',
+    '校园',
     '语言',
     '升学',
-    '校园',
+    '心理',
+    '文学',
+    '生活',
+    '运动',
     '读书',
-    '哲学'
+    '哲学',
+    '法学',
+    '经济学',
+    '艺术学',
+    '教育学',
+    '历史学',
+    '理学',
+    '工学',
+    '农学',
+    '医学',
+    '管理学',
+    '其它'
   ];
 
   List dataList = [];
@@ -79,34 +93,43 @@ class _DiscoverPageState extends State<DiscoverPage>
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return Stack(children: [
-          //第一层
-          Positioned.fill(
+        return Stack(
+          children: <Widget>[
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: Container(
-                  decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [Colors.white, Colors.white.withOpacity(0.1)]),
-          ))),
-          //第二层高斯模糊
-          Positioned.fill(
-              child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-            child: Container(color: Colors.white.withOpacity(0.6)),
-          )),
-          //第三层
-          Positioned.fill(
-            child: Center(
-              child: PublicCard(
-                radius: 10.r,
-                height: 400,
-                width: 400,
-                widget: Text('123'),
+                color: Colors.white.withOpacity(0.1),
               ),
             ),
-          ),
-        ]);
+            // 切割很重要
+            ClipRect(
+              child: SizedBox(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        gradient: MyWidgetStyle.secondLinearGradient),
+                  ),
+                ),
+              ),
+            ),
+
+            PublicCard(
+              radius: 10.r,
+              height: double.maxFinite,
+              width: double.maxFinite,
+              widget: Column(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(top: 30.h, bottom: 30.h),
+                    child: const Text('长按拖动排序'),
+                  ),
+                  DragGrid(dragList: _tabList, callback: () {})
+                ],
+              ),
+            ),
+          ],
+        );
       },
     );
   }

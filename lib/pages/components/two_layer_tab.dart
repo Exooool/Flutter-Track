@@ -109,27 +109,50 @@ class _TwoLayerTabState extends State<TwoLayerTab>
         length: widget.interiorTabs.length, vsync: this, initialIndex: 0);
   }
 
+  Widget mainTab(String title, int index) {
+    return InkWell(
+      onTap: () {
+        _tabExteriorController.index = index;
+        print(_tabExteriorController.index);
+        setState(() {});
+      },
+      child: Container(
+        height: 36.h,
+        width: 112.w,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            gradient: MyWidgetStyle.secondLinearGradient,
+            borderRadius: BorderRadius.all(Radius.circular(10.r))),
+        child: Text(title),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 12),
       child: UnionTabView(
         height: 400.h,
-        title: ['目标08', '', ''],
+        title: ['目标08s', '', ''],
         children: <Widget>[
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TabBar(
-                  isScrollable: true,
-                  onTap: (e) {
-                    setState(() {});
-                  },
-                  padding: const EdgeInsets.all(0),
-                  labelPadding: const EdgeInsets.all(0),
-                  controller: _tabExteriorController,
-                  indicator: const BoxDecoration(color: Colors.transparent),
-                  indicatorWeight: 0,
-                  tabs: parseTabs(widget.exteriorTabs, true)),
+              // TabBar(
+              //     isScrollable: true,
+              //     onTap: (e) {
+              //       setState(() {});
+              //     },
+              //     padding: const EdgeInsets.all(0),
+              //     labelPadding: const EdgeInsets.all(0),
+              //     controller: _tabExteriorController,
+              //     indicator: const BoxDecoration(color: Colors.transparent),
+              //     indicatorWeight: 0,
+              //     tabs: parseTabs(widget.exteriorTabs, true)),
+              mainTab('目标08', 0),
+              mainTab('目标08', 1),
+              mainTab('目标08', 2),
             ],
           ),
           Expanded(
@@ -161,11 +184,6 @@ class _TwoLayerTabState extends State<TwoLayerTab>
                             physics: const NeverScrollableScrollPhysics(),
                             controller: _tabInteriorController,
                             children: <Widget>[
-                          ListView(
-                            padding: const EdgeInsets.only(
-                                left: 24, right: 24, bottom: 100),
-                            children: getList(widget.interiorViews[0]),
-                          ),
                           ListView(
                             padding: const EdgeInsets.only(
                                 left: 24, right: 24, bottom: 100),

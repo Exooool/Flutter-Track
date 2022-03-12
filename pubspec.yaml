@@ -56,6 +56,8 @@ dependencies:
   jverify: ^2.2.4
   # 富文本编辑器
   zefyrka: ^1.1.1
+  # 可重新排列的表格
+  reorderables: ^0.4.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -1,4 +1,7 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -77,70 +80,120 @@ class AddProjectController extends GetxController {
     );
   }
 
+  // List<Widget> getColorItem(Color color) {
+  //   List<Widget> list = [];
+  //   tfColor.map((key, value) => {
+  //     return ;
+  //   })
+  //   return ;
+  // }
+
   // 选择头像
   selectImage() {
-    Get.bottomSheet(Container(
-      height: 500,
-      decoration: const BoxDecoration(
-          color: Color.fromRGBO(234, 236, 239, 1),
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30), topRight: Radius.circular(30))),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text('取消'),
-                style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                        const EdgeInsets.only(top: 20, left: 36))),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text('确认'),
-                style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                        const EdgeInsets.only(top: 20, right: 36))),
-              ),
-            ],
-          ),
-          Expanded(
-              child: ListView(
-            children: <Widget>[
-              GridView.builder(
-                  //解决无限高度问题
-                  shrinkWrap: true,
-                  //禁用滑动事件
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 20,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      //横轴元素个数
-                      crossAxisCount: 4,
-                      //纵轴间距
-                      mainAxisSpacing: 20.0,
-                      //横轴间距
-                      crossAxisSpacing: 10.0,
-                      //子组件宽高长度比例
-                      childAspectRatio: 1.0),
-                  itemBuilder: (BuildContext context, int index) {
-                    return getItemContainer(index);
-                  }),
-              SizedBox(
-                height: 50,
-                child: ListView.builder(
-                  itemCount: 20,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) {
-                    return getItemContainer(index);
-                  },
+    Get.bottomSheet(
+        BlurWidget(
+          Container(
+            padding: EdgeInsets.only(left: 36.w, right: 36.w),
+            height: 500.h,
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('取消',
+                          style: TextStyle(
+                              foreground: MyFontStyle.textlinearForeground)),
+                      style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.only(top: 20, left: 36))),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('确认',
+                          style: TextStyle(
+                              foreground: MyFontStyle.textlinearForeground)),
+                      style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.only(top: 20, right: 36))),
+                    ),
+                  ],
                 ),
-              )
-            ],
-          ))
-        ],
-      ),
-    ));
+                Expanded(
+                    child: ListView(
+                  padding: EdgeInsets.only(bottom: 58.h),
+                  children: <Widget>[
+                    GridView.builder(
+                        //解决无限高度问题
+                        shrinkWrap: true,
+                        //禁用滑动事件
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 20,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                //横轴元素个数
+                                crossAxisCount: 4,
+                                //纵轴间距
+                                mainAxisSpacing: 20.0,
+                                //横轴间距
+                                crossAxisSpacing: 10.0,
+                                //子组件宽高长度比例
+                                childAspectRatio: 1.0),
+                        itemBuilder: (BuildContext context, int index) {
+                          return getItemContainer(index);
+                        }),
+                    SizedBox(
+                        height: 36.r,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: <Widget>[
+                            Container(
+                              height: 36.r,
+                              width: 36.r,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30.r)),
+                                  gradient: const SweepGradient(colors: [
+                                    Color.fromRGBO(219, 0, 255, 1),
+                                    Color.fromRGBO(1, 11, 255, 1),
+                                    Color.fromRGBO(5, 240, 255, 1),
+                                    Color.fromRGBO(0, 255, 133, 1),
+                                    Color.fromRGBO(255, 230, 0, 1),
+                                    Color.fromRGBO(255, 120, 0, 1),
+                                    Color.fromRGBO(253, 50, 50, 1),
+                                  ])),
+                              // child: Center(
+                              //   child: Container(
+                              //     height: 14.r,
+                              //     width: 14.r,
+                              //     decoration: const BoxDecoration(
+                              //         gradient: SweepGradient(colors: [
+                              //       Color.fromRGBO(255, 255, 255, 1),
+                              //       Color.fromRGBO(255, 255, 255, 1),
+                              //       Color.fromRGBO(255, 255, 255, 1),
+                              //       Color.fromRGBO(255, 255, 255, 1),
+                              //       Color.fromRGBO(255, 255, 255, 1),
+                              //     ])),
+                              //   ),
+                              // ),
+                            )
+                          ],
+                        )
+                        // ListView.builder(
+                        //   itemCount: 20,
+                        //   scrollDirection: Axis.horizontal,
+                        //   itemBuilder: (BuildContext context, int index) {
+                        //     return getItemContainer(index);
+                        //   },
+                        // ),
+                        ),
+                  ],
+                ))
+              ],
+            ),
+          ),
+        ),
+        barrierColor: Colors.transparent);
   }
 }

@@ -106,7 +106,7 @@ class ArticleCard extends StatelessWidget {
                                       fontWeight: FontWeight.w600),
                                 ),
                                 Text(
-                                  news.postTime,
+                                  news.postTime.substring(0, 10),
                                   style: TextStyle(
                                       fontSize: MyFontSize.font12,
                                       fontWeight: FontWeight.w400),

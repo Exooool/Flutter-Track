@@ -1,9 +1,12 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:get/get.dart';
+import 'package:group_button/group_button.dart';
 import 'dart:io';
 
 import 'package:toggle_switch/toggle_switch.dart';
@@ -85,6 +88,117 @@ class AddProject extends StatelessWidget {
     );
   }
 
+  // 单次时长
+  Widget customRadio(String title) {
+    return Opacity(
+      opacity: 0.5,
+      child: PublicCard(
+        radius: 90.r,
+        notWhite: true,
+        widget: Center(
+          child: Text(
+            title,
+            style: TextStyle(
+                fontSize: MyFontSize.font16, color: MyColor.fontWhite),
+          ),
+        ),
+        height: 36.h,
+        width: 76.w,
+      ),
+    );
+  }
+
+  // 单次时长
+  Widget singleTimeBottomSheet(String? data) {
+    return InkWell(
+      onTap: () {
+        Get.bottomSheet(
+            SizedBox(
+              height: 330.h,
+              child: BlurWidget(Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: 36.w, right: 36.w, top: 24.h, bottom: 47.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: () {},
+                          child: Text(
+                            '取消',
+                            style: TextStyle(
+                                foreground: MyFontStyle.textlinearForeground),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: Text(
+                            '确认',
+                            style: TextStyle(
+                                foreground: MyFontStyle.textlinearForeground),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  GridView.count(
+                    shrinkWrap: true,
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 24.w,
+                    mainAxisSpacing: 24.h,
+                    childAspectRatio: 2.0,
+                    padding:
+                        EdgeInsets.only(left: 69.w, right: 69.w, bottom: 24.h),
+                    children: <Widget>[
+                      customRadio('30分钟'),
+                      customRadio('60分钟'),
+                      customRadio('90分钟'),
+                      customRadio('120分钟'),
+                      customRadio('150分钟'),
+                      customRadio('自定义'),
+                    ],
+                  ),
+                  Center(
+                    child: PublicCard(
+                      height: 36.h,
+                      width: 76.w,
+                      radius: 90.r,
+                      widget: TextField(
+                          textAlign: TextAlign.center,
+                          maxLength: 4,
+                          style: TextStyle(
+                              fontSize: MyFontSize.font16,
+                              fontWeight: FontWeight.w500,
+                              foreground: MyFontStyle.textlinearForeground),
+                          decoration: const InputDecoration(
+                              border: InputBorder.none, counterText: '')),
+                    ),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 6.h),
+                      child: Text(
+                        '单位为分钟',
+                        style: TextStyle(
+                            fontSize: MyFontSize.font10,
+                            color: MyColor.fontGrey),
+                      ),
+                    ),
+                  )
+                ],
+              )),
+            ),
+            barrierColor: Colors.transparent);
+      },
+      child: Text(
+        data ?? '请选择',
+        style:
+            TextStyle(color: MyColor.fontBlackO2, fontSize: MyFontSize.font16),
+      ),
+    );
+  }
+
   // 分阶段模板
   Widget columnModel(int stage) {
     return Column(
@@ -127,6 +241,9 @@ class AddProject extends StatelessWidget {
                           c.stageListMethod(stage, 'endTime', e);
                           print(c.stageList);
                         }, c.stageList[stage]['endTime'])),
+                    formInput('单次时长',
+                        component: singleTimeBottomSheet(
+                            c.stageList[stage]['singleTime'])),
                     formInput('完成频率',
                         component: FormDateTimePicker((e) {
                           // c.stageList[stage]['frequency'] = e;
@@ -220,15 +337,16 @@ class AddProject extends StatelessWidget {
               formInput('计划名称', onChanged: (e) {
                 c.projectTitle.value = e;
               }),
-              formInput('截止时间',
-                  component: FormDateTimePicker((e) {
-                    c.endTime.value = e.substring(0, 10);
-                  }, c.endTime.value)),
               formInput('分阶段完成',
                   component: formSwitch('是', '否', c.isDivide.value, (index) {
                     c.isDivide.value = index;
                     print('分阶段完成：${c.isDivide}');
                   })),
+              formInput('截止时间',
+                  component: FormDateTimePicker((e) {
+                    c.endTime.value = e.substring(0, 10);
+                  }, c.endTime.value)),
+
               // 分阶段
               Visibility(
                   visible: c.isDivide.value == 0 ? true : false,
@@ -310,7 +428,7 @@ class AddProject extends StatelessWidget {
                         Get.toNamed('/invite_group');
                       }
                     }),
-              )
+              ),
             ],
           );
         },

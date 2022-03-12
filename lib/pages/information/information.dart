@@ -194,9 +194,15 @@ class InformationPage extends StatelessWidget {
                     ),
                   )),
                   CustomButton(
-                      title: '签到', height: 42.h, width: 80.w, onPressed: () {})
+                      margin: EdgeInsets.only(left: 12.w),
+                      title: '签到',
+                      height: 42.h,
+                      width: 80.w,
+                      onPressed: () {})
                 ],
               ),
+
+              SizedBox(height: 24.h),
 
               UnionWidget(children: <Widget>[
                 Center(

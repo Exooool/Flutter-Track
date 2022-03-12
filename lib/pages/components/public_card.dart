@@ -67,26 +67,21 @@ class PublicCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: margin,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(radius)),
-            gradient: notWhite
-                ? MyWidgetStyle.mainLinearGradient
-                : MyWidgetStyle.secondLinearGradient),
-        height: height,
-        width: width,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-              sigmaX: 0.1, sigmaY: 0.1, tileMode: TileMode.decal),
+          margin: margin,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(radius)),
+              gradient: notWhite
+                  ? MyWidgetStyle.mainLinearGradient
+                  : MyWidgetStyle.secondLinearGradient),
+          height: height,
+          width: width,
           child: CustomPaint(
             painter: BorderGradientPainter(
                 radius: radius,
                 strokeWidth: 2,
                 gradient: MyWidgetStyle.borderLinearGradient),
             child: widget,
-          ),
-        ),
-      ),
+          )),
     );
   }
 }
