@@ -9,5 +9,9 @@ abstract class AppRoutes {
   static const matchGroup = '/match_group';
   static const inviteGroup = '/invite_group';
   static const setting = '/setting';
-  static const newsEdit = 'newsEdit';
+  static const newsEdit = '/newsEdit';
+  static const article = '/article';
+  static const message = '/message';
+  static const history = '/history';
+  static const chart = '/chart';
 }

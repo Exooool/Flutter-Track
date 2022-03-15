@@ -48,6 +48,7 @@ class PublicCard extends StatelessWidget {
   final double? height;
   final double? width;
   final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? padding;
   final double radius;
   final bool notWhite;
   final Function()? onTap;
@@ -56,6 +57,7 @@ class PublicCard extends StatelessWidget {
       this.height,
       this.width,
       this.margin,
+      this.padding,
       required this.radius,
       required this.widget,
       this.notWhite = false,
@@ -80,7 +82,10 @@ class PublicCard extends StatelessWidget {
                 radius: radius,
                 strokeWidth: 2,
                 gradient: MyWidgetStyle.borderLinearGradient),
-            child: widget,
+            child: Container(
+              padding: padding,
+              child: widget,
+            ),
           )),
     );
   }

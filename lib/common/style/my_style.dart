@@ -98,8 +98,8 @@ class MyWidgetStyle {
 
   // 白色透明渐变边框
   static const LinearGradient borderLinearGradient = LinearGradient(
-      begin: Alignment(-0.1, -1),
-      end: Alignment(0.6, 1),
+      begin: Alignment.topRight,
+      end: Alignment.bottomRight,
       stops: [
         0.1,
         0.5,

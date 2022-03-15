@@ -1,6 +1,10 @@
+import 'package:flutter_track/pages/discover/article.dart';
 import 'package:flutter_track/pages/discover/news_edit.dart';
 import 'package:flutter_track/pages/log/userinfo_form/userinfo_form.dart';
 import 'package:flutter_track/pages/setting/setting.dart';
+import 'package:flutter_track/pages/user/chart.dart';
+import 'package:flutter_track/pages/user/history.dart';
+import 'package:flutter_track/pages/user/message.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter_track/pages/home_menu.dart';
@@ -26,5 +30,9 @@ class AppPages {
     GetPage(name: '/invite_group', page: () => const InviteGroup()),
     GetPage(name: '/setting', page: () => const SettingPage()),
     GetPage(name: '/newsEdit', page: () => NewsEdit()),
+    GetPage(name: '/article', page: () => const ArticlePage()),
+    GetPage(name: '/message', page: () => MessagePage()),
+    GetPage(name: '/history', page: () => const HistoryPage()),
+    GetPage(name: '/chart', page: () => ChartPage()),
   ];
 }

@@ -55,12 +55,13 @@ class UionPainter extends CustomPainter {
   final Paint _paint2 = Paint();
   // 通过计算字体的个数来切割
   late final double width;
+  late final int index;
 
   final strokeWidth = 2.0;
   final strokeMargin = 2.0 / 2;
   final addHeight = 5.h;
 
-  UionPainter(int length) {
+  UionPainter(int length, {this.index = 0}) {
     width = length * 16.sp;
   }
   @override
@@ -84,24 +85,89 @@ class UionPainter extends CustomPainter {
     // 左下角贝塞尔
     path.lineTo(round1, size.height);
     path.quadraticBezierTo(0, size.height, 0, size.height - round1);
-    // 左上角贝塞尔
-    path.lineTo(0, round1);
-    path.quadraticBezierTo(0, 0, round1, 0);
     // 第一个贝塞尔曲线起点
     double firstStart = 48.w + width - round1;
-    path.lineTo(firstStart, 0);
     // 第一个贝塞尔曲线控制点
     double controll1 = 48.w + width;
-    // 突出的部分的右上圆角进行贝塞尔
-    path.quadraticBezierTo(controll1, 0, controll1, round1);
-    // 突出的部分的右下圆角进行贝塞尔
-    path.lineTo(controll1, round1 + round2 + addHeight);
-    path.quadraticBezierTo(controll1, round1 + round2 * 2 + addHeight,
-        controll1 + round2, round1 + round2 * 2 + addHeight);
-    //
-    path.lineTo(size.width - round1, round1 + round2 * 2 + addHeight);
-    path.quadraticBezierTo(size.width, round1 + round2 * 2 + addHeight,
-        size.width, round1 * 2 + round2 * 2 + addHeight);
+    double secondStart = size.width / 2 + 24.w + 32.sp - round1;
+    // 0是第一个
+    if (index == 0) {
+      // 左上角贝塞尔
+      path.lineTo(0, round1);
+      path.quadraticBezierTo(0, 0, round1, 0);
+
+      path.lineTo(firstStart, 0);
+
+      // 突出的部分的右上圆角进行贝塞尔
+      path.quadraticBezierTo(controll1, 0, controll1, round1);
+      // 突出的部分的右下圆角进行贝塞尔
+      path.lineTo(controll1, round1 + round2 + addHeight);
+      path.quadraticBezierTo(controll1, round1 + round2 * 2 + addHeight,
+          controll1 + round2, round1 + round2 * 2 + addHeight);
+      //
+      path.lineTo(size.width - round1, round1 + round2 * 2 + addHeight);
+      path.quadraticBezierTo(size.width, round1 + round2 * 2 + addHeight,
+          size.width, round1 * 2 + round2 * 2 + addHeight);
+    } else if (index == 1) {
+      // 左上角
+      path.lineTo(0, round1 * 2 + round2 * 2 + addHeight);
+      path.quadraticBezierTo(0, round1 + round2 * 2 + addHeight, round1,
+          round1 + round2 * 2 + addHeight);
+
+      // 突出部分左下角
+      firstStart = size.width / 2 - 24.w - 32.sp - round2;
+      path.lineTo(firstStart, round1 + round2 * 2 + addHeight);
+      path.quadraticBezierTo(
+          firstStart + round2,
+          round1 + round2 * 2 + addHeight,
+          firstStart + round2,
+          round1 + round2 + addHeight);
+
+      // 突出部分左上角
+      path.lineTo(firstStart + round2, round1);
+      path.quadraticBezierTo(
+          firstStart + round2, 0, firstStart + round2 + round1, 0);
+
+      // double secondStart = size.width / 2 + 24.w + 32.sp - round1;
+      // 突出部分右上角
+      path.lineTo(secondStart, 0);
+      path.quadraticBezierTo(
+          secondStart + round1, 0, secondStart + round1, round1);
+
+      // 突出部分右下角
+      path.lineTo(secondStart + round1, round1 + round2 + addHeight);
+      path.quadraticBezierTo(
+          secondStart + round1,
+          round1 + round2 * 2 + addHeight,
+          secondStart + round1 + round2,
+          round1 + round2 * 2 + addHeight);
+      //
+      path.lineTo(size.width - round1, round1 + round2 * 2 + addHeight);
+      path.quadraticBezierTo(size.width, round1 + round2 * 2 + addHeight,
+          size.width, round1 * 2 + round2 * 2 + addHeight);
+    } else {
+      // 左上角
+      path.lineTo(0, round1 * 2 + round2 * 2 + addHeight);
+      path.quadraticBezierTo(0, round1 + round2 * 2 + addHeight, round1,
+          round1 + round2 * 2 + addHeight);
+
+      firstStart = size.width - 48.w - width - round2;
+      // 突出部分左下角
+      path.lineTo(firstStart, round1 + round2 * 2 + addHeight);
+      path.quadraticBezierTo(
+          firstStart + round2,
+          round1 + round2 * 2 + addHeight,
+          firstStart + round2,
+          round1 + round2 + addHeight);
+      // 突出部分左上角
+      path.lineTo(firstStart + round2, round1);
+      path.quadraticBezierTo(
+          firstStart + round2, 0, firstStart + round2 + round1, 0);
+
+      // 突出部分右上角
+      path.lineTo(size.width - round1, 0);
+      path.quadraticBezierTo(size.width, 0, size.width, round1);
+    }
 
     // path.lineTo(200, 200);
     canvas.drawPath(path, _paint);
@@ -127,37 +193,124 @@ class UionPainter extends CustomPainter {
     borderPath.quadraticBezierTo(strokeMargin, size.height - strokeMargin,
         strokeMargin, size.height - strokeMargin - round1);
 
-    // 左上角
-    borderPath.lineTo(strokeMargin, strokeMargin + round1);
+    if (index == 0) {
+      // 左上角
+      borderPath.lineTo(strokeMargin, strokeMargin + round1);
 
-    borderPath.quadraticBezierTo(
-        strokeMargin, strokeMargin, strokeMargin + round1, strokeMargin);
+      borderPath.quadraticBezierTo(
+          strokeMargin, strokeMargin, strokeMargin + round1, strokeMargin);
 
-    // 突出上
-    borderPath.lineTo(firstStart + strokeMargin, strokeMargin);
-    borderPath.quadraticBezierTo(
-        firstStart - strokeMargin + round1,
-        strokeMargin,
-        firstStart - strokeMargin + round1,
-        strokeMargin + round1);
+      // 突出上
+      borderPath.lineTo(firstStart + strokeMargin, strokeMargin);
+      borderPath.quadraticBezierTo(
+          firstStart - strokeMargin + round1,
+          strokeMargin,
+          firstStart - strokeMargin + round1,
+          strokeMargin + round1);
 
-    // 突出下
-    borderPath.lineTo(firstStart - strokeMargin + round1,
-        strokeMargin + round1 + round2 + addHeight);
-    borderPath.quadraticBezierTo(
-        firstStart - strokeMargin + round1,
-        strokeMargin + round1 + round2 * 2 + addHeight,
-        firstStart - strokeMargin + round1 + round2,
-        strokeMargin + round1 + round2 * 2 + addHeight);
+      // 突出下
+      borderPath.lineTo(firstStart - strokeMargin + round1,
+          strokeMargin + round1 + round2 + addHeight);
+      borderPath.quadraticBezierTo(
+          firstStart - strokeMargin + round1,
+          strokeMargin + round1 + round2 * 2 + addHeight,
+          firstStart - strokeMargin + round1 + round2,
+          strokeMargin + round1 + round2 * 2 + addHeight);
 
-    // 右上角
-    borderPath.lineTo(size.width - strokeMargin - round1,
-        strokeMargin + round1 + round2 * 2 + addHeight);
-    borderPath.quadraticBezierTo(
-        size.width - strokeMargin,
-        strokeMargin + round1 + round2 * 2 + addHeight,
-        size.width - strokeMargin,
-        strokeMargin + round1 * 2 + round2 * 2 + addHeight);
+      // 右上角
+      borderPath.lineTo(size.width - strokeMargin - round1,
+          strokeMargin + round1 + round2 * 2 + addHeight);
+      borderPath.quadraticBezierTo(
+          size.width - strokeMargin,
+          strokeMargin + round1 + round2 * 2 + addHeight,
+          size.width - strokeMargin,
+          strokeMargin + round1 * 2 + round2 * 2 + addHeight);
+    } else if (index == 1) {
+      //左上角
+      borderPath.lineTo(
+          strokeMargin, strokeMargin + round1 * 2 + round2 * 2 + addHeight);
+      borderPath.quadraticBezierTo(
+          strokeMargin,
+          round1 + round2 * 2 + addHeight + strokeMargin,
+          strokeMargin + round1,
+          round1 + round2 * 2 + addHeight + strokeMargin);
+
+      // 突出部分左下角
+      borderPath.lineTo(firstStart + strokeMargin,
+          round1 + round2 * 2 + addHeight + strokeMargin);
+      borderPath.quadraticBezierTo(
+          firstStart + strokeMargin + round2,
+          round1 + round2 * 2 + addHeight + strokeMargin,
+          firstStart + strokeMargin + round2,
+          round1 + round2 + addHeight + strokeMargin);
+
+      // 突出部分左上角
+      borderPath.lineTo(
+          firstStart + strokeMargin + round2, round1 + strokeMargin);
+      borderPath.quadraticBezierTo(
+          firstStart + strokeMargin + round2,
+          strokeMargin,
+          firstStart + strokeMargin + round2 + round1,
+          strokeMargin);
+
+      // 突出部分右上角
+      borderPath.lineTo(secondStart - strokeMargin, strokeMargin);
+      borderPath.quadraticBezierTo(
+          secondStart - strokeMargin + round1,
+          strokeMargin,
+          secondStart - strokeMargin + round1,
+          strokeMargin + round1);
+
+      // 突出部分右下角
+      borderPath.lineTo(
+          secondStart - strokeMargin + round1, strokeMargin + round1 + round2);
+      borderPath.quadraticBezierTo(
+          secondStart - strokeMargin + round1,
+          strokeMargin + round1 + round2 * 2 + addHeight,
+          secondStart - strokeMargin + round1 + round2,
+          strokeMargin + round1 + round2 * 2 + addHeight);
+      // 右上角
+
+      borderPath.lineTo(size.width - strokeMargin - round1,
+          strokeMargin + round1 + round2 * 2 + addHeight);
+      borderPath.quadraticBezierTo(
+          size.width - strokeMargin,
+          strokeMargin + round1 + round2 * 2 + addHeight,
+          size.width - strokeMargin,
+          strokeMargin + round1 * 2 + round2 * 2 + addHeight);
+    } else {
+      //左上角
+      borderPath.lineTo(
+          strokeMargin, strokeMargin + round1 * 2 + round2 * 2 + addHeight);
+      borderPath.quadraticBezierTo(
+          strokeMargin,
+          round1 + round2 * 2 + addHeight + strokeMargin,
+          strokeMargin + round1,
+          round1 + round2 * 2 + addHeight + strokeMargin);
+
+      // 突出部分左下角
+      borderPath.lineTo(
+          firstStart + strokeMargin, round1 + round2 * 2 + addHeight);
+      borderPath.quadraticBezierTo(
+          firstStart + round2 + strokeMargin,
+          round1 + round2 * 2 + addHeight,
+          firstStart + round2 + strokeMargin,
+          round1 + round2 + addHeight);
+
+      // 突出部分左上角
+      borderPath.lineTo(
+          firstStart + round2 + strokeMargin, round1 + strokeMargin);
+      borderPath.quadraticBezierTo(
+          firstStart + round2 + strokeMargin,
+          strokeMargin,
+          firstStart + round2 + strokeMargin + round1,
+          strokeMargin);
+
+      // 突出右上角
+      borderPath.lineTo(size.width - strokeMargin - round1, strokeMargin);
+      borderPath.quadraticBezierTo(size.width - strokeMargin, strokeMargin,
+          size.width - strokeMargin, strokeMargin + round1);
+    }
 
     // 路径闭合
     borderPath.lineTo(size.width - strokeMargin, size.height - round1);
@@ -310,7 +463,7 @@ class UnionTabView extends StatelessWidget {
           height: height,
           width: double.infinity,
           child: CustomPaint(
-            painter: UionPainter(title[index].length),
+            painter: UionPainter(title[index].length, index: index),
           ),
         ),
         Column(

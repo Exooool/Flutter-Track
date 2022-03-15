@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 
 class ExpansionList extends StatefulWidget {
   final String title;
@@ -39,29 +41,27 @@ class _ExpansionListState extends State<ExpansionList> {
             closed = !closed;
             setState(() {});
           },
-          child: Container(
+          child: PublicCard(
+            radius: 90.r,
             height: widget.height,
             width: widget.width,
             padding: widget.headerPadding,
-            margin: const EdgeInsets.only(bottom: 12),
-            decoration: BoxDecoration(
-                borderRadius: widget.headerRadius,
-                gradient: MyWidgetStyle.mainLinearGradient),
-            child: Row(
+            margin: EdgeInsets.only(bottom: 12.h),
+            widget: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
                   widget.title,
                   style: TextStyle(
-                      color: MyColor.fontWhite,
+                      color: MyColor.fontBlack,
                       fontSize: MyFontSize.font16,
                       fontWeight: FontWeight.w600),
                 ),
-                const Icon(
-                  Icons.arrow_drop_up,
-                  size: 28,
-                  color: MyColor.fontWhite,
+                Icon(
+                  Icons.arrow_drop_down,
+                  size: 28.sp,
+                  color: MyColor.fontBlack,
                 )
               ],
             ),
@@ -69,7 +69,9 @@ class _ExpansionListState extends State<ExpansionList> {
         ),
         Offstage(
           offstage: closed,
-          child: Column(
+          child: ListView(
+            padding: EdgeInsets.only(left: 12.w, right: 12.w),
+            shrinkWrap: true,
             children: widget.children,
           ),
         )

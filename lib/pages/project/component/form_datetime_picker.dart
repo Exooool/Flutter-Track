@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
@@ -48,18 +47,9 @@ class FormDateTimePicker extends StatelessWidget {
         confirmText: confirmText,
         cancelText: '取消',
         containerColor: Colors.transparent,
-        selectionOverlay: Opacity(
-          opacity: 0.1,
-          child: Container(
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                  Color.fromRGBO(107, 101, 244, 1),
-                  Color.fromRGBO(51, 84, 244, 1)
-                ])),
-          ),
+        selectionOverlay: PublicCard(
+          radius: 90.r,
+          widget: const SizedBox(),
         ),
         backgroundColor: Colors.transparent,
         headerDecoration: const BoxDecoration(
@@ -166,32 +156,25 @@ class FormDateTimePicker extends StatelessWidget {
                     // 传值到外面
                     onChange(frequency);
                   }).makePicker(),
-              Container(
-                decoration: const BoxDecoration(
-                    border: Border(
-                        top: BorderSide(
-                            color: Color.fromRGBO(67, 89, 244, 0.1),
-                            width: 0.5),
-                        bottom: BorderSide(
-                            color: Color.fromRGBO(67, 89, 244, 0.11),
-                            width: 0.5))),
-                child: InkWell(
-                    onTap: () {
-                      weekDaySelector();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        const Text('重复',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500)),
-                        Obx(() => Text(c.repeatText.value,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                color: Color.fromRGBO(0, 0, 0, 0.2))))
-                      ],
-                    )),
-              ),
+              PublicCard(
+                  height: 40.h,
+                  radius: 90.r,
+                  widget: InkWell(
+                      onTap: () {
+                        weekDaySelector();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          const Text('重复',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500)),
+                          Obx(() => Text(c.repeatText.value,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Color.fromRGBO(0, 0, 0, 0.2))))
+                        ],
+                      )))
             ],
           )),
         ),
@@ -212,18 +195,9 @@ class FormDateTimePicker extends StatelessWidget {
                     // 将提醒时间的值传出去
                     onChange(value[0]);
                   },
-                  selectionOverlay: Opacity(
-                    opacity: 0.1,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                            Color.fromRGBO(107, 101, 244, 1),
-                            Color.fromRGBO(51, 84, 244, 1)
-                          ])),
-                    ),
+                  selectionOverlay: PublicCard(
+                    radius: 90.r,
+                    widget: const SizedBox(),
                   ),
                   confirmTextStyle: TextStyle(
                       fontSize: MyFontSize.font16,

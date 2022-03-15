@@ -1,41 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/expansion_list.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:get/get.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
 
-  Widget itemRow(String title,
-      {Function()? function,
-      MainAxisAlignment alignment = MainAxisAlignment.start,
-      bool inner = true}) {
+  Widget itemRow(String title, {Function()? function, bool inner = true}) {
     return InkWell(
       onTap: function,
-      child: Opacity(
-        opacity: inner ? 0.5 : 1,
-        child: Container(
-          height: inner ? 24 : 36,
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.only(left: 24, right: 24),
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(80)),
-              gradient: MyWidgetStyle.mainLinearGradient),
-          child: Row(
-            mainAxisAlignment: alignment,
+      child: PublicCard(
+          height: inner ? 24.h : 36.h,
+          margin: EdgeInsets.only(bottom: 12.h),
+          padding: EdgeInsets.only(left: 24.w, right: 24.w),
+          radius: 90.r,
+          notWhite: inner,
+          widget: Row(
+            mainAxisAlignment:
+                inner ? MainAxisAlignment.center : MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 title,
                 style: TextStyle(
-                    color: MyColor.fontWhite,
+                    color: inner ? MyColor.fontWhite : MyColor.fontBlack,
                     fontSize: inner ? MyFontSize.font14 : MyFontSize.font16,
                     fontWeight: FontWeight.w600),
               )
             ],
-          ),
-        ),
-      ),
+          )),
     );
   }
 
@@ -45,7 +41,7 @@ class SettingPage extends StatelessWidget {
       appBar: CustomAppbar(
         '',
         leading: InkWell(
-          onTap: () {},
+          onTap: () => Get.back(),
           child: const Text('返回'),
         ),
         title: '设置',
@@ -55,18 +51,48 @@ class SettingPage extends StatelessWidget {
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
+        padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
         children: <Widget>[
           ExpansionList(
             title: '账号安全',
             children: [
-              itemRow('第三方软件', alignment: MainAxisAlignment.center),
-              itemRow('更改密码', alignment: MainAxisAlignment.center),
-              itemRow('注销账号', alignment: MainAxisAlignment.center)
+              Container(
+                margin: EdgeInsets.only(bottom: 12.h),
+                child: Row(
+                  children: <Widget>[
+                    PublicCard(
+                        height: 24.h,
+                        width: 93.w,
+                        radius: 90.r,
+                        widget: Center(
+                          child: Text('手机号码',
+                              style: TextStyle(
+                                  fontSize: MyFontSize.font14,
+                                  fontWeight: FontWeight.w600,
+                                  color: MyColor.fontWhite)),
+                        ),
+                        notWhite: true),
+                    Expanded(
+                        child: PublicCard(
+                      height: 24.h,
+                      radius: 90.r,
+                      padding: EdgeInsets.only(right: 24.w),
+                      widget: Text('17722801204',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              height: 1.5,
+                              fontSize: MyFontSize.font14,
+                              color: MyColor.fontBlack)),
+                    ))
+                  ],
+                ),
+              ),
+              itemRow('第三方软件'),
+              itemRow('注销账号')
             ],
-            headerRadius: const BorderRadius.all(Radius.circular(80)),
-            height: 36,
-            headerPadding: const EdgeInsets.only(left: 24, right: 14),
+            headerRadius: BorderRadius.all(Radius.circular(90.r)),
+            height: 36.h,
+            headerPadding: EdgeInsets.only(left: 24.w, right: 14.w),
           ),
           ExpansionList(
             title: '系统权限',
@@ -77,9 +103,36 @@ class SettingPage extends StatelessWidget {
               itemRow('通讯录'),
               itemRow('通知')
             ],
-            headerRadius: const BorderRadius.all(Radius.circular(80)),
-            height: 36,
-            headerPadding: const EdgeInsets.only(left: 24, right: 14),
+            headerRadius: BorderRadius.all(Radius.circular(90.r)),
+            height: 36.h,
+            headerPadding: EdgeInsets.only(left: 24.w, right: 14.w),
+          ),
+          ExpansionList(
+            title: '隐私设置',
+            children: [
+              Row(
+                children: [
+                  PublicCard(
+                    radius: 90.r,
+                    width: 254.w,
+                    height: 24.h,
+                    padding: EdgeInsets.only(left: 12.w),
+                    margin: EdgeInsets.only(bottom: 12.h),
+                    widget: Text('对外收藏可见',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            height: 1.5,
+                            fontSize: MyFontSize.font14,
+                            fontWeight: FontWeight.w600,
+                            color: MyColor.fontWhite)),
+                    notWhite: true,
+                  )
+                ],
+              )
+            ],
+            headerRadius: BorderRadius.all(Radius.circular(90.r)),
+            height: 36.h,
+            headerPadding: EdgeInsets.only(left: 24.w, right: 14.w),
           ),
           itemRow('名单管理', inner: false),
           itemRow('关于我们', inner: false),

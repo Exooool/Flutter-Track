@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
@@ -49,6 +50,11 @@ class _VerifyPageState extends State<VerifyPage> {
                 child: TextField(
                   maxLength: 4,
                   autofocus: true,
+                  // 弹出数字软键盘
+                  keyboardType: TextInputType.number,
+
+                  // 限制输入为数字
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChanged: (value) {
                     setState(() {
                       _code = value;

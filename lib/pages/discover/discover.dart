@@ -7,6 +7,7 @@ import 'package:flutter_track/pages/components/article_card.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 
 import 'package:flutter_track/pages/components/drag_grid.dart';
+import 'package:get/get.dart';
 
 import './news_page.dart';
 
@@ -75,7 +76,7 @@ class _DiscoverPageState extends State<DiscoverPage>
     return list;
   }
 
-  //
+  // tab栏
   List<Widget> _tabContent() {
     List<Widget> list = _tabList.map((e) {
       return NewsPage(_getNewsArticle(), e);
@@ -124,7 +125,13 @@ class _DiscoverPageState extends State<DiscoverPage>
                     margin: EdgeInsets.only(top: 30.h, bottom: 30.h),
                     child: const Text('长按拖动排序'),
                   ),
-                  DragGrid(dragList: _tabList, callback: () {})
+                  DragGrid(dragList: _tabList, callback: () {}),
+                  PublicCard(
+                      margin: EdgeInsets.only(top: 25.h),
+                      radius: 90.r,
+                      height: 45.r,
+                      width: 45.r,
+                      widget: Icon(Icons.close))
                 ],
               ),
             ),
@@ -152,6 +159,15 @@ class _DiscoverPageState extends State<DiscoverPage>
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: PublicCard(
+          radius: 90.r,
+          height: 72.r,
+          width: 72.r,
+          onTap: () => Get.toNamed('/newsEdit'),
+          margin: EdgeInsets.only(bottom: 122.h),
+          widget: Icon(Icons.add),
+        ),
         body: Padding(
           padding: EdgeInsets.only(
               top: MediaQueryData.fromWindow(window).padding.top + 12.h),

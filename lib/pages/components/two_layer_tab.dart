@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // 样式导入
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/model/news_model.dart';
+import 'package:flutter_track/pages/components/article_card.dart';
 import 'package:flutter_track/pages/components/union_widget.dart';
+
+import 'package:flutter_track/model/project_model.dart';
+import 'package:flutter_track/pages/components/project_card.dart';
 
 class TwoLayerTab extends StatefulWidget {
   final List exteriorTabs;
@@ -31,65 +36,51 @@ class _TwoLayerTabState extends State<TwoLayerTab>
   // tab按钮
   Widget customTab(String title, double opcity, bool inner, {String? nums}) {
     return Opacity(
-        opacity: opcity,
-        child: Container(
-          alignment: Alignment.center,
-          height: 36.h,
-          padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 10.h),
-          child: nums == null
-              ? Text(
-                  title,
-                  style: TextStyle(
-                      height: 1,
-                      color: MyColor.fontWhite,
-                      fontSize: MyFontSize.font14),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(title,
-                        style: TextStyle(
-                            height: 1,
-                            color: MyColor.fontBlack,
-                            fontSize: MyFontSize.font16)),
-                    Text(nums,
-                        style: TextStyle(
-                            height: 1,
-                            color: MyColor.fontBlack,
-                            fontSize: MyFontSize.font18))
-                  ],
-                ),
-        ));
+      opacity: 0.8,
+      child: Container(
+        height: 36.h,
+        width: 75.w,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            gradient: MyWidgetStyle.mainLinearGradient),
+        child: Text(title),
+      ),
+    );
   }
 
   List<Widget> parseTabs(List list, bool isEx) {
     List<Widget> result = [];
-    if (isEx) {
-      for (var i = 0; i < list.length; i++) {
-        if (list[i]['nums'] == null) {
-          result.add(customTab(list[i]['title'],
-              _tabExteriorController.index == i ? 1 : 0.5, false));
-        } else {
-          result.add(customTab(list[i]['title'],
-              _tabExteriorController.index == i ? 1 : 0.5, false,
-              nums: list[i]['nums']));
-        }
-      }
-    } else {
-      for (var i = 0; i < list.length; i++) {
-        if (list[i]['nums'] == null) {
-          result.add(customTab(list[i]['title'],
-              _tabInteriorController.index == i ? 1 : 0.5, true));
-        } else {
-          result.add(customTab(list[i]['title'],
-              _tabInteriorController.index == i ? 1 : 0.5, true,
-              nums: list[i]['nums']));
-        }
+    for (var i = 0; i < list.length; i++) {
+      if (list[i]['nums'] == null) {
+        result.add(customTab(list[i]['title'],
+            _tabInteriorController.index == i ? 1 : 0.5, true));
+      } else {
+        result.add(customTab(
+            list[i]['title'], _tabInteriorController.index == i ? 1 : 0.5, true,
+            nums: list[i]['nums']));
       }
     }
-
     return result;
+  }
+
+  // 获取资讯列表
+  List<Widget> _getNewsArticle(List articleList) {
+    List<Widget> list = [];
+
+    list = articleList.map((e) {
+      return ArticleCard(Article.fromMap(e));
+    }).toList();
+    return list;
+  }
+
+  // 获取计划
+  List<Widget> _getProject(List projectList) {
+    List<Widget> list = [];
+    list = projectList.map((e) {
+      return ProjectCard(Project.fromMap(e));
+    }).toList();
+    return list;
   }
 
   List<Widget> getList(List list) {
@@ -118,11 +109,13 @@ class _TwoLayerTabState extends State<TwoLayerTab>
       },
       child: Container(
         height: 36.h,
-        width: 112.w,
+        padding: EdgeInsets.only(left: 24.w, right: 24.w),
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-            gradient: MyWidgetStyle.secondLinearGradient,
-            borderRadius: BorderRadius.all(Radius.circular(10.r))),
+        decoration: _tabExteriorController.index == index
+            ? null
+            : BoxDecoration(
+                gradient: MyWidgetStyle.secondLinearGradient,
+                borderRadius: BorderRadius.all(Radius.circular(10.r))),
         child: Text(title),
       ),
     );
@@ -131,83 +124,78 @@ class _TwoLayerTabState extends State<TwoLayerTab>
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 12),
+      margin: EdgeInsets.only(top: 12.h),
       child: UnionTabView(
-        height: 400.h,
-        title: ['目标08s', '', ''],
+        height: double.maxFinite,
+        title: ['目标08', '目标08', '目标08'],
+        index: _tabExteriorController.index,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // TabBar(
-              //     isScrollable: true,
-              //     onTap: (e) {
-              //       setState(() {});
-              //     },
-              //     padding: const EdgeInsets.all(0),
-              //     labelPadding: const EdgeInsets.all(0),
-              //     controller: _tabExteriorController,
-              //     indicator: const BoxDecoration(color: Colors.transparent),
-              //     indicatorWeight: 0,
-              //     tabs: parseTabs(widget.exteriorTabs, true)),
               mainTab('目标08', 0),
-              mainTab('目标08', 1),
-              mainTab('目标08', 2),
+              mainTab('收藏99+', 1),
+              mainTab('发布10', 2),
             ],
           ),
           Expanded(
-              child: TabBarView(
-                  // 禁止滑动
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: _tabExteriorController,
-                  children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Container(
-                      margin: const EdgeInsets.only(top: 12),
-                      child: TabBar(
-                          isScrollable: true,
-                          onTap: (e) {
-                            setState(() {});
-                          },
-                          indicator:
-                              const BoxDecoration(color: Colors.transparent),
-                          indicatorWeight: 0,
-                          labelPadding:
-                              const EdgeInsets.only(left: 6, right: 6),
-                          controller: _tabInteriorController,
-                          tabs: parseTabs(widget.interiorTabs, false)),
-                    ),
-                    Expanded(
-                        child: TabBarView(
-                            // 禁止滑动
-                            physics: const NeverScrollableScrollPhysics(),
+              child: Container(
+            margin: EdgeInsets.only(top: 12.h),
+            child: TabBarView(
+                // 禁止滑动
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _tabExteriorController,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(top: 12),
+                        child: TabBar(
+                            isScrollable: true,
+                            onTap: (e) {
+                              setState(() {});
+                            },
+                            indicator:
+                                const BoxDecoration(color: Colors.transparent),
+                            indicatorWeight: 0,
+                            labelPadding:
+                                EdgeInsets.only(left: 6.w, right: 6.w),
                             controller: _tabInteriorController,
-                            children: <Widget>[
-                          ListView(
-                            padding: const EdgeInsets.only(
-                                left: 24, right: 24, bottom: 100),
-                            children: getList(widget.interiorViews[0]),
-                          ),
-                          ListView(
-                            padding: const EdgeInsets.only(
-                                left: 24, right: 24, bottom: 100),
-                            children: getList(widget.interiorViews[0]),
-                          )
-                        ]))
-                  ],
-                ),
-                ListView(
-                  padding:
-                      const EdgeInsets.only(left: 24, right: 24, bottom: 100),
-                  children: getList(widget.exteriorViews[0]),
-                ),
-                ListView(
-                  padding:
-                      const EdgeInsets.only(left: 24, right: 24, bottom: 100),
-                  children: getList(widget.exteriorViews[1]),
-                ),
-              ]))
+                            tabs: parseTabs(widget.interiorTabs, false)),
+                      ),
+                      Expanded(
+                          child: TabBarView(
+                              // 禁止滑动
+                              physics: const NeverScrollableScrollPhysics(),
+                              controller: _tabInteriorController,
+                              children: <Widget>[
+                            ListView(
+                              physics: const BouncingScrollPhysics(),
+                              padding: EdgeInsets.only(
+                                  left: 24.w, right: 24.w, bottom: 100.h),
+                              children: _getProject(widget.interiorViews[0]),
+                            ),
+                            ListView(
+                              physics: const BouncingScrollPhysics(),
+                              padding: EdgeInsets.only(
+                                  left: 24.w, right: 24.w, bottom: 100.h),
+                              children: _getProject(widget.interiorViews[0]),
+                            )
+                          ]))
+                    ],
+                  ),
+                  ListView(
+                    padding:
+                        const EdgeInsets.only(left: 24, right: 24, bottom: 100),
+                    children: _getNewsArticle(widget.exteriorViews[0]),
+                  ),
+                  ListView(
+                    padding:
+                        const EdgeInsets.only(left: 24, right: 24, bottom: 100),
+                    children: _getNewsArticle(widget.exteriorViews[1]),
+                  ),
+                ]),
+          ))
         ],
       ),
     );

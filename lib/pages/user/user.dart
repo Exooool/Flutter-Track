@@ -2,12 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/assets/test.dart';
+
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 
 // 样式导入
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
-import 'package:flutter_track/pages/components/public_card.dart';
+
 import 'package:flutter_track/pages/components/two_layer_tab.dart';
 import 'package:flutter_track/pages/user/user_controller.dart';
 import 'package:get/get.dart';
@@ -89,7 +91,9 @@ class UserPage extends StatelessWidget {
             ),
             const SizedBox(width: 6),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Get.toNamed('/setting');
+              },
               child: Text('设置', style: TextStyle(fontSize: MyFontSize.font14)),
             )
           ],
@@ -128,8 +132,8 @@ class UserPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // slideButton('兑换商店', () {}),
-                slideButton('历史记录', () {}),
-                slideButton('我的消息', () {})
+                slideButton('历史记录', () => Get.toNamed('history')),
+                slideButton('我的消息', () => Get.toNamed('message'))
               ],
             ),
 
