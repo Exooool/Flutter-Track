@@ -7,7 +7,8 @@ import 'package:flutter_track/pages/components/public_card.dart';
 
 class BlurWidget extends StatelessWidget {
   final Widget widget;
-  const BlurWidget(this.widget, {Key? key}) : super(key: key);
+  final double? radius;
+  const BlurWidget(this.widget, {Key? key, this.radius}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class BlurWidget extends StatelessWidget {
         ClipRect(
           child: SizedBox(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+              filter: ImageFilter.blur(sigmaX: 70, sigmaY: 70),
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(30.r)),
@@ -34,7 +35,7 @@ class BlurWidget extends StatelessWidget {
         ),
 
         PublicCard(
-            radius: 30.r,
+            radius: radius ?? 30.r,
             height: double.maxFinite,
             width: double.maxFinite,
             widget: widget),

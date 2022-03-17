@@ -7,6 +7,7 @@ import 'package:flutter_track/pages/components/article_card.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 
 import 'package:flutter_track/pages/components/drag_grid.dart';
+import 'package:flutter_track/pages/discover/news_search.dart';
 import 'package:get/get.dart';
 
 import './news_page.dart';
@@ -79,7 +80,7 @@ class _DiscoverPageState extends State<DiscoverPage>
   // tab栏
   List<Widget> _tabContent() {
     List<Widget> list = _tabList.map((e) {
-      return NewsPage(_getNewsArticle(), e);
+      return NewsPage([], e);
     }).toList();
     return list;
   }
@@ -225,10 +226,11 @@ class _DiscoverPageState extends State<DiscoverPage>
                     height: 30.h,
                     margin: EdgeInsets.only(top: 12.h, left: 24.w, right: 24.w),
                     radius: 60.r,
+                    onTap: () => Get.to(const NewsSearch()),
                     widget: Padding(
                       padding: EdgeInsets.only(left: 16.w),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Icon(
@@ -236,20 +238,10 @@ class _DiscoverPageState extends State<DiscoverPage>
                             size: 14.sp,
                           ),
                           SizedBox(width: 10.w),
-                          Expanded(
-                              child: TextField(
-                            onTap: () {
-                              print('跳转搜索页');
-                            },
-                            style: TextStyle(fontSize: MyFontSize.font14),
-                            decoration: InputDecoration.collapsed(
-                              // isDense: true,
-                              enabled: true,
-                              hintText: '搜一搜',
-
-                              hintStyle: TextStyle(fontSize: MyFontSize.font14),
-                            ),
-                          ))
+                          Text('搜一搜',
+                              style: TextStyle(
+                                  fontSize: MyFontSize.font14,
+                                  color: MyColor.fontGrey))
                         ],
                       ),
                     ),

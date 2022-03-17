@@ -52,6 +52,7 @@ class PublicCard extends StatelessWidget {
   final double radius;
   final bool notWhite;
   final Function()? onTap;
+  final Function()? onLongPress;
   const PublicCard(
       {Key? key,
       this.height,
@@ -61,13 +62,15 @@ class PublicCard extends StatelessWidget {
       required this.radius,
       required this.widget,
       this.notWhite = false,
-      this.onTap})
+      this.onTap,
+      this.onLongPress})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Container(
           margin: margin,
           decoration: BoxDecoration(

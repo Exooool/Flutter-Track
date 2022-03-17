@@ -27,6 +27,8 @@ class _ProjectPageState extends State<ProjectPage>
   // 内层tab的controller
   late TabController _tabInteriorController;
 
+  Map groupList = {'matched': [], 'matching': []};
+  List projectList = [];
   // 自定义tab样式
   Widget mainTab(String content, {bool show = true}) {
     return show
@@ -84,6 +86,7 @@ class _ProjectPageState extends State<ProjectPage>
         height: 72.r,
         width: 72.r,
         radius: 60.r,
+        margin: EdgeInsets.only(top: 24.h),
         widget: InkWell(
           onTap: () {
             Navigator.pushNamed(context, '/add_project');
@@ -105,6 +108,14 @@ class _ProjectPageState extends State<ProjectPage>
     }).toList();
     return list;
   }
+
+  // List<Widget> _getGroup(List list) {
+  //   if (list.isEmpty) {
+  //     return;
+  //   } else {
+  //     return;
+  //   }
+  // }
 
   @override
   void initState() {
@@ -165,32 +176,43 @@ class _ProjectPageState extends State<ProjectPage>
                     padding: EdgeInsets.only(
                         top: 35.h, left: 24.w, right: 24.w, bottom: 100.h),
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 20.h),
-                        alignment: Alignment.center,
-                        child: Text(
-                          '即将开始',
-                          style: TextStyle(fontSize: MyFontSize.font20),
+                      Center(
+                        child: PublicCard(
+                          margin: EdgeInsets.only(bottom: 20.h),
+                          width: 96.w,
+                          height: 36.h,
+                          radius: 90.r,
+                          widget: Center(
+                            child: Text(
+                              '即将开始',
+                              style: TextStyle(fontSize: MyFontSize.font14),
+                            ),
+                          ),
                         ),
                       ),
                       Column(
                         children: _getProject(),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
-                        alignment: Alignment.center,
-                        child: Text(
-                          '其余计划',
-                          style: TextStyle(fontSize: MyFontSize.font20),
+                      Center(
+                        child: PublicCard(
+                          margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
+                          radius: 90.r,
+                          width: 96.w,
+                          height: 36.h,
+                          widget: Center(
+                            child: Text(
+                              '其余计划',
+                              style: TextStyle(fontSize: MyFontSize.font14),
+                            ),
+                          ),
                         ),
                       ),
                       Column(
                         children: _getProject(),
                       ),
+                      Center(child: projectAddButton())
                     ],
                   ),
-                  Positioned(
-                      bottom: 140.h, right: 24.w, child: projectAddButton())
                 ],
               ),
 
@@ -226,26 +248,30 @@ class _ProjectPageState extends State<ProjectPage>
                           physics: const NeverScrollableScrollPhysics(),
                           controller: _tabInteriorController,
                           children: <Widget>[
-                        ListView(
-                          children: const [
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                            ListTile(title: Text('123')),
-                          ],
-                        ),
-                        const Text('2')
+                        groupList['matched'].isEmpty
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: const [
+                                  Text('暂无互助小组'),
+                                  Text('快去添加计划试试吧～')
+                                ],
+                              )
+                            : ListView(
+                                children: const [],
+                              ),
+                        groupList['matching'].isEmpty
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: const [
+                                  Text('暂无互助小组'),
+                                  Text('快去添加计划试试吧～')
+                                ],
+                              )
+                            : ListView(
+                                children: const [],
+                              ),
                       ]))
                 ],
               ),
