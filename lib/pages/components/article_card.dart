@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/model/news_model.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:flutter_track/pages/discover/article.dart';
+import 'package:get/get.dart';
 
 class BorderGradientPainter extends CustomPainter {
   final Paint _paint = Paint();
@@ -47,7 +49,9 @@ class BorderGradientPainter extends CustomPainter {
 
 class ArticleCard extends StatelessWidget {
   final Article news;
-  const ArticleCard(this.news, {Key? key}) : super(key: key);
+  final bool small;
+  const ArticleCard(this.news, {Key? key, this.small = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +62,9 @@ class ArticleCard extends StatelessWidget {
             radius: 10.r,
             height: 223.h,
             width: 366.w,
+            onTap: () => Get.to(ArticlePage()),
             widget: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(12.r),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -75,10 +80,6 @@ class ArticleCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       )),
-                      InkWell(
-                        onTap: () {},
-                        child: const Icon(Icons.menu),
-                      )
                     ],
                   ),
                   // SizedBox(height: 8.h),
@@ -135,31 +136,54 @@ class ArticleCard extends StatelessWidget {
                     ],
                   ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        news.tag,
-                        style: TextStyle(fontSize: MyFontSize.font10),
-                      ),
-                      Row(children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 60.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
                         Text(
-                          '观看数' + news.viewNum.toString(),
-                          style: TextStyle(fontSize: MyFontSize.font9),
+                          news.tag,
+                          style: TextStyle(fontSize: MyFontSize.font10),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 18.w, right: 12.w),
-                          child: Text(
-                            '评论数：' + news.comment.length.toString(),
-                            style: TextStyle(fontSize: MyFontSize.font9),
+                        Row(children: [
+                          Image.asset(
+                            'lib/assets/icons/View_fill.png',
+                            height: 18.r,
+                            width: 18.r,
                           ),
-                        ),
-                        Text(
-                          '点赞数：' + news.likeNum.toString(),
-                          style: TextStyle(fontSize: MyFontSize.font9),
-                        ),
-                      ])
-                    ],
+                          Text(
+                            news.viewNum.toString(),
+                            style: TextStyle(fontSize: MyFontSize.font10),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(left: 18.w, right: 12.w),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'lib/assets/icons/Chat_fill.png',
+                                    height: 18.r,
+                                    width: 18.r,
+                                  ),
+                                  Text(
+                                    news.comment.length.toString(),
+                                    style:
+                                        TextStyle(fontSize: MyFontSize.font10),
+                                  ),
+                                ],
+                              )),
+                          Image.asset(
+                            'lib/assets/icons/Favorite_fill.png',
+                            height: 18.r,
+                            width: 18.r,
+                          ),
+                          Text(
+                            news.likeNum.toString(),
+                            style: TextStyle(fontSize: MyFontSize.font10),
+                          ),
+                        ])
+                      ],
+                    ),
                   )
                 ],
               ),

@@ -44,7 +44,7 @@ class _TwoLayerTabState extends State<TwoLayerTab>
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10.r)),
             gradient: MyWidgetStyle.mainLinearGradient),
-        child: Text(title),
+        child: Text(title, style: TextStyle(fontSize: MyFontSize.font14)),
       ),
     );
   }
@@ -116,7 +116,9 @@ class _TwoLayerTabState extends State<TwoLayerTab>
             : BoxDecoration(
                 gradient: MyWidgetStyle.secondLinearGradient,
                 borderRadius: BorderRadius.all(Radius.circular(10.r))),
-        child: Text(title),
+        child: Text(title,
+            style: TextStyle(
+                fontSize: MyFontSize.font16, fontWeight: FontWeight.w600)),
       ),
     );
   }
@@ -149,7 +151,7 @@ class _TwoLayerTabState extends State<TwoLayerTab>
                   Column(
                     children: <Widget>[
                       Container(
-                        margin: const EdgeInsets.only(top: 12),
+                        margin: EdgeInsets.only(top: 12.h),
                         child: TabBar(
                             isScrollable: true,
                             onTap: (e) {
@@ -186,12 +188,12 @@ class _TwoLayerTabState extends State<TwoLayerTab>
                   ),
                   ListView(
                     padding:
-                        const EdgeInsets.only(left: 24, right: 24, bottom: 100),
+                        EdgeInsets.only(left: 12.w, right: 12.w, bottom: 100.h),
                     children: _getNewsArticle(widget.exteriorViews[0]),
                   ),
                   ListView(
                     padding:
-                        const EdgeInsets.only(left: 24, right: 24, bottom: 100),
+                        EdgeInsets.only(left: 12.w, right: 12.w, bottom: 100.h),
                     children: _getNewsArticle(widget.exteriorViews[1]),
                   ),
                 ]),

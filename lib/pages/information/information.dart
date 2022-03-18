@@ -150,7 +150,11 @@ class InformationPage extends StatelessWidget {
         'infoPage',
         ending: InkWell(
           onTap: () {},
-          child: const Text('分享'),
+          child: Image.asset(
+            'lib/assets/icons/Out.png',
+            height: 25.r,
+            width: 25.r,
+          ),
         ),
       ),
       body: GetX<InformationController>(

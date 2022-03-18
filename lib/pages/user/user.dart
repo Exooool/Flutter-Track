@@ -76,9 +76,10 @@ class UserPage extends StatelessWidget {
             const SizedBox(width: 26),
             InkWell(
               onTap: () {},
-              child: Text(
-                '寻找好友',
-                style: TextStyle(fontSize: MyFontSize.font14),
+              child: Image.asset(
+                'lib/assets/icons/User_fill_add.png',
+                height: 25.r,
+                width: 25.r,
               ),
             )
           ],
@@ -87,14 +88,22 @@ class UserPage extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {},
-              child: Text('分享', style: TextStyle(fontSize: MyFontSize.font14)),
+              child: Image.asset(
+                'lib/assets/icons/Out.png',
+                height: 25.r,
+                width: 25.r,
+              ),
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: 10.w),
             InkWell(
               onTap: () {
                 Get.toNamed('/setting');
               },
-              child: Text('设置', style: TextStyle(fontSize: MyFontSize.font14)),
+              child: Image.asset(
+                'lib/assets/icons/Setting_fill.png',
+                height: 25.r,
+                width: 25.r,
+              ),
             )
           ],
         ),
@@ -118,14 +127,47 @@ class UserPage extends StatelessWidget {
             ),
 
             // 昵称
-            Text('Gutabled',
-                style: TextStyle(
-                    fontSize: MyFontSize.font19,
-                    color: MyColor.mainColor,
-                    fontWeight: FontWeight.w600)),
+            Padding(
+              padding: EdgeInsets.all(10.h),
+              child: Text('Gutabled',
+                  style: TextStyle(
+                      fontSize: MyFontSize.font19,
+                      color: MyColor.mainColor,
+                      fontWeight: FontWeight.w600)),
+            ),
+
             // 粉丝关注
             Row(
-              children: <Widget>[],
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                InkWell(
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'lib/assets/icons/User_add_alt_fill.png',
+                        height: 25.r,
+                        width: 25.r,
+                      ),
+                      SizedBox(width: 5.w),
+                      Text('99', style: TextStyle(fontSize: MyFontSize.font12))
+                    ],
+                  ),
+                ),
+                SizedBox(width: 5.w),
+                InkWell(
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'lib/assets/icons/User_add_alt_fill-1.png',
+                        height: 25.r,
+                        width: 25.r,
+                      ),
+                      SizedBox(width: 5.w),
+                      Text('99', style: TextStyle(fontSize: MyFontSize.font12))
+                    ],
+                  ),
+                )
+              ],
             ),
             // 历史记录 我的消息
             Row(

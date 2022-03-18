@@ -6,6 +6,7 @@ import 'package:flutter_track/pages/discover/discover.dart';
 import 'package:flutter_track/pages/user/user.dart';
 import 'package:flutter_track/pages/project/project.dart';
 import 'package:flutter_track/pages/information/information.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import './discover/news_page.dart';
 
 // 屏幕适配
@@ -35,6 +36,7 @@ class _HomeMenuState extends State<HomeMenu> {
         onTap: () {
           setState(() {
             _index = index;
+            Vibrate.feedback(FeedbackType.light);
           });
         },
         child: Padding(

@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
+import 'package:flutter_track/pages/components/custom_checkbox.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:get/get.dart' as getx;
 import 'package:image_picker/image_picker.dart';
@@ -25,7 +26,7 @@ class NewsEdit extends StatelessWidget {
     {"insert": "\n"},
     {"insert": "\n"}
   ];
-
+  late String newsTitle = '';
   NewsEdit({Key? key}) : super(key: key);
 
   @override
@@ -41,7 +42,17 @@ class NewsEdit extends StatelessWidget {
             onTap: () {
               // 富文本编辑器输出内容
               print(jsonEncode(_controller.document));
-              getx.Get.to(const TagSelect());
+              if (newsTitle != '') {
+                var jsondata = {
+                  "news_title": newsTitle,
+                  "news_content": jsonEncode(_controller.document)
+                };
+                // Dio().post('http://10.0.2.2:3000/article/postArticle',
+                //     data: jsondata);
+                getx.Get.to(() => TagSelect(), arguments: jsondata);
+              } else {
+                getx.Get.snackbar('提示', '请填入标题');
+              }
             },
             child: Text('输出'),
           ),
@@ -58,6 +69,9 @@ class NewsEdit extends StatelessWidget {
                 padding: EdgeInsets.only(left: 24.w, right: 24.w),
                 widget: Center(
                   child: TextField(
+                    onChanged: (value) {
+                      newsTitle = value;
+                    },
                     decoration: InputDecoration.collapsed(
                       enabled: true,
                       hintText: '请输入你的标题',
@@ -96,15 +110,13 @@ Widget customToolBar(ZefyrController _controller) {
     height: 36.h,
     margin: EdgeInsets.only(bottom: 34.h),
     widget: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         customVideoInsertButton(),
         CustomLinkStyleButton(controller: _controller),
         CustomInsertImageButton(
-          // 自定义图片上传组件
-          controller: _controller,
-          icon: Icons.image,
-        ),
+            // 自定义图片上传组件
+            controller: _controller),
       ],
     ),
   );
@@ -123,12 +135,6 @@ Widget customZefyrEmbedBuilder(BuildContext context, EmbedNode node) {
               child: Image.network(
                 node.value.type,
                 fit: BoxFit.fill,
-                loadingBuilder: (context, child, loadingProgress) {
-                  return Text('图片加载中');
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Text('图片加载失败');
-                },
               ),
             ),
             // Text(node.value.type)
@@ -149,13 +155,9 @@ Widget customZefyrEmbedBuilder(BuildContext context, EmbedNode node) {
 class CustomInsertImageButton extends StatelessWidget {
   final ZefyrController controller;
   final ImagePicker _picker = ImagePicker();
-  final IconData icon;
 
-  CustomInsertImageButton({
-    Key? key,
-    required this.controller,
-    required this.icon,
-  }) : super(key: key);
+  CustomInsertImageButton({Key? key, required this.controller})
+      : super(key: key);
 
   //  Future<String> upload(File imageFile) async {
   //     // open a bytestream
@@ -188,42 +190,35 @@ class CustomInsertImageButton extends StatelessWidget {
     FormData formdata = FormData.fromMap({
       "image": await MultipartFile.fromFile(file!.path, filename: file.name)
     });
+    print('object');
 
     var respone = await Dio()
-        .post<String>("http://10.0.0.2/index.php/upload", data: formdata);
+        .post<String>("http://10.0.2.2:3000/article/imgPost", data: formdata);
     print(respone);
 
     print(formdata);
-    return 'http://10.0.0.2/track-api/runtime/storage/' +
-        respone.toString().substring(1, respone.toString().length - 1);
+    return 'http://10.0.2.2/track-api-nodejs/public/images/article/' +
+        respone.toString();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ZIconButton(
-      highlightElevation: 0,
-      hoverElevation: 0,
-      size: 32,
-      icon: Icon(
-        icon,
-        size: 18,
-        color: Theme.of(context).iconTheme.color,
-      ),
-      fillColor: Theme.of(context).canvasColor,
-      onPressed: () {
+    return InkWell(
+      child: Image.asset('lib/assets/icons/Img_box_fill.png', height: 25.r),
+      onTap: () {
         final index = controller.selection.baseOffset;
         final length = controller.selection.extentOffset - index;
         ImageSource gallerySource = ImageSource.gallery;
-        // final image = pickImage(gallerySource);
-        controller.replaceText(
-            index,
-            length,
-            BlockEmbed(
-                'https://img0.baidu.com/it/u=2064213898,2801034448&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'));
-        // image.then((value) {
-        //   print(value);
-        //   controller.replaceText(index, length, BlockEmbed(value!));
-        // });
+        final image = pickImage(gallerySource);
+        // controller.replaceText(
+        //     index,
+        //     length,
+        //     BlockEmbed(
+        //         'https://img0.baidu.com/it/u=2064213898,2801034448&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'));
+        image.then((value) {
+          print(value);
+          controller.replaceText(index, length, BlockEmbed(value!));
+        });
       },
     );
   }
@@ -253,31 +248,62 @@ class DetailScreen extends StatelessWidget {
 
 // 视频上传按钮
 Widget customVideoInsertButton() {
-  return ZIconButton(
-    highlightElevation: 0,
-    hoverElevation: 0,
-    size: 32,
-    icon: const Icon(
-      Icons.video_call,
-      size: 18,
-    ),
-    onPressed: () {
+  return InkWell(
+    child: Image.asset('lib/assets/icons/Video_file_fill.png', height: 25.r),
+    onTap: () {
       getx.Get.snackbar('提示', '添加视频功能暂未开放');
     },
   );
 }
 
 // 标签选择页
-class TagSelect extends StatelessWidget {
-  const TagSelect({Key? key}) : super(key: key);
+
+class TagSelect extends StatefulWidget {
+  TagSelect({Key? key}) : super(key: key);
+
+  @override
+  State<TagSelect> createState() => _TagSelectState();
+}
+
+class _TagSelectState extends State<TagSelect> {
+  final _tagList = const [
+    '校园',
+    '语言',
+    '升学',
+    '心理',
+    '文学',
+    '生活',
+    '运动',
+    '读书',
+    '哲学',
+    '法学',
+    '经济学',
+    '艺术学',
+    '教育学',
+    '历史学',
+    '理学',
+    '工学',
+    '农学',
+    '医学',
+    '管理学',
+    '其它'
+  ];
+
+  int tagIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final arguments = getx.Get.arguments;
+    // print(arguments);
     return Scaffold(
       appBar: CustomAppbar(
         'TagSelect',
         ending: InkWell(
-          onTap: () => getx.Get.to(const CoverSelect()),
+          onTap: () {
+            arguments['hashtag'] = _tagList[tagIndex];
+            // print(arguments);
+            getx.Get.to(() => CoverSelect(), arguments: arguments);
+          },
           child: const Text('下一步'),
         ),
       ),
@@ -297,18 +323,85 @@ class TagSelect extends StatelessWidget {
                   radius: 10.r,
                   margin:
                       EdgeInsets.only(left: 24.w, right: 24.w, bottom: 34.h),
-                  widget: Container()))
+                  widget: GridView.builder(
+                      itemCount: _tagList.length,
+                      padding:
+                          EdgeInsets.only(top: 24.h, left: 10.w, right: 10.w),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          //横轴三个子widget
+                          mainAxisSpacing: 30.h,
+                          crossAxisSpacing: 15.w,
+                          childAspectRatio: 2),
+                      itemBuilder: (context, index) {
+                        return Opacity(
+                          opacity: tagIndex == index ? 1 : 0.5,
+                          child: PublicCard(
+                              notWhite: true,
+                              radius: 90.r,
+                              onTap: () {
+                                tagIndex = index;
+                                setState(() {});
+                              },
+                              widget: Center(
+                                  child: Text(_tagList[index],
+                                      style: TextStyle(
+                                          fontSize: MyFontSize.font16,
+                                          fontWeight: FontWeight.w600,
+                                          color: MyColor.fontWhite)))),
+                        );
+                      })))
         ],
       ),
     );
   }
 }
 
-class CoverSelect extends StatelessWidget {
-  const CoverSelect({Key? key}) : super(key: key);
+class CoverSelect extends StatefulWidget {
+  CoverSelect({Key? key}) : super(key: key);
+
+  @override
+  State<CoverSelect> createState() => _CoverSelectState();
+}
+
+class _CoverSelectState extends State<CoverSelect> {
+  Widget imageItem(String address, Function() onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Stack(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            child: Image.network(
+              address,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned(
+              right: 0.r,
+              top: 0.r,
+              child: CustomCheckBox(value: false, onChanged: (e) {}))
+        ],
+      ),
+    );
+  }
+
+  List imgList = [
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1587685987799-73e5a5ec0878?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=80'
+  ];
+
+  List<Widget> getList() {
+    List<Widget> list;
+    list = imgList.map((e) {
+      return imageItem(e, () => null);
+    }).toList();
+    return list;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final arguments = getx.Get.arguments;
+    print(arguments);
     return Scaffold(
       appBar: CustomAppbar(
         'CoverSelect',
@@ -333,7 +426,17 @@ class CoverSelect extends StatelessWidget {
                   radius: 10.r,
                   margin:
                       EdgeInsets.only(left: 24.w, right: 24.w, bottom: 34.h),
-                  widget: Container()))
+                  widget: GridView(
+                    padding:
+                        EdgeInsets.only(top: 24.h, left: 10.w, right: 10.w),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        //横轴三个子widget
+                        mainAxisSpacing: 0.h,
+                        crossAxisSpacing: 20.w,
+                        childAspectRatio: 1),
+                    children: getList(),
+                  )))
         ],
       ),
     );
@@ -343,13 +446,9 @@ class CoverSelect extends StatelessWidget {
 // 自定义超链接按钮
 class CustomLinkStyleButton extends StatefulWidget {
   final ZefyrController controller;
-  final IconData? icon;
 
-  const CustomLinkStyleButton({
-    Key? key,
-    required this.controller,
-    this.icon,
-  }) : super(key: key);
+  const CustomLinkStyleButton({Key? key, required this.controller})
+      : super(key: key);
 
   @override
   _CustomLinkStyleButtonState createState() => _CustomLinkStyleButtonState();
@@ -386,17 +485,9 @@ class _CustomLinkStyleButtonState extends State<CustomLinkStyleButton> {
     final theme = Theme.of(context);
     final isEnabled = !widget.controller.selection.isCollapsed;
     final pressedHandler = isEnabled ? () => _openLinkDialog(context) : null;
-    return ZIconButton(
-      highlightElevation: 0,
-      hoverElevation: 0,
-      size: 32,
-      icon: Icon(
-        widget.icon ?? Icons.link,
-        size: 18,
-        color: isEnabled ? theme.iconTheme.color : theme.disabledColor,
-      ),
-      fillColor: Theme.of(context).canvasColor,
-      onPressed: pressedHandler,
+    return InkWell(
+      child: Image.asset('lib/assets/icons/link.png', height: 25.r),
+      onTap: pressedHandler,
     );
   }
 

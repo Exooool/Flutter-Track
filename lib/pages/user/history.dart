@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:get/get.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -47,7 +48,17 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar('history'),
+      appBar: CustomAppbar(
+        'history',
+        leading: InkWell(
+          onTap: () => Get.back(),
+          child: Image.asset(
+            'lib/assets/icons/Refund_back.png',
+            height: 25.r,
+            width: 25.r,
+          ),
+        ),
+      ),
       body: ListView(
         padding: EdgeInsets.only(left: 25.w, right: 25.w),
         children: <Widget>[historyCard()],

@@ -145,7 +145,11 @@ class AddProject extends StatelessWidget {
                       onTap: () {
                         c.stageList.removeAt(stage);
                       },
-                      child: const Icon(Icons.close))
+                      child: Image.asset(
+                        'lib/assets/icons/Trash.png',
+                        height: 25.r,
+                        width: 25.r,
+                      ))
                   : null,
             )
           ],
@@ -217,11 +221,12 @@ class AddProject extends StatelessWidget {
       appBar: CustomAppbar(
         'addproject',
         title: '添加计划',
-        ending: InkWell(
-          onTap: () {},
-          child: const Text(
-            '确定',
-            style: TextStyle(color: Color.fromRGBO(240, 242, 243, 0.8)),
+        leading: InkWell(
+          onTap: () => Get.back(),
+          child: Image.asset(
+            'lib/assets/icons/Refund_back.png',
+            height: 25.r,
+            width: 25.r,
           ),
         ),
       ),
@@ -290,7 +295,11 @@ class AddProject extends StatelessWidget {
                         },
                         child: Container(
                             margin: EdgeInsets.only(bottom: 12.h),
-                            child: Icon(Icons.add)),
+                            child: Image.asset(
+                              'lib/assets/icons/Add_round_fill.png',
+                              height: 25.r,
+                              width: 25.r,
+                            )),
                       )
                     ],
                   )),

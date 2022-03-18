@@ -124,7 +124,17 @@ class MessagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar('mseeage'),
+      appBar: CustomAppbar(
+        'mseeage',
+        leading: InkWell(
+          onTap: () => Get.back(),
+          child: Image.asset(
+            'lib/assets/icons/Refund_back.png',
+            height: 25.r,
+            width: 25.r,
+          ),
+        ),
+      ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
         // padding: EdgeInsets.only(left: 26.w, right: 26.w),

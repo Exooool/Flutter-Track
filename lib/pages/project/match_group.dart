@@ -1,4 +1,5 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:get/get.dart';
 
@@ -16,9 +17,11 @@ class MatchGroup extends StatelessWidget {
                 onTap: () {
                   Get.back();
                 },
-                child: const Text('返回',
-                    style:
-                        TextStyle(color: Color.fromRGBO(240, 242, 243, 0.8))))),
+                child: Image.asset(
+                  'lib/assets/icons/Refund_back.png',
+                  height: 25.r,
+                  width: 25.r,
+                ))),
         body: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -128,6 +128,14 @@ class ChartPage extends StatelessWidget {
       appBar: CustomAppbar(
         'chart',
         title: 'Gutabled',
+        leading: InkWell(
+          onTap: () => Get.back(),
+          child: Image.asset(
+            'lib/assets/icons/Refund_back.png',
+            height: 25.r,
+            width: 25.r,
+          ),
+        ),
       ),
       body: Center(
         child: Column(

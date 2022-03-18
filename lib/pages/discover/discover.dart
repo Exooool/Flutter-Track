@@ -80,7 +80,7 @@ class _DiscoverPageState extends State<DiscoverPage>
   // tab栏
   List<Widget> _tabContent() {
     List<Widget> list = _tabList.map((e) {
-      return NewsPage([], e);
+      return NewsPage(_getNewsArticle(), e);
     }).toList();
     return list;
   }
@@ -216,7 +216,8 @@ class _DiscoverPageState extends State<DiscoverPage>
                             },
                             child: Container(
                               color: Colors.transparent,
-                              child: const Icon(Icons.menu),
+                              child:
+                                  Image.asset('lib/assets/icons/Full_alt.png'),
                             )),
                       )
                     ],
@@ -226,17 +227,17 @@ class _DiscoverPageState extends State<DiscoverPage>
                     height: 30.h,
                     margin: EdgeInsets.only(top: 12.h, left: 24.w, right: 24.w),
                     radius: 60.r,
-                    onTap: () => Get.to(const NewsSearch()),
+                    onTap: () => Get.to(NewsSearch()),
                     widget: Padding(
                       padding: EdgeInsets.only(left: 16.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Icon(
-                            Icons.search,
-                            size: 14.sp,
-                          ),
+                          Opacity(
+                              opacity: 0.5,
+                              child: Image.asset(
+                                  'lib/assets/icons/Search_fill.png')),
                           SizedBox(width: 10.w),
                           Text('搜一搜',
                               style: TextStyle(

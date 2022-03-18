@@ -21,7 +21,7 @@ class _VerifyPageState extends State<VerifyPage> {
 
   verifyInput() {
     List<Widget> list = [];
-    for (int i = 1; i <= 4; i++) {
+    for (int i = 1; i <= 6; i++) {
       list.add(VerifyInput(
         isFocused: _code.length == i - 1,
         text: _code.length >= i ? _code.substring(i - 1, i) : '',
@@ -48,7 +48,7 @@ class _VerifyPageState extends State<VerifyPage> {
               Opacity(
                 opacity: 0,
                 child: TextField(
-                  maxLength: 4,
+                  maxLength: 6,
                   autofocus: true,
                   // 弹出数字软键盘
                   keyboardType: TextInputType.number,

@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/custom_checkbox.dart';
-import 'package:flutter_track/pages/components/search_input.dart';
 import 'package:get/get.dart';
 
+class InviteGroupController extends GetxController {
+  var selectIndex = 999999.obs;
+}
+
 class InviteGroup extends StatelessWidget {
-  const InviteGroup({Key? key}) : super(key: key);
+  InviteGroup({Key? key}) : super(key: key);
+
+  final InviteGroupController c = Get.put(InviteGroupController());
 
   @override
   Widget build(BuildContext context) {
@@ -15,55 +22,69 @@ class InviteGroup extends StatelessWidget {
         'inviteGroup',
         title: '邀请好友',
         leading: InkWell(
-            onTap: () {
-              Get.back();
-            },
-            child: const Text('返回')),
-        ending: InkWell(onTap: () {}, child: const Text('下一步')),
+          onTap: () => Get.back(),
+          child: Image.asset(
+            'lib/assets/icons/Refund_back.png',
+            height: 25.r,
+            width: 25.r,
+          ),
+        ),
+        ending: InkWell(
+          onTap: () {},
+          child: Image.asset(
+            'lib/assets/icons/Send_fill.png',
+            height: 25.r,
+            width: 25.r,
+          ),
+        ),
       ),
       body: Column(
         children: <Widget>[
-          SearchInput(
-            height: 30,
-            gradient: true,
-            hintText: '搜索',
-            onTap: () {},
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomButton(
                   title: '短信邀请',
                   shadow: false,
-                  height: 44,
-                  width: 112,
-                  margin: const EdgeInsets.only(
-                      left: 6, right: 6, top: 12, bottom: 12),
+                  height: 44.h,
+                  width: 112.w,
+                  margin: EdgeInsets.only(
+                      left: 6.w, right: 6.w, top: 12.h, bottom: 12.h),
                   onPressed: () {}),
               CustomButton(
                   title: '复制链接',
                   shadow: false,
-                  height: 44,
-                  width: 112,
-                  margin: const EdgeInsets.only(
-                      left: 6, right: 6, top: 12, bottom: 12),
+                  height: 44.h,
+                  width: 112.w,
+                  margin: EdgeInsets.only(
+                      left: 6.w, right: 6.w, top: 12.h, bottom: 12.h),
                   onPressed: () {}),
             ],
           ),
-          const Text(
+          Text(
             '最多成立三人小组',
-            style: TextStyle(fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.2)),
+            style: TextStyle(fontSize: 12.sp, color: MyColor.fontBlackO2),
           ),
           Expanded(
               child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   itemCount: 10,
-                  itemBuilder: (BuildContext context, intindex) {
-                    return ListTile(
-                        leading: Icon(Icons.file_copy),
-                        title: Text('名字'),
-                        trailing:
-                            CustomCheckBox(onChanged: (e) {}, value: false));
+                  itemBuilder: (BuildContext context, index) {
+                    return InkWell(
+                      onTap: () {
+                        if (c.selectIndex.toInt().isEqual(index)) {
+                          c.selectIndex.value = 999;
+                        } else {
+                          c.selectIndex.value = index;
+                        }
+                      },
+                      child: ListTile(
+                          leading: Icon(Icons.file_copy),
+                          title: const Text('名字'),
+                          trailing: Obx(() => CustomCheckBox(
+                              onChanged: (e) {},
+                              value: c.selectIndex.value.isEqual(index)))),
+                    );
                   }))
         ],
       ),
