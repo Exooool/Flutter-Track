@@ -18,7 +18,7 @@ import 'package:flutter_track/pages/log/log.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const initial = AppRoutes.home;
+  static const initial = AppRoutes.log;
 
   static final routes = [
     GetPage(name: '/home', page: () => const HomeMenu()),

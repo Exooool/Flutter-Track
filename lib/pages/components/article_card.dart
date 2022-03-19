@@ -90,7 +90,7 @@ class ArticleCard extends StatelessWidget {
                           children: [
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 ClipOval(
                                   child: Image.network(
@@ -100,20 +100,24 @@ class ArticleCard extends StatelessWidget {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
+                                SizedBox(width: 10.w),
                                 Text(
                                   news.userName,
                                   style: TextStyle(
                                       fontSize: MyFontSize.font12,
                                       fontWeight: FontWeight.w600),
                                 ),
+                                SizedBox(width: 10.w),
                                 Text(
                                   news.newsTime.substring(0, 10),
                                   style: TextStyle(
+                                      height: 1.6,
                                       fontSize: MyFontSize.font12,
                                       fontWeight: FontWeight.w400),
                                 )
                               ],
                             ),
+                            SizedBox(height: 8.h),
                             Text(
                               news.newsContent,
                               maxLines: 5,
@@ -124,20 +128,23 @@ class ArticleCard extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 16.w),
-                      Image.network(
-                        news.newsImg,
-                        width: 158.w,
-                        height: 110.h,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Text('未找到图片');
-                        },
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                        child: Image.network(
+                          news.newsImg,
+                          width: 158.w,
+                          height: 110.h,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Text('未找到图片');
+                          },
+                        ),
                       )
                     ],
                   ),
 
                   Padding(
-                    padding: EdgeInsets.only(right: 60.w),
+                    padding: EdgeInsets.only(right: 50.w),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -152,6 +159,7 @@ class ArticleCard extends StatelessWidget {
                             height: 18.r,
                             width: 18.r,
                           ),
+                          SizedBox(width: 3.w),
                           Text(
                             news.viewNum.toString(),
                             style: TextStyle(fontSize: MyFontSize.font10),
@@ -165,6 +173,7 @@ class ArticleCard extends StatelessWidget {
                                     height: 18.r,
                                     width: 18.r,
                                   ),
+                                  SizedBox(width: 3.w),
                                   Text(
                                     news.commentNum.toString(),
                                     style:
@@ -177,6 +186,7 @@ class ArticleCard extends StatelessWidget {
                             height: 18.r,
                             width: 18.r,
                           ),
+                          SizedBox(width: 3.w),
                           Text(
                             news.likeNum.toString(),
                             style: TextStyle(fontSize: MyFontSize.font10),

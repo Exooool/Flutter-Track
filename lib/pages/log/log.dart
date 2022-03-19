@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:dio/dio.dart' as dio;
+import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
@@ -23,11 +24,10 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
   final FocusNode _focusNodeUserName = FocusNode();
   final FocusNode _focusNodePassWord = FocusNode();
   //表单状态
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // 手机号
-  String? _number;
-  // 密码
-  String? _password;
+  late String _number;
+
   // 切换验证码或密码登录
   bool logByPwd = true;
 
@@ -135,7 +135,6 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                     width: 290.r,
                   ),
                 ),
-
                 PublicCard(
                   height: 60.h,
                   width: 300.w,
@@ -162,9 +161,16 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                       Container(
                         padding: EdgeInsets.only(left: 42.w),
                         width: 198.w,
-                        child: TextFormField(
+                        child: TextField(
                           maxLength: 11,
                           focusNode: _focusNodeUserName,
+                          // 弹出数字软键盘
+                          keyboardType: TextInputType.number,
+
+                          // 限制输入为数字
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           decoration: InputDecoration(
                               // maxLength设置长度后在左下角出现的计时器字符
                               counterText: '',
@@ -176,67 +182,14 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                                   foreground:
                                       MyFontStyle.textlinearForegroundO5),
                               border: InputBorder.none),
-                          onSaved: (v) {
-                            _number = v;
-                          },
-                          validator: (v) {
-                            if (v!.trim().length < 11) {
-                              return "手机号不能小于11位";
-                            }
-                            return null;
+                          onChanged: (value) {
+                            _number = value;
                           },
                         ),
                       )
                     ],
                   ),
                 ),
-
-                // Neumorphic(
-                //   style: const NeumorphicStyle(
-                //       shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
-                //       shadowLightColorEmboss: Color.fromRGBO(255, 255, 255, 1),
-                //       depth: -3,
-                //       color: Color.fromRGBO(238, 238, 246, 1),
-                //       // color: Color(0xffEFECF0),
-                //       boxShape: NeumorphicBoxShape.stadium(),
-                //       lightSource: LightSource.topLeft),
-                //   child: SizedBox(
-                //     width: 300,
-                //     height: 56,
-                //     child: ),
-                // ),
-                // 手机与密码输入区域
-
-                // 切换密码登录和验证码登录
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: <Widget>[
-                //     Container(
-                //       margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                //       height: 45,
-                //       child: ElevatedButton(
-                //           onPressed: () {
-                //             setState(() {
-                //               if (logByPwd) {
-                //                 logByPwd = false;
-                //               } else {
-                //                 logByPwd = true;
-                //               }
-                //             });
-                //           },
-                //           child: Text(logByPwd ? '切换验证码登录' : '切换密码登录')),
-                //     ),
-                //   ],
-                // ),
-                // CustomButton(
-                //   title: '获取验证码',
-                //   height: 60,
-                //   width: 300,
-                //   margin: const EdgeInsets.only(top: 24, bottom: 24),
-                //   onPressed: () {
-                //     Get.toNamed('/verify');
-                //   },
-                // ),
                 CustomButton(
                   title: '验证码登录',
                   height: 60.h,
@@ -244,10 +197,38 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                   fontSize: MyFontSize.font16,
                   margin: EdgeInsets.only(top: 24.h, bottom: 24.h),
                   onPressed: () async {
-                    Get.toNamed('/verify');
+                    // 验证手机号码
+                    if (GetUtils.isPhoneNumber(_number) &&
+                        _number.length == 11) {
+                      print(_number);
+                      // Get.toNamed('/verify');
+                      var url = 'https://api.sms.jpush.cn/v1/codes';
+                      var data = {
+                        "mobile": _number,
+                        "sign_id": "",
+                        "temp_id": "1"
+                      };
+                      Options options = Options(headers: {
+                        'authorization':
+                            'Basic N2M1MTJkYTY0NjQ0NmNjNjlmOWM1NWE1Ojg4NTI2OWE1NDNlZmVjZTdlMTQ1OGZjZQ==',
+                        'content-type': 'application/json'
+                      });
+
+                      var res =
+                          await Dio().post(url, data: data, options: options);
+                      print(res.data);
+                      if (res.data['msg_id'] != null) {
+                        Get.toNamed('/verify', arguments: {
+                          "msg_id": res.data['msg_id'],
+                          "mobile": _number
+                        });
+                        Get.snackbar('提示', '验证码已成功发送');
+                      }
+                    } else {
+                      Get.snackbar('提示', '手机号格式不正确');
+                    }
                   },
                 ),
-
                 CustomButton(
                   title: '本机号码一键登录',
                   height: 60.h,
@@ -258,24 +239,6 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                     logAuth();
                   },
                 ),
-                // 随便逛逛
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: <Widget>[
-                //     InkWell(
-                //       onTap: () {
-                //         // Navigator.pushReplacementNamed(context, '/home');
-                //       },
-                //       child: const Text(
-                //         '随便逛逛',
-                //         style: TextStyle(
-                //             fontSize: 14,
-                //             color: Color.fromRGBO(158, 158, 158, 1)),
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // 第三方登录
                 thirdPartyLog()
               ],
             ),

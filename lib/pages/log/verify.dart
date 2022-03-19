@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/config/http_config.dart';
+import 'package:get/get.dart';
 import './verify_input.dart';
 import '../components/custom_appbar.dart';
 import '../components/custom_button.dart';
@@ -32,6 +35,8 @@ class _VerifyPageState extends State<VerifyPage> {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = Get.arguments;
+    print(arguments);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppbar('log', title: '验证码'),
@@ -69,9 +74,15 @@ class _VerifyPageState extends State<VerifyPage> {
             width: 300.w,
             title: '登录',
             fontSize: MyFontSize.font16,
-            onPressed: () {
+            onPressed: () async {
               print(_code);
-              Navigator.pushReplacementNamed(context, '/sex_info');
+              arguments['code'] = _code;
+              var res = await Dio().post(
+                HttpOptions.BASE_URL + '/login/messageVerify',
+                data: arguments,
+              );
+              print(res.data);
+              // Get.toNamed('/sex_info');
             },
           ),
           Container(

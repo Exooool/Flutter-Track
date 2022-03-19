@@ -48,7 +48,13 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   Future _getList({bool refersh = false}) async {
-    var data = {"start": listIndex, "hashtag": widget.category};
+    var data;
+    if (widget.category == '推荐') {
+      data = {"start": listIndex};
+    } else {
+      data = {"start": listIndex, "hashtag": widget.category};
+    }
+
     var response =
         await Dio().post(HttpOptions.BASE_URL + '/news/newslist', data: data);
     List res = response.data;
@@ -81,8 +87,18 @@ class _NewsPageState extends State<NewsPage> {
       controller: _controller,
       onLoad: _onLoad,
       onRefresh: _onRefresh,
-      header: ClassicalHeader(),
-      footer: ClassicalFooter(),
+      header: ClassicalHeader(
+          refreshText: '下拉刷新',
+          refreshReadyText: '松开手刷新',
+          refreshedText: '刷新成功',
+          refreshingText: '刷新中',
+          refreshFailedText: '刷新失败'),
+      footer: ClassicalFooter(
+          loadText: '上拉加载',
+          loadReadyText: '松开手加载',
+          loadedText: '加载成功',
+          loadingText: '加载中',
+          loadFailedText: '加载失败'),
       child: ListView.builder(
         itemCount: datalist.length,
         itemBuilder: (context, index) {
