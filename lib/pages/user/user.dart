@@ -180,21 +180,21 @@ class UserPage extends StatelessWidget {
             ),
 
             // tab切换栏
-            Expanded(
-                child: Obx(() => TwoLayerTab(
-                      exteriorTabs: const [
-                        {'title': '目标', 'nums': '08'},
-                        {'title': '收藏', 'nums': '99+'},
-                        {'title': '发布', 'nums': '12'}
-                      ],
-                      interiorTabs: const [
-                        {'title': '对外可见'},
-                        {'title': '自己可见'}
-                      ],
-                      // controller中的变量在数组中传递时 需要通过toList才可让Getx检测到
-                      exteriorViews: [c.collect.toList(), c.article.toList()],
-                      interiorViews: [c.target.toList()],
-                    ))),
+            // Expanded(
+            //     child: Obx(() => TwoLayerTab(
+            //           exteriorTabs: const [
+            //             {'title': '目标', 'nums': '08'},
+            //             {'title': '收藏', 'nums': '99+'},
+            //             {'title': '发布', 'nums': '12'}
+            //           ],
+            //           interiorTabs: const [
+            //             {'title': '对外可见'},
+            //             {'title': '自己可见'}
+            //           ],
+            //           // controller中的变量在数组中传递时 需要通过toList才可让Getx检测到
+            //           exteriorViews: [c.collect.toList(), c.article.toList()],
+            //           interiorViews: [c.target.toList()],
+            //         ))),
             // test
             // FloatingActionButton(
             //     onPressed: () {

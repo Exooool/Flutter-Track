@@ -60,6 +60,8 @@ dependencies:
   zefyrka: ^1.1.1
   # 可重新排列的表格
   reorderables: ^0.4.3
+  # 刷新 
+  flutter_easyrefresh: ^2.2.1
 
   
 

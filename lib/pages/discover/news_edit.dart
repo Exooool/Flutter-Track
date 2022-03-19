@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/config/http_config.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/custom_checkbox.dart';
@@ -192,8 +194,9 @@ class CustomInsertImageButton extends StatelessWidget {
     });
     print('object');
 
-    var respone = await Dio()
-        .post<String>("http://10.0.2.2:3000/article/imgPost", data: formdata);
+    var respone = await Dio().post<String>(
+        HttpOptions.BASE_URL + "/article/imgPost",
+        data: formdata);
     print(respone);
 
     print(formdata);
@@ -365,9 +368,24 @@ class CoverSelect extends StatefulWidget {
 }
 
 class _CoverSelectState extends State<CoverSelect> {
-  Widget imageItem(String address, Function() onTap) {
+  final ImagePicker _picker = ImagePicker();
+
+  late String imgUrl = '';
+  int imgIndex = 0;
+  List imgList = [
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1587685987799-73e5a5ec0878?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=80',
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1638913976954-8f7b612867c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=80',
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1647591413270-469a0393da0c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzMHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80',
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1647591609971-7ebb33c0f98a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0MHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80'
+  ];
+
+  Widget imageItem(String address, int index) {
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        setState(() {
+          imgIndex = index;
+        });
+      },
       child: Stack(
         children: <Widget>[
           ClipRRect(
@@ -380,22 +398,56 @@ class _CoverSelectState extends State<CoverSelect> {
           Positioned(
               right: 0.r,
               top: 0.r,
-              child: CustomCheckBox(value: false, onChanged: (e) {}))
+              child: CustomCheckBox(
+                  value: imgIndex.isEqual(index), onChanged: (e) {}))
         ],
       ),
     );
   }
 
-  List imgList = [
-    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1587685987799-73e5a5ec0878?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=80'
-  ];
-
   List<Widget> getList() {
-    List<Widget> list;
-    list = imgList.map((e) {
-      return imageItem(e, () => null);
-    }).toList();
+    List<Widget> list = [];
+    for (var i = 0; i < imgList.length; i++) {
+      list.add(imageItem(imgList[i], i));
+    }
+    list.add(PublicCard(
+        radius: 10.r,
+        widget: InkWell(
+          onTap: pickImage,
+          child: imgUrl == ''
+              ? Image.asset('lib/assets/icons/Add_round_fill.png')
+              : ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                  child: Image.network(
+                    imgUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+        )));
     return list;
+  }
+
+  Future pickImage() async {
+    final file =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 65);
+
+    if (file != null) {
+      FormData formdata = FormData.fromMap({
+        "image": await MultipartFile.fromFile(file.path, filename: file.name)
+      });
+
+      var respone = await Dio().post<String>(
+          HttpOptions.BASE_URL + "/article/imgPost",
+          data: formdata);
+      print(respone);
+
+      print(formdata);
+      setState(() {
+        imgIndex = -1;
+        imgUrl = 'http://10.0.2.2/track-api-nodejs/public/images/article/' +
+            respone.toString();
+      });
+    }
   }
 
   @override
@@ -406,7 +458,16 @@ class _CoverSelectState extends State<CoverSelect> {
       appBar: CustomAppbar(
         'CoverSelect',
         ending: InkWell(
-          onTap: () {},
+          onTap: () {
+            if (imgIndex != -1) {
+              arguments['news_img'] = imgList[imgIndex];
+            } else {
+              arguments['news_img'] = imgUrl;
+            }
+            Dio().post(HttpOptions.BASE_URL + '/article/postArticle',
+                data: arguments);
+            print(arguments);
+          },
           child: const Text('下一步'),
         ),
       ),
@@ -432,8 +493,9 @@ class _CoverSelectState extends State<CoverSelect> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         //横轴三个子widget
-                        mainAxisSpacing: 0.h,
+                        mainAxisSpacing: 30.h,
                         crossAxisSpacing: 20.w,
+                        mainAxisExtent: 90.h,
                         childAspectRatio: 1),
                     children: getList(),
                   )))

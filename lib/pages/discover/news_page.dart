@@ -1,9 +1,16 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_track/config/http_config.dart';
+import 'package:flutter_track/model/news_model.dart';
+import 'package:flutter_track/pages/components/article_card.dart';
 
 class NewsPage extends StatefulWidget {
-  List<Widget> list;
   String category;
-  NewsPage(this.list, this.category, {Key? key}) : super(key: key);
+  NewsPage(this.category, {Key? key}) : super(key: key);
 
   @override
   _NewsPageState createState() => _NewsPageState();
@@ -14,9 +21,13 @@ class _NewsPageState extends State<NewsPage> {
   ScrollController scrollController =
       ScrollController(initialScrollOffset: 0, keepScrollOffset: true);
   double pos = 0;
+
+  final EasyRefreshController _controller = EasyRefreshController();
+
+  List datalist = [];
+  int listIndex = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     scrollController.addListener(() {
       // 更新状态
@@ -33,15 +44,54 @@ class _NewsPageState extends State<NewsPage> {
       });
       // print("监听滚动的位置 ${scrollController.offset}");
     });
+    _getList();
+  }
+
+  Future _getList({bool refersh = false}) async {
+    var data = {"start": listIndex, "hashtag": widget.category};
+    var response =
+        await Dio().post(HttpOptions.BASE_URL + '/news/newslist', data: data);
+    List res = response.data;
+    print('当前请求长度为$listIndex，获取数据长度为${res.length}');
+    listIndex += res.length;
+
+    setState(() {
+      if (refersh) {
+        datalist = res;
+      } else {
+        datalist.addAll(res);
+      }
+    });
+  }
+
+  // 下拉刷新
+  Future _onRefresh() async {
+    listIndex = 0;
+    _getList(refersh: true);
+  }
+
+  // 上拉加载
+  Future _onLoad() async {
+    _getList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.only(top: 17),
-      controller: scrollController,
-      children: widget.list,
-      physics: const AlwaysScrollableScrollPhysics(),
+    return EasyRefresh(
+      controller: _controller,
+      onLoad: _onLoad,
+      onRefresh: _onRefresh,
+      header: ClassicalHeader(),
+      footer: ClassicalFooter(),
+      child: ListView.builder(
+        itemCount: datalist.length,
+        itemBuilder: (context, index) {
+          return ArticleCard(Article.fromMap(datalist[index]));
+        },
+        padding: const EdgeInsets.only(top: 17),
+        controller: scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+      ),
     );
   }
 }

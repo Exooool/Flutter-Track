@@ -67,20 +67,20 @@ class _DiscoverPageState extends State<DiscoverPage>
   List dataList = [];
 
   // 获取资讯列表
-  List<Widget> _getNewsArticle() {
-    List<Widget> list = [];
-    var json = data['data'] as Map;
-    var l = json['news'] as List<dynamic>;
-    list = l.map((e) {
-      return ArticleCard(Article.fromMap(e));
-    }).toList();
-    return list;
-  }
+  // List<Widget> _getNewsArticle() {
+  //   List<Widget> list = [];
+  //   var json = data['data'] as Map;
+  //   var l = json['news'] as List<dynamic>;
+  //   list = l.map((e) {
+  //     return ArticleCard(Article.fromMap(e));
+  //   }).toList();
+  //   return list;
+  // }
 
   // tab栏
   List<Widget> _tabContent() {
     List<Widget> list = _tabList.map((e) {
-      return NewsPage(_getNewsArticle(), e);
+      return NewsPage(e);
     }).toList();
     return list;
   }

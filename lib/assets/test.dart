@@ -10,9 +10,9 @@ var data = {
         "news_time": "2022-02-13 07:00",
         "like_num": 20,
         "view_num": 139,
-        "content":
+        "news_content":
             "苏翊鸣手写回信北京初中生：让我们一起向未来前日，北京市教委组织开展“见字如面·对话冬奥”书信交流活动。北京师范大学附属实验中学的一名初中生给中国单板滑雪运动员苏翊鸣写信，而苏翊鸣则亲自手写回信。初中生在信中称非常喜欢单板滑雪，平时也会观看苏翊鸣的比赛。并说道：“同为00后，你一直是我学习的榜样。你那不断突破，拼搏进取，勇往直前的精神也一直深深激励我在学习、运动等方面不断前行。”“我相信你的执着和努力一定会再创佳绩，为我们伟大祖国争光。期待你梦想成真，凯旋而归，加油！”",
-        "content_img":
+        "news_img":
             "https://imagecloud.thepaper.cn/thepaper/image/179/220/442.jpg",
         "hashtag": "冬奥运动会",
         "comment": [
@@ -45,9 +45,9 @@ var data = {
         "news_time": "2022-02-13 10:30",
         "like_num": 189,
         "view_num": 556,
-        "content":
+        "news_content":
             "2月12日，中国男子冰球队球员福帅打进一球，这是中国男冰在冬奥会历史上第一粒进球。“我听到远处的观众发出了很大的尖叫声，场内所有的观众都起立鼓掌，那一刻非常动容。”作为该场比赛场外裁判之一的彭杜2月12日晚告诉澎湃新闻（www.thepaper.cn）。",
-        "content_img":
+        "news_img":
             "https://imagecloud.thepaper.cn/thepaper/image/179/224/300.jpg",
         "hashtag": "冬奥运动会",
         "comment": [
@@ -72,9 +72,9 @@ var data = {
         "news_time": "2022-02-13 06:36",
         "like_num": 99,
         "view_num": 370,
-        "content":
+        "news_content":
             "当男子速度滑冰500米决赛最后一组的两名选手冲过终点，高亭宇兴奋地和队友还有教练相拥怒吼，然后披上了五星红旗，绕场一周。如果不是工作人员的提示和制止，披着国旗的高亭宇在颁花仪式前，就已经想跳上“冰丝带”的最高领奖台。随后，他只是单膝跪在领奖台前，把头埋进了怀里。那一刻，高亭宇热泪盈眶。",
-        "content_img":
+        "news_img":
             "https://imagecloud.thepaper.cn/thepaper/image/179/180/814.jpg",
         "hashtag": "冬奥运动会",
         "comment": [
@@ -99,9 +99,9 @@ var data = {
         "news_time": "2022-02-13 06:36",
         "like_num": 99,
         "view_num": 370,
-        "content":
+        "news_content":
             "当男子速度滑冰500米决赛最后一组的两名选手冲过终点，高亭宇兴奋地和队友还有教练相拥怒吼，然后披上了五星红旗，绕场一周。如果不是工作人员的提示和制止，披着国旗的高亭宇在颁花仪式前，就已经想跳上“冰丝带”的最高领奖台。随后，他只是单膝跪在领奖台前，把头埋进了怀里。那一刻，高亭宇热泪盈眶。",
-        "content_img":
+        "news_img":
             "https://imagecloud.thepaper.cn/thepaper/image/179/180/814.jpg",
         "hashtag": "冬奥运动会",
         "comment": [
@@ -126,90 +126,9 @@ var data = {
         "news_time": "2022-02-13 06:36",
         "like_num": 99,
         "view_num": 370,
-        "content":
+        "news_content":
             "当男子速度滑冰500米决赛最后一组的两名选手冲过终点，高亭宇兴奋地和队友还有教练相拥怒吼，然后披上了五星红旗，绕场一周。如果不是工作人员的提示和制止，披着国旗的高亭宇在颁花仪式前，就已经想跳上“冰丝带”的最高领奖台。随后，他只是单膝跪在领奖台前，把头埋进了怀里。那一刻，高亭宇热泪盈眶。",
-        "content_img":
-            "https://imagecloud.thepaper.cn/thepaper/image/179/180/814.jpg",
-        "hashtag": "冬奥运动会",
-        "comment": [
-          {
-            "user": {
-              "userName": "用户1",
-              "userId": 3,
-              "userImg": "https://file.thepaper.cn/www/v3/img/logo116.png"
-            },
-            "comment": "好太好了"
-          }
-        ],
-        "author": {
-          "userName": "澎湃新闻",
-          "userId": 1,
-          "userImg": "https://file.thepaper.cn/www/v3/img/logo116.png"
-        }
-      },
-      {
-        "news_id": 2,
-        "news_title": "深一度｜“破咒者”高亭宇，从来不信命",
-        "news_time": "2022-02-13 06:36",
-        "like_num": 99,
-        "view_num": 370,
-        "content":
-            "当男子速度滑冰500米决赛最后一组的两名选手冲过终点，高亭宇兴奋地和队友还有教练相拥怒吼，然后披上了五星红旗，绕场一周。如果不是工作人员的提示和制止，披着国旗的高亭宇在颁花仪式前，就已经想跳上“冰丝带”的最高领奖台。随后，他只是单膝跪在领奖台前，把头埋进了怀里。那一刻，高亭宇热泪盈眶。",
-        "content_img":
-            "https://imagecloud.thepaper.cn/thepaper/image/179/180/814.jpg",
-        "hashtag": "冬奥运动会",
-        "comment": [
-          {
-            "user": {
-              "userName": "用户1",
-              "userId": 3,
-              "userImg": "https://file.thepaper.cn/www/v3/img/logo116.png"
-            },
-            "comment": "好太好了"
-          }
-        ],
-        "author": {
-          "userName": "澎湃新闻",
-          "userId": 1,
-          "userImg": "https://file.thepaper.cn/www/v3/img/logo116.png"
-        }
-      },
-      {
-        "news_id": 2,
-        "news_title": "深一度｜“破咒者”高亭宇，从来不信命",
-        "news_time": "2022-02-13 06:36",
-        "like_num": 99,
-        "view_num": 370,
-        "content":
-            "当男子速度滑冰500米决赛最后一组的两名选手冲过终点，高亭宇兴奋地和队友还有教练相拥怒吼，然后披上了五星红旗，绕场一周。如果不是工作人员的提示和制止，披着国旗的高亭宇在颁花仪式前，就已经想跳上“冰丝带”的最高领奖台。随后，他只是单膝跪在领奖台前，把头埋进了怀里。那一刻，高亭宇热泪盈眶。",
-        "content_img":
-            "https://imagecloud.thepaper.cn/thepaper/image/179/180/814.jpg",
-        "hashtag": "冬奥运动会",
-        "comment": [
-          {
-            "user": {
-              "userName": "用户1",
-              "userId": 3,
-              "userImg": "https://file.thepaper.cn/www/v3/img/logo116.png"
-            },
-            "comment": "好太好了"
-          }
-        ],
-        "author": {
-          "userName": "澎湃新闻",
-          "userId": 1,
-          "userImg": "https://file.thepaper.cn/www/v3/img/logo116.png"
-        }
-      },
-      {
-        "news_id": 2,
-        "news_title": "深一度｜“破咒者”高亭宇，从来不信命",
-        "news_time": "2022-02-13 06:36",
-        "like_num": 99,
-        "view_num": 370,
-        "content":
-            "当男子速度滑冰500米决赛最后一组的两名选手冲过终点，高亭宇兴奋地和队友还有教练相拥怒吼，然后披上了五星红旗，绕场一周。如果不是工作人员的提示和制止，披着国旗的高亭宇在颁花仪式前，就已经想跳上“冰丝带”的最高领奖台。随后，他只是单膝跪在领奖台前，把头埋进了怀里。那一刻，高亭宇热泪盈眶。",
-        "content_img":
+        "news_img":
             "https://imagecloud.thepaper.cn/thepaper/image/179/180/814.jpg",
         "hashtag": "冬奥运动会",
         "comment": [

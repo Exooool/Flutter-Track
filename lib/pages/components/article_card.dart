@@ -73,7 +73,7 @@ class ArticleCard extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                           child: Text(
-                        news.title,
+                        news.newsTitle,
                         style: TextStyle(
                             fontSize: MyFontSize.font18,
                             fontWeight: FontWeight.w500),
@@ -94,20 +94,20 @@ class ArticleCard extends StatelessWidget {
                               children: <Widget>[
                                 ClipOval(
                                   child: Image.network(
-                                    news.author.userImg,
+                                    news.userImg,
                                     height: 24.h,
                                     width: 24.h,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                                 Text(
-                                  news.author.userName,
+                                  news.userName,
                                   style: TextStyle(
                                       fontSize: MyFontSize.font12,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 Text(
-                                  news.postTime.substring(0, 10),
+                                  news.newsTime.substring(0, 10),
                                   style: TextStyle(
                                       fontSize: MyFontSize.font12,
                                       fontWeight: FontWeight.w400),
@@ -115,7 +115,7 @@ class ArticleCard extends StatelessWidget {
                               ],
                             ),
                             Text(
-                              news.content,
+                              news.newsContent,
                               maxLines: 5,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(fontSize: MyFontSize.font12),
@@ -125,7 +125,7 @@ class ArticleCard extends StatelessWidget {
                       ),
                       SizedBox(width: 16.w),
                       Image.network(
-                        news.contentImg,
+                        news.newsImg,
                         width: 158.w,
                         height: 110.h,
                         fit: BoxFit.cover,
@@ -143,7 +143,7 @@ class ArticleCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          news.tag,
+                          news.hashtag,
                           style: TextStyle(fontSize: MyFontSize.font10),
                         ),
                         Row(children: [
@@ -166,7 +166,7 @@ class ArticleCard extends StatelessWidget {
                                     width: 18.r,
                                   ),
                                   Text(
-                                    news.comment.length.toString(),
+                                    news.commentNum.toString(),
                                     style:
                                         TextStyle(fontSize: MyFontSize.font10),
                                   ),
