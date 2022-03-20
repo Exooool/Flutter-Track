@@ -1,7 +1,3 @@
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
-
 class Project {
   late IconInfo iconInfo;
   late String projectId;

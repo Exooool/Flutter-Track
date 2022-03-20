@@ -7,6 +7,7 @@ import 'package:flutter_track/pages/user/user.dart';
 import 'package:flutter_track/pages/project/project.dart';
 import 'package:flutter_track/pages/information/information.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './discover/news_page.dart';
 
 // 屏幕适配
@@ -20,7 +21,7 @@ class HomeMenu extends StatefulWidget {
 }
 
 class _HomeMenuState extends State<HomeMenu> {
-  int _index = 3;
+  int _index = 1;
   final List _pageList = [
     ProjectPage(),
     DiscoverPage(),

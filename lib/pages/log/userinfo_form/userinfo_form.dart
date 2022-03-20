@@ -1,15 +1,17 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/config/http_config.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './interest_tag.dart';
+import 'package:dio/dio.dart' as dio;
 
 // 基础信息
 class BasicInfo extends StatefulWidget {
@@ -22,9 +24,10 @@ class BasicInfo extends StatefulWidget {
 
 class _BasicInfoState extends State<BasicInfo> {
   final ImagePicker _picker = ImagePicker();
-  XFile? image;
-  // 表单
-  final _formKey = GlobalKey<FormState>();
+  late String name = '';
+  late String college = '';
+  late String major = '';
+  late String imgUrl = '';
 
   // 表单列
   Widget formRow(String title, Function saveMethod) {
@@ -52,7 +55,7 @@ class _BasicInfoState extends State<BasicInfo> {
               height: 48.h,
               width: 261.w,
               widget: TextFormField(
-                onSaved: (value) {
+                onChanged: (value) {
                   saveMethod(value);
                 },
                 style: TextStyle(
@@ -76,19 +79,32 @@ class _BasicInfoState extends State<BasicInfo> {
   }
 
   // 获取照片
-  _getImage() async {
-    //选择相册
-    final pickerImages = await _picker.pickImage(source: ImageSource.gallery);
-    if (mounted) {
+
+  Future pickImage() async {
+    final file =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 65);
+
+    if (file != null) {
+      dio.FormData formdata = dio.FormData.fromMap({
+        "image":
+            await dio.MultipartFile.fromFile(file.path, filename: file.name)
+      });
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      dio.Options options = dio.Options(headers: {
+        'authorization': prefs.getString('token'),
+        'content-type': 'application/json'
+      });
+
+      var respone = await dio.Dio().post<String>(
+          HttpOptions.BASE_URL + "/article/imgPost",
+          data: formdata,
+          options: options);
+      print(respone);
+
+      print(formdata);
       setState(() {
-        if (pickerImages != null) {
-          image = pickerImages;
-          setState(() {});
-          print('选择了一张照片');
-          print(image?.path);
-        } else {
-          print('没有照片可以选择');
-        }
+        imgUrl = 'http://10.0.2.2/track-api-nodejs/public/images/article/' +
+            respone.toString();
       });
     }
   }
@@ -121,12 +137,16 @@ class _BasicInfoState extends State<BasicInfo> {
                       height: 88.r,
                       width: 88.r,
                       child: InkWell(
-                        onTap: _getImage,
-                        child: image == null
-                            ? const SizedBox()
-                            : Image.file(
-                                File(image!.path),
-                                fit: BoxFit.cover,
+                        onTap: pickImage,
+                        child: imgUrl == ''
+                            ? Container()
+                            : ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.r)),
+                                child: Image.network(
+                                  imgUrl,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                       )),
                 ),
@@ -138,27 +158,25 @@ class _BasicInfoState extends State<BasicInfo> {
                     '头像',
                     style: TextStyle(fontSize: MyFontSize.font16),
                   )),
-              Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      formRow('昵称', (value) {
-                        print('昵称:$value');
-                        widget.infoJson['user_name'] = value;
-                      }),
-                      formRow('学校', (value) {
-                        print('学校:$value');
-                        widget.infoJson['school'] = value;
-                      }),
-                      formRow('专业', (value) {
-                        print('专业:$value');
-                        widget.infoJson['major'] = value;
-                      }),
-                      // formRow('邮箱', (value) {
-                      //   print('邮箱:$value');
-                      // }),
-                    ],
-                  )),
+              Column(
+                children: <Widget>[
+                  formRow('昵称', (value) {
+                    print('昵称:$value');
+                    name = value;
+                  }),
+                  formRow('学校', (value) {
+                    print('学校:$value');
+                    college = value;
+                  }),
+                  formRow('专业', (value) {
+                    print('专业:$value');
+                    major = value;
+                  }),
+                  // formRow('邮箱', (value) {
+                  //   print('邮箱:$value');
+                  // }),
+                ],
+              ),
             ],
           ),
           Positioned(
@@ -172,8 +190,18 @@ class _BasicInfoState extends State<BasicInfo> {
                 fontSize: MyFontSize.font16,
                 onPressed: () {
                   // 执行表单的save操作
-                  _formKey.currentState!.save();
-                  Get.to(() => InterestTag(widget.infoJson));
+                  if (name == '' ||
+                      major == '' ||
+                      college == '' ||
+                      imgUrl == '') {
+                    Get.snackbar('提示', '请填入信息');
+                  } else {
+                    widget.infoJson['user_name'] = name;
+                    widget.infoJson['college'] = college;
+                    widget.infoJson['major'] = major;
+                    widget.infoJson['user_img'] = imgUrl;
+                    Get.to(() => InterestTag(widget.infoJson));
+                  }
                 },
               ))
         ]));
@@ -235,17 +263,18 @@ class _InterestTagState extends State<InterestTag> {
   //   '管理学',
   //   '其它'
   // ];
-  List interestList = [];
+  List<String> interestList = [];
 
   refresh(value) {
     print('子组件传值：$value');
 
-    if (!interestList.contains(value) && interestList.length < 3) {
+    if (!interestList.contains(interest[value]['name']) &&
+        interestList.length < 3) {
       interest[value]['isSelected'] = true;
-      interestList.add(value);
+      interestList.add(interest[value]['name']);
     } else {
       interest[value]['isSelected'] = false;
-      interestList.remove(value);
+      interestList.remove(interest[value]['name']);
     }
     setState(() {});
     // print(interest);
@@ -312,10 +341,33 @@ class _InterestTagState extends State<InterestTag> {
                   width: 300.w,
                   margin: EdgeInsets.zero,
                   fontSize: MyFontSize.font16,
-                  onPressed: () {
+                  onPressed: () async {
                     widget.infoJson['interset'] = interestList;
                     // Get.to(() => const BasicInfo());
+
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+
+                    prefs.setStringList('interest', interestList);
                     print(widget.infoJson);
+
+                    // 请求端口修改数据
+
+                    dio.Options options = dio.Options(headers: {
+                      'authorization': prefs.getString('token'),
+                      'content-type': 'application/json'
+                    });
+
+                    var res = await dio.Dio().post(
+                        HttpOptions.BASE_URL + '/users/update',
+                        data: widget.infoJson,
+                        options: options);
+                    print(res.data);
+                    if (res.data['status'] == 0) {
+                      Get.offAllNamed('/home');
+                    } else {
+                      Get.snackbar('提示', '网络错误');
+                    }
                   },
                 ))
           ],
@@ -333,6 +385,7 @@ class SexSelector extends StatefulWidget {
 
 class _SexSelectorState extends State<SexSelector> {
   late int sexIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -387,15 +440,18 @@ class _SexSelectorState extends State<SexSelector> {
                   width: 300.w,
                   margin: EdgeInsets.zero,
                   fontSize: MyFontSize.font16,
-                  onPressed: () {
+                  onPressed: () async {
                     var infoJson = {
-                      'sex': sexIndex,
-                      'img_path': '',
+                      'sex': sexIndex == 0 ? '男' : '女',
+                      'user_img': '',
                       'user_name': '',
-                      'school': '',
+                      'college': '',
                       'major': '',
                       'interset': []
                     };
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    print("登录token为：${prefs.getString('token')}");
                     Get.to(() => BasicInfo(infoJson));
                   },
                 ))

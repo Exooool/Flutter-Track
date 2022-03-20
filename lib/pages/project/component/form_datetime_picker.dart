@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
 import './picker_week_row.dart';
@@ -94,7 +93,7 @@ class FormDateTimePicker extends StatelessWidget {
                             confirmText: '下一步',
                             onConfirm: (Picker picker, List value) {
                               if (tempWeek.isEmpty) {
-                                Fluttertoast.showToast(msg: "请选择时间");
+                                Get.snackbar('提示', '请选择时间');
                               } else {
                                 // 对数组进行排序
                                 tempWeek.sort();

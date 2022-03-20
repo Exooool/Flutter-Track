@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:get/get.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../components/custom_button.dart';
 import 'package:jverify/jverify.dart';
 
@@ -24,9 +25,9 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
   final FocusNode _focusNodeUserName = FocusNode();
   final FocusNode _focusNodePassWord = FocusNode();
   //表单状态
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   // 手机号
-  late String _number;
+  late String _number = '';
 
   // 切换验证码或密码登录
   bool logByPwd = true;
@@ -101,7 +102,7 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
   Widget build(BuildContext context) {
     jverify.setup(
         appKey: '7c512da646446cc69f9c55a5', channel: "devloper-default");
-    jverify.setDebugMode(true); // 是否打开调试模式
+    jverify.setDebugMode(false); // 是否打开调试模式
 
     ScreenUtil.init(
         BoxConstraints(
@@ -121,127 +122,140 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
             _focusNodePassWord.unfocus();
             _focusNodeUserName.unfocus();
           },
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 68.h, bottom: 42.h),
-                  child: Image.asset(
-                    'lib/assets/images/logo.png',
-                    height: 290.r,
-                    width: 290.r,
-                  ),
-                ),
-                PublicCard(
-                  height: 60.h,
-                  width: 300.w,
-                  radius: 30.r,
-                  widget: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(left: 21.w, right: 10.w),
-                        child: Center(
-                          child: Text(
-                            '+86',
-                            style: TextStyle(
-                                fontSize: MyFontSize.font16,
-                                foreground: MyFontStyle.textlinearForeground),
+          child: Stack(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: 68.h, bottom: 42.h),
+                      child: Image.asset(
+                        'lib/assets/images/logo.png',
+                        height: 290.r,
+                        width: 290.r,
+                      ),
+                    ),
+                    PublicCard(
+                      height: 60.h,
+                      width: 300.w,
+                      radius: 30.r,
+                      widget: Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(left: 21.w, right: 10.w),
+                            child: Center(
+                              child: Text(
+                                '+86',
+                                style: TextStyle(
+                                    fontSize: MyFontSize.font16,
+                                    foreground:
+                                        MyFontStyle.textlinearForeground),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      Container(
-                        height: 38.5.h,
-                        width: 2.w,
-                        decoration: const BoxDecoration(
-                            gradient: MyWidgetStyle.mainLinearGradient),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 42.w),
-                        width: 198.w,
-                        child: TextField(
-                          maxLength: 11,
-                          focusNode: _focusNodeUserName,
-                          // 弹出数字软键盘
-                          keyboardType: TextInputType.number,
+                          Container(
+                            height: 38.5.h,
+                            width: 2.w,
+                            decoration: const BoxDecoration(
+                                gradient: MyWidgetStyle.mainLinearGradient),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: 42.w),
+                            width: 198.w,
+                            child: TextField(
+                              maxLength: 11,
+                              focusNode: _focusNodeUserName,
+                              // 弹出数字软键盘
+                              keyboardType: TextInputType.number,
 
-                          // 限制输入为数字
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration: InputDecoration(
-                              // maxLength设置长度后在左下角出现的计时器字符
-                              counterText: '',
-                              // labelText: '手机',
-                              hintText: '请输入手机号',
-                              hintStyle: TextStyle(
-                                  fontSize: MyFontSize.font16,
-                                  fontWeight: FontWeight.w400,
-                                  foreground:
-                                      MyFontStyle.textlinearForegroundO5),
-                              border: InputBorder.none),
-                          onChanged: (value) {
-                            _number = value;
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                CustomButton(
-                  title: '验证码登录',
-                  height: 60.h,
-                  width: 300.w,
-                  fontSize: MyFontSize.font16,
-                  margin: EdgeInsets.only(top: 24.h, bottom: 24.h),
-                  onPressed: () async {
-                    // 验证手机号码
-                    if (GetUtils.isPhoneNumber(_number) &&
-                        _number.length == 11) {
-                      print(_number);
-                      // Get.toNamed('/verify');
-                      var url = 'https://api.sms.jpush.cn/v1/codes';
-                      var data = {
-                        "mobile": _number,
-                        "sign_id": "",
-                        "temp_id": "1"
-                      };
-                      Options options = Options(headers: {
-                        'authorization':
-                            'Basic N2M1MTJkYTY0NjQ0NmNjNjlmOWM1NWE1Ojg4NTI2OWE1NDNlZmVjZTdlMTQ1OGZjZQ==',
-                        'content-type': 'application/json'
-                      });
+                              // 限制输入为数字
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              decoration: InputDecoration(
+                                  // maxLength设置长度后在左下角出现的计时器字符
+                                  counterText: '',
+                                  // labelText: '手机',
+                                  hintText: '请输入手机号',
+                                  hintStyle: TextStyle(
+                                      fontSize: MyFontSize.font16,
+                                      fontWeight: FontWeight.w400,
+                                      foreground:
+                                          MyFontStyle.textlinearForegroundO5),
+                                  border: InputBorder.none),
+                              onChanged: (value) {
+                                _number = value;
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    CustomButton(
+                      title: '验证码登录',
+                      height: 60.h,
+                      width: 300.w,
+                      fontSize: MyFontSize.font16,
+                      margin: EdgeInsets.only(top: 24.h, bottom: 24.h),
+                      onPressed: () async {
+                        // 验证手机号码
+                        if (GetUtils.isPhoneNumber(_number) &&
+                            _number.length == 11) {
+                          print(_number);
+                          // Get.toNamed('/verify');
+                          var url = 'https://api.sms.jpush.cn/v1/codes';
+                          var data = {
+                            "mobile": _number,
+                            "sign_id": "",
+                            "temp_id": "1"
+                          };
+                          Options options = Options(headers: {
+                            'authorization':
+                                'Basic N2M1MTJkYTY0NjQ0NmNjNjlmOWM1NWE1Ojg4NTI2OWE1NDNlZmVjZTdlMTQ1OGZjZQ==',
+                            'content-type': 'application/json'
+                          });
 
-                      var res =
-                          await Dio().post(url, data: data, options: options);
-                      print(res.data);
-                      if (res.data['msg_id'] != null) {
-                        Get.toNamed('/verify', arguments: {
-                          "msg_id": res.data['msg_id'],
-                          "mobile": _number
-                        });
-                        Get.snackbar('提示', '验证码已成功发送');
-                      }
-                    } else {
-                      Get.snackbar('提示', '手机号格式不正确');
-                    }
-                  },
+                          var res = await Dio()
+                              .post(url, data: data, options: options);
+                          print(res.data);
+                          if (res.data['msg_id'] != null) {
+                            Get.toNamed('/verify', arguments: {
+                              "msg_id": res.data['msg_id'],
+                              "mobile": _number
+                            });
+                            Get.snackbar('提示', '验证码已成功发送');
+                          } else {
+                            Get.snackbar('提示', '验证码发送失败');
+                          }
+                        } else {
+                          Get.snackbar('提示', '手机号格式不正确');
+                        }
+                      },
+                    ),
+                    CustomButton(
+                      title: '本机号码一键登录',
+                      height: 60.h,
+                      width: 300.w,
+                      fontSize: MyFontSize.font16,
+                      margin: const EdgeInsets.all(0),
+                      onPressed: () {
+                        logAuth();
+                      },
+                    ),
+                    thirdPartyLog()
+                  ],
                 ),
-                CustomButton(
-                  title: '本机号码一键登录',
-                  height: 60.h,
-                  width: 300.w,
-                  fontSize: MyFontSize.font16,
-                  margin: const EdgeInsets.all(0),
-                  onPressed: () {
-                    logAuth();
-                  },
-                ),
-                thirdPartyLog()
-              ],
-            ),
+              ),
+              // Container(
+              //   child: Image.asset(
+              //     'lib/assets/gifs/开屏.gif',
+              //     width: double.infinity,
+              //   ),
+              // )
+            ],
           ),
         ));
   }

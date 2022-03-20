@@ -48,8 +48,6 @@ dependencies:
   toggle_switch: ^1.4.0
   # checkbox
   group_button: ^4.5.0
-  # 通知
-  fluttertoast: ^8.0.8
   # 图表
   flutter_echarts: ^2.3.0
   # 屏幕适配
@@ -62,7 +60,8 @@ dependencies:
   reorderables: ^0.4.3
   # 刷新 
   flutter_easyrefresh: ^2.2.1
-
+  # 缓存插件
+  shared_preferences: ^2.0.13
   
 
   # The following adds the Cupertino Icons font to your application.
@@ -88,7 +87,8 @@ flutter:
   assets:
       - lib/assets/images/
       - lib/assets/icons/
-
+      - lib/assets/gifs/
+      
   fonts:
     - family: MyIcons
       fonts:

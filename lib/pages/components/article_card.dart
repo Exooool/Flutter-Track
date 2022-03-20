@@ -62,7 +62,8 @@ class ArticleCard extends StatelessWidget {
             radius: 10.r,
             height: 223.h,
             width: 366.w,
-            onTap: () => Get.to(ArticlePage()),
+            onTap: () => Get.to(() => ArticlePage(),
+                arguments: {'news_id': news.newsId}),
             widget: Padding(
               padding: EdgeInsets.all(12.r),
               child: Column(
@@ -136,7 +137,12 @@ class ArticleCard extends StatelessWidget {
                           height: 110.h,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                            return const Text('未找到图片');
+                            return Image.asset(
+                              'lib/assets/images/404.jpg',
+                              width: 158.w,
+                              height: 110.h,
+                              fit: BoxFit.cover,
+                            );
                           },
                         ),
                       )

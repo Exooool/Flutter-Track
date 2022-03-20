@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -9,6 +11,9 @@ import './verify_input.dart';
 import '../components/custom_appbar.dart';
 import '../components/custom_button.dart';
 
+// 数据存储
+import 'package:shared_preferences/shared_preferences.dart';
+
 class VerifyPage extends StatefulWidget {
   const VerifyPage({Key? key}) : super(key: key);
 
@@ -19,6 +24,15 @@ class VerifyPage extends StatefulWidget {
 class _VerifyPageState extends State<VerifyPage> {
   //验证码
   String _code = '';
+
+  /// 倒计时的计时器。
+  late Timer _timer;
+
+  /// 当前倒计时的秒数。
+  int _seconds = 60;
+
+  // 当前发送状态
+  bool _available = false;
 
   // 验证码输入框
 
@@ -33,10 +47,36 @@ class _VerifyPageState extends State<VerifyPage> {
     return list;
   }
 
+  void _setTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_seconds == 0) {
+        _timer.cancel();
+        _seconds = 60;
+        _available = true;
+        setState(() {});
+        return;
+      }
+      _seconds--;
+      setState(() {});
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _setTimer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     final arguments = Get.arguments;
-    print(arguments);
+    // print(arguments);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppbar('log', title: '验证码'),
@@ -77,23 +117,47 @@ class _VerifyPageState extends State<VerifyPage> {
             onPressed: () async {
               print(_code);
               arguments['code'] = _code;
+              print(arguments);
               var res = await Dio().post(
                 HttpOptions.BASE_URL + '/login/messageVerify',
                 data: arguments,
               );
               print(res.data);
-              // Get.toNamed('/sex_info');
+              if (res.data['is_valid']) {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString('token', res.data['token']);
+
+                if (res.data['first']) {
+                  Get.offNamed('/sex_info');
+                } else {
+                  Get.toNamed('/home');
+                }
+              } else {
+                Get.snackbar('提示', '验证码错误');
+              }
             },
           ),
           Container(
             margin: EdgeInsets.only(top: 18.h),
-            child: Text(
-              '重新发送 60s',
-              style: TextStyle(
-                  fontSize: MyFontSize.font14,
-                  color: const Color.fromRGBO(158, 158, 158, 1)),
-            ),
-          )
+            child: _available
+                ? InkWell(
+                    onTap: () {
+                      _setTimer();
+                      _available = false;
+                      setState(() {});
+                      print('发送验证码');
+                    },
+                    child: Text('重新发送验证码',
+                        style: TextStyle(
+                            fontSize: MyFontSize.font14,
+                            color: MyColor.fontGrey)),
+                  )
+                : Text(
+                    '重新发送 ${_seconds}s',
+                    style: TextStyle(
+                        fontSize: MyFontSize.font14, color: MyColor.fontGrey),
+                  ),
+          ),
         ],
       ),
     );

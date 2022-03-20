@@ -7,6 +7,8 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_track/config/http_config.dart';
 import 'package:flutter_track/model/news_model.dart';
 import 'package:flutter_track/pages/components/article_card.dart';
+import 'package:flutter_track/service/service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NewsPage extends StatefulWidget {
   String category;
@@ -55,9 +57,16 @@ class _NewsPageState extends State<NewsPage> {
       data = {"start": listIndex, "hashtag": widget.category};
     }
 
-    var response =
-        await Dio().post(HttpOptions.BASE_URL + '/news/newslist', data: data);
-    List res = response.data;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Options options = Options(headers: {
+      'authorization': prefs.getString('token'),
+      'content-type': 'application/json'
+    });
+
+    var response = await Dio().post(HttpOptions.BASE_URL + '/news/newslist',
+        data: data, options: options);
+    List res = response.data['data'];
+    // print(res);
     print('当前请求长度为$listIndex，获取数据长度为${res.length}');
     listIndex += res.length;
 

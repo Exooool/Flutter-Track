@@ -18,7 +18,7 @@ import 'package:flutter_track/pages/log/log.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const initial = AppRoutes.log;
+  static const initial = AppRoutes.home;
 
   static final routes = [
     GetPage(name: '/home', page: () => const HomeMenu()),
@@ -30,7 +30,7 @@ class AppPages {
     GetPage(name: '/invite_group', page: () => InviteGroup()),
     GetPage(name: '/setting', page: () => const SettingPage()),
     GetPage(name: '/newsEdit', page: () => NewsEdit()),
-    GetPage(name: '/article', page: () => const ArticlePage()),
+    GetPage(name: '/article', page: () => ArticlePage()),
     GetPage(name: '/message', page: () => MessagePage()),
     GetPage(name: '/history', page: () => const HistoryPage()),
     GetPage(name: '/chart', page: () => ChartPage()),
