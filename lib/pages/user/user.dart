@@ -9,10 +9,10 @@ import 'package:flutter_track/pages/components/custom_appbar.dart';
 // 样式导入
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 
 import 'package:flutter_track/pages/components/two_layer_tab.dart';
 import 'package:flutter_track/pages/user/user_controller.dart';
-import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 
 class UserPage extends StatelessWidget {
@@ -26,7 +26,7 @@ class UserPage extends StatelessWidget {
         shadow: false,
         height: 24.h,
         width: 80.w,
-        margin: EdgeInsets.only(top: 14.h, bottom: 12.h, left: 6.w, right: 6.w),
+        margin: EdgeInsets.only(bottom: 12.h, left: 6.w, right: 6.w),
         fontSize: MyFontSize.font14,
         onPressed: onPressed);
   }
@@ -83,15 +83,47 @@ class UserPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 // 头像
-                ClipOval(
-                  child: Container(
-                    color: MyColor.thirdColor,
-                    child: Image.asset(
-                      'lib/assets/images/male.png',
-                      height: 84.r,
-                      width: 84.r,
+                Stack(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 15.w, right: 15.w),
+                      child: ClipOval(
+                        child: Container(
+                          child: c.user.value.userImg == ''
+                              ? Image.asset(
+                                  'lib/assets/images/defaultUserImg.png')
+                              : Image.network(
+                                  c.user.value.userImg,
+                                  height: 84.r,
+                                  width: 84.r,
+                                ),
+                        ),
+                      ),
                     ),
-                  ),
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: PublicCard(
+                          radius: 90.r,
+                          height: 30.h,
+                          width: 61.w,
+                          notWhite: true,
+                          widget: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text('等级 Lv',
+                                  style: TextStyle(
+                                      color: MyColor.fontWhite,
+                                      fontSize: MyFontSize.font12)),
+                              Text('${c.user.value.exp % 1000}',
+                                  style: TextStyle(
+                                      color: MyColor.fontWhite,
+                                      fontSize: MyFontSize.font16))
+                            ],
+                          )),
+                    )
+                  ],
                 ),
 
                 // 昵称
@@ -117,7 +149,7 @@ class UserPage extends StatelessWidget {
                             width: 25.r,
                           ),
                           SizedBox(width: 5.w),
-                          Text('99',
+                          Text('${c.user.value.focus.length}',
                               style: TextStyle(fontSize: MyFontSize.font12))
                         ],
                       ),
@@ -132,13 +164,24 @@ class UserPage extends StatelessWidget {
                             width: 25.r,
                           ),
                           SizedBox(width: 5.w),
-                          Text('99',
+                          Text('${c.user.value.fans.length}',
                               style: TextStyle(fontSize: MyFontSize.font12))
                         ],
                       ),
                     )
                   ],
                 ),
+
+                // 学校
+                Padding(
+                  padding: EdgeInsets.only(top: 6.h, bottom: 6.h),
+                  child: Text(c.user.value.college,
+                      style: TextStyle(
+                          fontSize: MyFontSize.font12,
+                          color: MyColor.mainColor,
+                          fontWeight: FontWeight.w600)),
+                ),
+
                 // 历史记录 我的消息
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -150,27 +193,21 @@ class UserPage extends StatelessWidget {
                 ),
 
                 // tab切换栏
-                // Expanded(
-                //     child: Obx(() => TwoLayerTab(
-                //           exteriorTabs: const [
-                //             {'title': '目标', 'nums': '08'},
-                //             {'title': '收藏', 'nums': '99+'},
-                //             {'title': '发布', 'nums': '12'}
-                //           ],
-                //           interiorTabs: const [
-                //             {'title': '对外可见'},
-                //             {'title': '自己可见'}
-                //           ],
-                //           // controller中的变量在数组中传递时 需要通过toList才可让Getx检测到
-                //           exteriorViews: [c.collect.toList(), c.article.toList()],
-                //           interiorViews: [c.target.toList()],
-                //         ))),
-                // test
-                // FloatingActionButton(
-                //     onPressed: () {
-                //       c.target.removeAt(1);
-                //     },
-                //     child: const Text('删除'))
+                Expanded(
+                    child: TwoLayerTab(
+                  exteriorTabs: const [
+                    {'title': '目标', 'nums': '08'},
+                    {'title': '收藏', 'nums': '99+'},
+                    {'title': '发布', 'nums': '12'}
+                  ],
+                  interiorTabs: const [
+                    {'title': '对外可见'},
+                    {'title': '自己可见'}
+                  ],
+                  // controller中的变量在数组中传递时 需要通过toList才可让Getx检测到
+                  exteriorViews: [c.collect.toList(), c.article.toList()],
+                  interiorViews: [c.target.toList()],
+                )),
               ],
             ),
           );

@@ -64,7 +64,7 @@ class DioUtil {
   }
 
   void post(String url,
-      {Map<String, dynamic>? data, required success, required error}) async {
+      {dynamic data, required success, required error}) async {
     Response response;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     options.headers["Authorization"] = prefs.getString("token");
@@ -85,6 +85,9 @@ class DioUtil {
       error(e);
     }
   }
+
+  void imgPost(String url,
+      {Map<String, dynamic>? data, required success, required error}) {}
 
   // // 判断是否有网
   // void _isNet(BackError error) async {

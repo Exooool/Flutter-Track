@@ -1,17 +1,23 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/config/http_config.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:dio/dio.dart' as dio;
+
 class AddProjectController extends GetxController {
-  // final ImagePicker _picker = ImagePicker();
   XFile? image;
 
   // 表单数据
   // 截止时间
   var endTime = ''.obs;
+  // 单次时长
+  var singleTime = {}.obs;
   // 分阶段
   var isDivide = 0.obs;
   // 互助小组
@@ -21,9 +27,9 @@ class AddProjectController extends GetxController {
   // 标题
   var projectTitle = ''.obs;
   // 频率
-  var frequency = null.obs;
-  // 提醒时间
-  var reminderTime = null.obs;
+  var frequency = {}.obs;
+  // 提醒时间 9没有值 表示没有填写
+  var reminderTime = 9.obs;
   // 阶段
   var stageList = [{}].obs;
 
@@ -49,51 +55,62 @@ class AddProjectController extends GetxController {
   List weekList = ['一', '二', '三', '四', '五', '六', '日'];
   List ahead = ["到点提醒", "提前5分钟", "提前10分钟", "提前15分钟", "提前20分钟"];
 
-  // _getImage() async {
-  //   //选择相册
-  //   final pickerImages = await _picker.pickImage(source: ImageSource.gallery);
-  //   if (mounted) {
-  //     setState(() {
-  //       if (pickerImages != null) {
-  //         image = pickerImages;
-  //         setState(() {});
-  //         print('选择了一张照片');
-  //         print(image?.path);
-  //       } else {
-  //         print('没有照片可以选择');
-  //       }
-  //     });
-  //   }
-  // }
+  RxInt imageIndex = 0.obs;
+  final ImagePicker _picker = ImagePicker();
+  RxString imgUrl = ''.obs;
+  // 上传图片并返回值
+  Future pickImage() async {
+    final file =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 65);
 
-  Widget getItemContainer(int item) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      height: 5.0,
-      alignment: Alignment.center,
-      margin: const EdgeInsets.all(10),
-      child: Text(
-        '$item',
-        style: TextStyle(color: Colors.white, fontSize: 10),
-      ),
-      color: Colors.blue,
-    );
+    if (file != null) {
+      dio.FormData formdata = dio.FormData.fromMap({
+        "image":
+            await dio.MultipartFile.fromFile(file.path, filename: file.name)
+      });
+
+      DioUtil().post('/article/imgPost', data: formdata, success: (success) {
+        print(success);
+        imgUrl.value =
+            'http://10.0.2.2/track-api-nodejs/public/images/article/' +
+                success.toString();
+      }, error: (error) {
+        print(error);
+      });
+    }
   }
 
-  // List<Widget> getColorItem(Color color) {
-  //   List<Widget> list = [];
-  //   tfColor.map((key, value) => {
-  //     return ;
-  //   })
-  //   return ;
-  // }
+  // 头像Item
+  Widget imageItem(String title, int index, String url) {
+    return InkWell(
+      onTap: () {
+        imageIndex.value = index;
+      },
+      child: Opacity(
+        opacity: imageIndex.value == index ? 1 : 0.5,
+        child: Column(
+          children: <Widget>[
+            Image.asset(
+              url,
+              height: 103.r,
+              width: 103.r,
+              fit: BoxFit.cover,
+            ),
+            Text(
+              title,
+              style: TextStyle(fontSize: MyFontSize.font14),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   // 选择头像
   selectImage() {
     Get.bottomSheet(
         BlurWidget(
-          Container(
-            padding: EdgeInsets.only(left: 36.w, right: 36.w),
+          SizedBox(
             height: 500.h,
             child: Column(
               children: <Widget>[
@@ -101,95 +118,59 @@ class AddProjectController extends GetxController {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => Get.back(),
                       child: Text('取消',
                           style: TextStyle(
-                              foreground: MyFontStyle.textlinearForeground)),
+                              foreground: MyFontStyle.textlinearForeground,
+                              fontWeight: FontWeight.w600)),
                       style: ButtonStyle(
                           padding: MaterialStateProperty.all(
                               const EdgeInsets.only(top: 20, left: 36))),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        imgUrl.value = '${imageIndex.value + 1}';
+                        Get.back();
+                      },
                       child: Text('确认',
                           style: TextStyle(
-                              foreground: MyFontStyle.textlinearForeground)),
+                              foreground: MyFontStyle.textlinearForeground,
+                              fontWeight: FontWeight.w600)),
                       style: ButtonStyle(
                           padding: MaterialStateProperty.all(
                               const EdgeInsets.only(top: 20, right: 36))),
                     ),
                   ],
                 ),
-                Expanded(
-                    child: ListView(
-                  padding: EdgeInsets.only(bottom: 58.h),
-                  children: <Widget>[
-                    GridView.builder(
-                        //解决无限高度问题
-                        shrinkWrap: true,
-                        //禁用滑动事件
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 20,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                //横轴元素个数
-                                crossAxisCount: 4,
-                                //纵轴间距
-                                mainAxisSpacing: 20.0,
-                                //横轴间距
-                                crossAxisSpacing: 10.0,
-                                //子组件宽高长度比例
-                                childAspectRatio: 1.0),
-                        itemBuilder: (BuildContext context, int index) {
-                          return getItemContainer(index);
-                        }),
-                    SizedBox(
-                        height: 36.r,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: <Widget>[
-                            Container(
-                              height: 36.r,
-                              width: 36.r,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30.r)),
-                                  gradient: const SweepGradient(colors: [
-                                    Color.fromRGBO(219, 0, 255, 1),
-                                    Color.fromRGBO(1, 11, 255, 1),
-                                    Color.fromRGBO(5, 240, 255, 1),
-                                    Color.fromRGBO(0, 255, 133, 1),
-                                    Color.fromRGBO(255, 230, 0, 1),
-                                    Color.fromRGBO(255, 120, 0, 1),
-                                    Color.fromRGBO(253, 50, 50, 1),
-                                  ])),
-                              // child: Center(
-                              //   child: Container(
-                              //     height: 14.r,
-                              //     width: 14.r,
-                              //     decoration: const BoxDecoration(
-                              //         gradient: SweepGradient(colors: [
-                              //       Color.fromRGBO(255, 255, 255, 1),
-                              //       Color.fromRGBO(255, 255, 255, 1),
-                              //       Color.fromRGBO(255, 255, 255, 1),
-                              //       Color.fromRGBO(255, 255, 255, 1),
-                              //       Color.fromRGBO(255, 255, 255, 1),
-                              //     ])),
-                              //   ),
-                              // ),
-                            )
-                          ],
-                        )
-                        // ListView.builder(
-                        //   itemCount: 20,
-                        //   scrollDirection: Axis.horizontal,
-                        //   itemBuilder: (BuildContext context, int index) {
-                        //     return getItemContainer(index);
-                        //   },
-                        // ),
-                        ),
-                  ],
-                ))
+                GetX<AddProjectController>(builder: (_) {
+                  return GridView.count(
+                    shrinkWrap: true,
+                    crossAxisCount: 3,
+                    padding: EdgeInsets.all(10.r),
+                    childAspectRatio: 1.2,
+                    children: <Widget>[
+                      imageItem('学习提升', 0, 'lib/assets/images/project1.png'),
+                      imageItem('升学', 1, 'lib/assets/images/project2.png'),
+                      imageItem('生活习惯', 2, 'lib/assets/images/project3.png'),
+                      imageItem('社交关系', 3, 'lib/assets/images/project4.png'),
+                      imageItem('就业目标', 4, 'lib/assets/images/project5.png'),
+                      imageItem('其它', 5, 'lib/assets/images/project6.png'),
+                    ],
+                  );
+                }),
+                PublicCard(
+                    radius: 90.r,
+                    height: 72.r,
+                    width: 72.r,
+                    onTap: () {
+                      pickImage();
+                      Get.back();
+                    },
+                    widget: Image.asset(
+                      'lib/assets/icons/add.png',
+                      height: 44.r,
+                      width: 44.r,
+                    ))
               ],
             ),
           ),

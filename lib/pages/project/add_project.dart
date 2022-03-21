@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/project/component/single_time.dart';
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 
 import 'dart:io';
@@ -22,7 +25,8 @@ class AddProject extends StatelessWidget {
   final AddProjectController c = Get.put(AddProjectController());
 
   // 表单输入框
-  Widget formInput(String title, {Widget? component, Function? onChanged}) {
+  Widget formInput(String title,
+      {Widget? component, Function? onChanged, String? value}) {
     return Center(
       child: PublicCard(
         radius: 30.r,
@@ -47,7 +51,8 @@ class AddProject extends StatelessWidget {
                           alignment: Alignment.centerRight,
                           child: component,
                         )
-                      : TextFormField(
+                      : TextField(
+                          controller: TextEditingController(text: value),
                           onChanged: (value) {
                             onChanged!(value);
                           },
@@ -92,7 +97,7 @@ class AddProject extends StatelessWidget {
   List<String> text = ['30分钟', '60分钟', '90分钟', '120分钟', '150分钟', '自定义'];
 
   String? textTransfom(data) {
-    if (data != null) {
+    if (data != null && data['type'] != null) {
       if (data['type'] == 5) {
         return text[data['type']] + data['custom'].toString() + '分钟';
       }
@@ -154,7 +159,7 @@ class AddProject extends StatelessWidget {
             )
           ],
         ),
-        formInput('完成内容', onChanged: (e) {
+        formInput('完成内容', value: c.stageList[stage]['content'], onChanged: (e) {
           c.stageList[stage]['content'] = e;
         }),
         GetBuilder<AddProjectController>(
@@ -165,7 +170,13 @@ class AddProject extends StatelessWidget {
                           // c.stageList[stage]['endTime'] = e;
                           c.stageListMethod(stage, 'endTime', e);
                           print(c.stageList);
-                        }, c.stageList[stage]['endTime'])),
+                        }, c.stageList[stage]['endTime'],
+                            beforeEndTime: stage - 1 >= 0
+                                ? c.stageList[stage - 1]['endTime']
+                                : null,
+                            afterEndTime: stage + 1 <= c.stageList.length - 1
+                                ? c.stageList[stage + 1]['endTime']
+                                : null)),
                     formInput('单次时长',
                         component: singleTimeBottomSheet(
                             c.stageList[stage]['singleTime'], (e) {
@@ -195,14 +206,14 @@ class AddProject extends StatelessWidget {
 
   // 转换提醒时间为字符串
   reminderTimetoString(value) {
-    if (value != null) {
+    if (value != null && value != 9) {
       return c.ahead[value];
     }
   }
 
   // 转换频率为字符串
   frequencytoString(value) {
-    if (value != null) {
+    if (value != null && value['week'] != null) {
       String temp = '';
       // 先转换周期
       temp = value['week'].map((e) {
@@ -245,12 +256,19 @@ class AddProject extends StatelessWidget {
                       height: 88.r,
                       width: 88.r,
                       onTap: c.selectImage,
-                      widget: c.image == null
+                      widget: c.imgUrl.value == ''
                           ? const SizedBox()
-                          : Image.file(
-                              File(c.image!.path),
-                              fit: BoxFit.cover,
-                            ),
+                          : GetUtils.isNum(c.imgUrl.value)
+                              ? ClipOval(
+                                  child: Image.asset(
+                                  'lib/assets/images/project${c.imgUrl.value}.png',
+                                  fit: BoxFit.cover,
+                                ))
+                              : ClipOval(
+                                  child: Image.network(
+                                  c.imgUrl.value,
+                                  fit: BoxFit.cover,
+                                )),
                     ),
                   ),
                   Padding(
@@ -262,7 +280,7 @@ class AddProject extends StatelessWidget {
                 ],
               ),
               // 列表
-              formInput('计划名称', onChanged: (e) {
+              formInput('计划名称', value: c.projectTitle.value, onChanged: (e) {
                 c.projectTitle.value = e;
               }),
               formInput('分阶段完成',
@@ -270,11 +288,20 @@ class AddProject extends StatelessWidget {
                     c.isDivide.value = index;
                     print('分阶段完成：${c.isDivide}');
                   })),
-              formInput('截止时间',
-                  component: FormDateTimePicker((e) {
-                    c.endTime.value = e.substring(0, 10);
-                  }, c.endTime.value)),
-
+              Visibility(
+                  visible: c.isDivide.value == 0 ? false : true,
+                  child: Column(
+                    children: <Widget>[
+                      formInput('截止时间',
+                          component: FormDateTimePicker((e) {
+                            c.endTime.value = e.substring(0, 10);
+                          }, c.endTime.value)),
+                      formInput('单次时长',
+                          component: singleTimeBottomSheet(c.singleTime, (e) {
+                            c.singleTime.value = e;
+                          })),
+                    ],
+                  )),
               // 分阶段
               Visibility(
                   visible: c.isDivide.value == 0 ? true : false,
@@ -344,20 +371,58 @@ class AddProject extends StatelessWidget {
                     onPressed: () {
                       // 集合所有数据
                       var data = {
+                        'project_img': c.imgUrl.value,
                         'endTime': c.endTime.value,
-                        'isDivide': c.isDivide.value,
-                        'isJoin': c.isJoin.value,
-                        'isMatch': c.isMatch.value,
-                        'projectTitle': c.projectTitle.value,
-                        'frequency': c.frequency,
-                        'reminderTime': c.reminderTime.value,
-                        'stageList': c.stageList
+                        'single_time': jsonEncode(c.singleTime),
+                        'project_title': c.projectTitle.value,
+                        'frequency': jsonEncode(c.frequency),
+                        'reminder_time': c.reminderTime.value,
+                        'stage_list': jsonEncode(c.stageList)
                       };
-                      print(data);
-                      if (c.isMatch.value == 0) {
-                        Get.toNamed('/match_group');
+
+                      bool flag = true;
+                      // 进行数据验证
+                      if (c.projectTitle.value == '') {
+                        flag = false;
+                      } else if (c.isDivide.value == 0) {
+                        // 判断分阶段的情况
+                        for (var i = 0; i < c.stageList.length; i++) {
+                          if (c.stageList[i]['content'] == null ||
+                              c.stageList[i]['content'] == '' ||
+                              c.stageList[i]['endTime'] == '' ||
+                              c.stageList[i]['endTime'] == null ||
+                              c.stageList[i]['singleTime']['type'] == null ||
+                              c.stageList[i]['frequency']['week'] == null ||
+                              c.stageList[i]['reminderTime'] == 9) {
+                            flag = false;
+                          }
+                        }
                       } else {
-                        Get.toNamed('/invite_group');
+                        // 判断部分阶段
+                        if (c.endTime.value == '' ||
+                            c.singleTime['type'] == null ||
+                            c.frequency['week'] == null ||
+                            c.reminderTime.value == 9) {
+                          flag = false;
+                        }
+                      }
+
+                      if (flag) {
+                        if (c.isJoin.value == 0) {
+                        } else {
+                          DioUtil().post('/project/add', data: data,
+                              success: (success) {
+                            print('请求成功,服务端返回:$success');
+                            if (success['status'] == 0) {
+                              Get.back();
+                              Get.snackbar('提示', '计划添加成功');
+                            }
+                          }, error: (error) {
+                            print(error);
+                          });
+                        }
+                      } else {
+                        Get.snackbar('提示', '请输入信息');
                       }
                     }),
               ),

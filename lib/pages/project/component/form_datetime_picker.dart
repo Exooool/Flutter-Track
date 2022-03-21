@@ -19,8 +19,10 @@ class FormDateTimePicker extends StatelessWidget {
   final String? value;
   // 时间选择器类型 0截止时间 1完成频率 2提醒时间
   final int type;
-
-  FormDateTimePicker(this.onChange, this.value, {Key? key, this.type = 0})
+  final String? beforeEndTime;
+  final String? afterEndTime;
+  FormDateTimePicker(this.onChange, this.value,
+      {Key? key, this.type = 0, this.beforeEndTime, this.afterEndTime})
       : super(key: key);
   final List weekList = ['每周一', '每周二', '每周三', '每周四', '每周五', '每周六', '每周日'];
   final String pickData = '''[["到点提醒","提前5分钟","提前10分钟","提前15分钟","提前20分钟"]]''';
@@ -60,13 +62,20 @@ class FormDateTimePicker extends StatelessWidget {
   // 时间选择器
   showEndTimePicker(BuildContext context) {
     var datetime = DateTime.now();
-    var year = datetime.year;
+    // var year = datetime.year;
+    // 通过传入的时间限制选择截止时间
+    var minTime =
+        beforeEndTime == null ? datetime : DateTime.parse(beforeEndTime!);
+    var maxTime = afterEndTime == null ? null : DateTime.parse(afterEndTime!);
     Get.bottomSheet(
         SizedBox(
           height: 300.h,
           child: BlurWidget(customPicker(
             adapter: DateTimePickerAdapter(
-                isNumberMonth: true, type: 7, yearBegin: year),
+                maxValue: maxTime,
+                minValue: minTime,
+                isNumberMonth: true,
+                type: 7),
             onConfirm: (Picker picker, List value) {
               onChange(picker.adapter.text.substring(0, 10));
             },
@@ -145,9 +154,7 @@ class FormDateTimePicker extends StatelessWidget {
             children: [
               customPicker(
                   adapter: DateTimePickerAdapter(
-                      maxHour: 12,
-                      customColumnType: [6, 3, 4],
-                      strAMPM: ['上午', '下午']),
+                      maxHour: 24, customColumnType: [3, 4]),
                   onConfirm: (Picker picker, List value) {
                     print(picker.adapter.text.substring(11, 16));
                     frequency['time'] = picker.adapter.text.substring(11, 16);
@@ -170,8 +177,7 @@ class FormDateTimePicker extends StatelessWidget {
                                   fontSize: 16, fontWeight: FontWeight.w500)),
                           Obx(() => Text(c.repeatText.value,
                               style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Color.fromRGBO(0, 0, 0, 0.2))))
+                                  fontSize: 16, color: MyColor.fontBlackO2)))
                         ],
                       )))
             ],

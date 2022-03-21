@@ -64,9 +64,14 @@ class _SingleTimeState extends State<SingleTime> {
               InkWell(
                 onTap: () {
                   var time = {'type': singleTime, 'custom': customTime};
-                  widget.onChanged(time);
-                  print(singleTime);
-                  Get.back();
+                  if (singleTime == 5 && customTime == 0) {
+                    Get.back();
+                    Get.snackbar('提示', '自定义时间不要为空');
+                  } else {
+                    widget.onChanged(time);
+                    Get.back();
+                  }
+                  print(time);
                 },
                 child: Text(
                   '确认',
@@ -117,6 +122,8 @@ class _SingleTimeState extends State<SingleTime> {
                 onChanged: (value) {
                   if (value != '') {
                     customTime = int.parse(value);
+                  } else {
+                    customTime = 0;
                   }
                 },
                 // 限制输入为数字
