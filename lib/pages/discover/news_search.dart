@@ -3,10 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/model/news_model.dart';
+import 'package:flutter_track/pages/components/article_card.dart';
 
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 
 class NewsSearchController extends GetxController {
   RxList searchList = [].obs;
@@ -29,16 +31,23 @@ class NewsSearch extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Icon(
-              Icons.search,
-              size: 14.sp,
+            Image.asset(
+              'lib/assets/icons/Search_fill.png',
+              height: 25.r,
+              width: 25.r,
             ),
             SizedBox(width: 10.w),
             Expanded(
                 child: TextField(
               onSubmitted: (value) {
-                print(value);
-                c.searchList.add('123');
+                if (value != '') {
+                  DioUtil().post('/news/search', data: {"search": value},
+                      success: (res) {
+                    print(res);
+                    c.searchList.value = res['data'];
+                    print(c.searchList.length);
+                  }, error: (error) {});
+                }
               },
               onChanged: (value) {
                 if (value == '') {
@@ -160,20 +169,23 @@ class NewsSearch extends StatelessWidget {
                 children: <Widget>[
                   InkWell(
                     onTap: () => Get.back(),
-                    child: Text('返回'),
+                    child: Image.asset(
+                      'lib/assets/icons/Refund_back.png',
+                      height: 25.r,
+                      width: 25.r,
+                    ),
                   ),
                   Expanded(child: searchInput()),
                 ],
               ),
               c.searchList.isNotEmpty
                   ? Expanded(
-                      child: ListView(
-                        children: <Widget>[
-                          Center(
-                            child: Text('我是搜索结果'),
-                          )
-                        ],
-                      ),
+                      child: ListView.builder(
+                          itemCount: c.searchList.length,
+                          itemBuilder: (context, index) {
+                            return ArticleCard(
+                                Article.fromMap(c.searchList[index]));
+                          }),
                     )
                   : Expanded(child: searchContentView())
             ],

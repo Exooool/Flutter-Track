@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
@@ -38,6 +37,14 @@ class NewsEdit extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppbar(
         'edit',
+        leading: InkWell(
+          onTap: () => getx.Get.back(),
+          child: Image.asset(
+            'lib/assets/icons/Refund_back.png',
+            height: 25.r,
+            width: 25.r,
+          ),
+        ),
         ending: SizedBox(
           height: 20,
           child: InkWell(
@@ -56,7 +63,7 @@ class NewsEdit extends StatelessWidget {
                 getx.Get.snackbar('提示', '请填入标题');
               }
             },
-            child: Text('输出'),
+            child: Text('下一步'),
           ),
         ),
       ),
@@ -548,7 +555,7 @@ class _CustomLinkStyleButtonState extends State<CustomLinkStyleButton> {
     final isEnabled = !widget.controller.selection.isCollapsed;
     final pressedHandler = isEnabled ? () => _openLinkDialog(context) : null;
     return InkWell(
-      child: Image.asset('lib/assets/icons/link.png', height: 25.r),
+      child: Image.asset('lib/assets/icons/Link.png', height: 25.r),
       onTap: pressedHandler,
     );
   }

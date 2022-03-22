@@ -147,7 +147,7 @@ class AddProjectController extends GetxController {
                     shrinkWrap: true,
                     crossAxisCount: 3,
                     padding: EdgeInsets.all(10.r),
-                    childAspectRatio: 1.2,
+                    childAspectRatio: 1,
                     children: <Widget>[
                       imageItem('学习提升', 0, 'lib/assets/images/project1.png'),
                       imageItem('升学', 1, 'lib/assets/images/project2.png'),
@@ -167,7 +167,7 @@ class AddProjectController extends GetxController {
                       Get.back();
                     },
                     widget: Image.asset(
-                      'lib/assets/icons/add.png',
+                      'lib/assets/icons/Add.png',
                       height: 44.r,
                       width: 44.r,
                     ))

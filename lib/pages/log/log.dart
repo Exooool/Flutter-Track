@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/pages/log/beforelog.dart';
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,53 +38,75 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
   late String _result = '';
   final Jverify jverify = Jverify();
 
+  not() {
+    Get.snackbar('提示', '第三方登录暂未开通');
+  }
+
   // 第三方登录
   thirdPartyLog() {
     return Expanded(
         child: Container(
-      margin: const EdgeInsets.only(bottom: 64),
+      margin: EdgeInsets.only(bottom: 64.h),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          const SizedBox(
-            height: 18,
+          SizedBox(
+            height: 18.h,
           ),
           Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              const Text(
+              Text(
                 '其他账号登录',
-                style: TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: 12.sp),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
               Container(
-                width: 160,
-                height: 2,
-                color: const Color.fromRGBO(238, 238, 246, 1),
+                width: 160.w,
+                height: 2.h,
+                color: const Color.fromRGBO(158, 158, 158, 1),
               ),
             ],
           ),
-          const SizedBox(
-            height: 15,
+          SizedBox(
+            height: 15.h,
           ),
           SizedBox(
-            width: 160,
+            width: 160.w,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 InkWell(
-                  onTap: () {},
-                  child: const Icon(
-                    IconData(0xe667, fontFamily: 'MyIcons'),
-                    size: 28,
+                  onTap: not,
+                  child: Image.asset(
+                    'lib/assets/images/抖音.png',
+                    height: 28.r,
+                    width: 28.r,
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
-                  child: const Icon(
-                    IconData(0xe607, fontFamily: 'MyIcons'),
-                    size: 28,
+                  onTap: not,
+                  child: Image.asset(
+                    'lib/assets/images/apple.png',
+                    height: 28.r,
+                    width: 28.r,
+                  ),
+                ),
+                InkWell(
+                  onTap: not,
+                  child: Image.asset(
+                    'lib/assets/images/微信.png',
+                    height: 28.r,
+                    width: 28.r,
+                  ),
+                ),
+                InkWell(
+                  onTap: not,
+                  child: Image.asset(
+                    'lib/assets/images/QQ.png',
+                    height: 28.r,
+                    width: 28.r,
                   ),
                 ),
               ],
@@ -131,11 +155,13 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.only(top: 68.h, bottom: 42.h),
+                      margin: EdgeInsets.only(
+                        top: 68.h,
+                      ),
                       child: Image.asset(
                         'lib/assets/images/logo.png',
-                        height: 290.r,
-                        width: 290.r,
+                        height: 330.r,
+                        width: 330.r,
                       ),
                     ),
                     PublicCard(
@@ -206,30 +232,28 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                             _number.length == 11) {
                           print(_number);
                           // Get.toNamed('/verify');
-                          var url = 'https://api.sms.jpush.cn/v1/codes';
+
                           var data = {
                             "mobile": _number,
                             "sign_id": "",
                             "temp_id": "1"
                           };
-                          Options options = Options(headers: {
-                            'authorization':
-                                'Basic N2M1MTJkYTY0NjQ0NmNjNjlmOWM1NWE1Ojg4NTI2OWE1NDNlZmVjZTdlMTQ1OGZjZQ==',
-                            'content-type': 'application/json'
-                          });
 
-                          var res = await Dio()
-                              .post(url, data: data, options: options);
-                          print(res.data);
-                          if (res.data['msg_id'] != null) {
-                            Get.toNamed('/verify', arguments: {
-                              "msg_id": res.data['msg_id'],
-                              "mobile": _number
-                            });
-                            Get.snackbar('提示', '验证码已成功发送');
-                          } else {
-                            Get.snackbar('提示', '验证码发送失败');
-                          }
+                          DioUtil().logPost('https://api.sms.jpush.cn/v1/codes',
+                              data: data, success: (res) {
+                            print(res);
+                            if (res['msg_id'] != null) {
+                              Get.toNamed('/verify', arguments: {
+                                "msg_id": res['msg_id'],
+                                "mobile": _number
+                              });
+                              Get.snackbar('提示', '验证码已成功发送');
+                            } else {
+                              Get.snackbar('提示', '验证码发送失败');
+                            }
+                          }, error: (error) {
+                            Get.snackbar('提示', error);
+                          });
                         } else {
                           Get.snackbar('提示', '手机号格式不正确');
                         }
@@ -255,6 +279,7 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
               //     width: double.infinity,
               //   ),
               // )
+              BeforeLog()
             ],
           ),
         ));

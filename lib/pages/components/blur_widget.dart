@@ -8,18 +8,22 @@ import 'package:flutter_track/pages/components/public_card.dart';
 class BlurWidget extends StatelessWidget {
   final Widget widget;
   final double? radius;
-  const BlurWidget(this.widget, {Key? key, this.radius}) : super(key: key);
+  final bool backBlur;
+  const BlurWidget(this.widget, {Key? key, this.radius, this.backBlur = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-          child: Container(
-            color: Colors.white.withOpacity(0.1),
-          ),
-        ),
+        Visibility(
+            visible: backBlur,
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: Container(
+                color: Colors.white.withOpacity(0.1),
+              ),
+            )),
         // 切割很重要
         ClipRect(
           child: SizedBox(

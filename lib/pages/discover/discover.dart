@@ -218,6 +218,8 @@ class _DiscoverPageState extends State<DiscoverPage>
                               color: Colors.transparent,
                               child:
                                   Image.asset('lib/assets/icons/Full_alt.png'),
+                              height: 25.r,
+                              width: 25.r,
                             )),
                       )
                     ],

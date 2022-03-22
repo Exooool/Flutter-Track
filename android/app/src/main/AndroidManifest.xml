@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <!-- android:name="${applicationName}" 原来flutter默认用的是占位符 导致导入第三方库后占位符失效 -->
    <application
-        android:label="flutter_track"
+        android:label="轨迹"
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher">
         <!-- 极光api 样式自定义 -->

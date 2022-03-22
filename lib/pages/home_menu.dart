@@ -7,6 +7,7 @@ import 'package:flutter_track/pages/user/user.dart';
 import 'package:flutter_track/pages/project/project.dart';
 import 'package:flutter_track/pages/information/information.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './discover/news_page.dart';
 
@@ -84,22 +85,35 @@ class _HomeMenuState extends State<HomeMenu> {
           child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _menuItem('lib/assets/images/icon5.png',
-                    'lib/assets/images/icon1.png', 0, '计划'),
-                _menuItem('lib/assets/images/icon6.png',
-                    'lib/assets/images/icon2.png', 1, '发现'),
-                _menuItem('lib/assets/images/icon7.png',
-                    'lib/assets/images/icon3.png', 2, '数据'),
-                _menuItem('lib/assets/images/icon8.png',
-                    'lib/assets/images/icon4.png', 3, '个人'),
+                _menuItem('lib/assets/icons/nav_1.png',
+                    'lib/assets/icons/nav_fill_1.png', 0, '计划'),
+                _menuItem('lib/assets/icons/nav_2.png',
+                    'lib/assets/icons/nav_fill_2.png', 1, '发现'),
+                _menuItem('lib/assets/icons/nav_3.png',
+                    'lib/assets/icons/nav_fill_3.png', 2, '数据'),
+                _menuItem('lib/assets/icons/nav_4.png',
+                    'lib/assets/icons/nav_fill_4.png', 3, '个人'),
               ]),
         ),
       ],
     );
   }
 
+  loginVerify() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    if (token == null) {
+      Get.offAllNamed('/log');
+      // Get.snackbar('提示', '未登录');
+    } else {
+      print('该用户已登录：$token');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    loginVerify();
+
     double _phoneWidth = MediaQuery.of(context).size.width;
     double distance = (_phoneWidth - 320) / 2;
 

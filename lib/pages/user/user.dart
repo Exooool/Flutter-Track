@@ -44,7 +44,7 @@ class UserPage extends StatelessWidget {
               InkWell(
                 onTap: () {},
                 child: Image.asset(
-                  'lib/assets/icons/User_fill_add.png',
+                  'lib/assets/icons/User_add.png',
                   height: 25.r,
                   width: 25.r,
                 ),
@@ -144,7 +144,7 @@ class UserPage extends StatelessWidget {
                       child: Row(
                         children: [
                           Image.asset(
-                            'lib/assets/icons/User_add_alt_fill.png',
+                            'lib/assets/icons/User_focus.png',
                             height: 25.r,
                             width: 25.r,
                           ),
@@ -159,7 +159,7 @@ class UserPage extends StatelessWidget {
                       child: Row(
                         children: [
                           Image.asset(
-                            'lib/assets/icons/User_add_alt_fill-1.png',
+                            'lib/assets/icons/User_fans.png',
                             height: 25.r,
                             width: 25.r,
                           ),

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
@@ -60,10 +61,9 @@ class ArticleCard extends StatelessWidget {
         child: Center(
           child: PublicCard(
             radius: 10.r,
-            height: 223.h,
             width: 366.w,
-            onTap: () => Get.to(() => ArticlePage(),
-                arguments: {'news_id': news.newsId}),
+            // 传递news对象给文章页面
+            onTap: () => Get.to(() => ArticlePage(), arguments: {'news': news}),
             widget: Padding(
               padding: EdgeInsets.all(12.r),
               child: Column(
@@ -83,7 +83,7 @@ class ArticleCard extends StatelessWidget {
                       )),
                     ],
                   ),
-                  // SizedBox(height: 8.h),
+                  SizedBox(height: 10.h),
                   Row(
                     children: [
                       Expanded(
@@ -110,7 +110,8 @@ class ArticleCard extends StatelessWidget {
                                 ),
                                 SizedBox(width: 10.w),
                                 Text(
-                                  news.newsTime.substring(0, 10),
+                                  formatDate(DateTime.parse(news.newsTime),
+                                      [yyyy, '.', mm, '.', dd]),
                                   style: TextStyle(
                                       height: 1.6,
                                       fontSize: MyFontSize.font12,
@@ -148,7 +149,7 @@ class ArticleCard extends StatelessWidget {
                       )
                     ],
                   ),
-
+                  SizedBox(height: 15.h),
                   Padding(
                     padding: EdgeInsets.only(right: 50.w),
                     child: Row(

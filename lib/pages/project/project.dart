@@ -91,11 +91,8 @@ class _ProjectPageState extends State<ProjectPage>
           onTap: () {
             Navigator.pushNamed(context, '/add_project');
           },
-          child: const Icon(
-            Icons.add,
-            color: MyColor.fontBlack,
-            size: 36,
-          ),
+          child: Image.asset('lib/assets/icons/Add.png',
+              height: 44.r, width: 44.r),
         ));
   }
 

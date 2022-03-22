@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 
 // 发现页appbar的tab切换
@@ -42,14 +43,14 @@ class CustomAppbar extends AppBar {
           leading: leading == null
               ? null
               : Padding(
-                  padding: const EdgeInsets.only(left: 26),
+                  padding: EdgeInsets.only(left: 16.w),
                   child: Center(
                     child: leading,
                   ),
                 ),
           actions: [
             Padding(
-              padding: const EdgeInsets.only(right: 26),
+              padding: EdgeInsets.only(right: 26.w),
               child: Center(
                 child: ending,
               ),

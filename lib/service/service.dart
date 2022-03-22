@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //规定函数类型
 typedef BackError = Function(int code, String msg);
+
+String jiguang =
+    'Basic N2M1MTJkYTY0NjQ0NmNjNjlmOWM1NWE1Ojg4NTI2OWE1NDNlZmVjZTdlMTQ1OGZjZQ==';
 
 class DioUtil {
   late Dio dio;
@@ -39,10 +44,18 @@ class DioUtil {
 
   void get(String url,
       {Map<String, dynamic>? data, required success, required error}) async {
-    // _isNet(error);
+    // isNet().then((value) {
+    //   print(value);
+    // });
+
     Response response;
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    options.headers["Authorization"] = prefs.getString("token");
+    var token = prefs.getString("token");
+    if (token == null) {
+      return;
+    }
+    options.headers["Authorization"] = token;
     dio = Dio(options);
 
     try {
@@ -66,9 +79,17 @@ class DioUtil {
   void post(String url,
       {dynamic data, required success, required error}) async {
     Response response;
+
+    // 取token数据
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    options.headers["Authorization"] = prefs.getString("token");
+    var token = prefs.getString("token");
+    if (token == null) {
+      return;
+    }
+    options.headers["Authorization"] = token;
+
     dio = Dio(options);
+
     try {
       if (data == null) {
         response = await dio.post(url);
@@ -86,15 +107,53 @@ class DioUtil {
     }
   }
 
+  void logPost(String url,
+      {Map<String, dynamic>? data, required success, required error}) async {
+    Response response;
+    // 设置极光api的认证
+    options.headers["Authorization"] = jiguang;
+    dio = Dio(options);
+
+    try {
+      if (data == null) {
+        response = await dio.post(url);
+      } else {
+        response = await dio.post(url, data: data);
+      }
+
+      if (response.statusCode == 200) {
+        success(response.data);
+      } else {
+        error(response.statusCode, "数据服务出现异常！");
+      }
+    } on DioError catch (e) {
+      if (e.type == DioErrorType.connectTimeout) {
+        error('网络异常，连接超时');
+      } else {}
+    }
+  }
+
   void imgPost(String url,
       {Map<String, dynamic>? data, required success, required error}) {}
 
-  // // 判断是否有网
-  // void _isNet(BackError error) async {
+  Future<bool> isNet() async {
+    try {
+      final result = await InternetAddress.lookup('https://www.baidu.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        return true;
+      } else {
+        return false;
+      }
+    } on SocketException catch (_) {
+      return false;
+    }
+  }
+  // 判断是否有网
+  // void isNet(error) async {
   //   //没有网络
   //   var connectivityResult = await (Connectivity().checkConnectivity());
   //   if (connectivityResult == ConnectivityResult.none) {
-  //     error(ExceptionHandle.net_error, '网络异常，请检查你的网络！');
+  //     error('网络异常，请检查你的网络！');
   //     return;
   //   }
   // }

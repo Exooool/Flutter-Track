@@ -63,20 +63,20 @@ class _NewsPageState extends State<NewsPage> {
       'content-type': 'application/json'
     });
 
-    var response = await Dio().post(HttpOptions.BASE_URL + '/news/newslist',
-        data: data, options: options);
-    List res = response.data['data'];
-    // print(res);
-    print('当前请求长度为$listIndex，获取数据长度为${res.length}');
-    listIndex += res.length;
+    DioUtil().post('/news/newslist', data: data, success: (success) {
+      List res = success['data'];
+      // print(res);
+      print('当前请求长度为$listIndex，获取数据长度为${res.length}');
+      listIndex += res.length;
 
-    setState(() {
-      if (refersh) {
-        datalist = res;
-      } else {
-        datalist.addAll(res);
-      }
-    });
+      setState(() {
+        if (refersh) {
+          datalist = res;
+        } else {
+          datalist.addAll(res);
+        }
+      });
+    }, error: (error) {});
   }
 
   // 下拉刷新
