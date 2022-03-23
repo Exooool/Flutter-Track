@@ -18,7 +18,7 @@ class HistoryPage extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Image.asset('lib/assets/images/img.jpg',
+                Image.asset('lib/assets/images/male.png',
                     fit: BoxFit.cover, height: 60.r, width: 60.r),
                 Text(
                   'Gutabled',

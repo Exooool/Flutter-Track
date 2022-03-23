@@ -9,31 +9,18 @@ import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/custom_checkbox.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart' as getx;
 import 'package:image_picker/image_picker.dart';
 import 'package:zefyrka/zefyrka.dart';
 
 class NewsEdit extends StatelessWidget {
-  final doc = [
-    {
-      "insert": "12123",
-      "attributes": {"i": true}
-    },
-    {"insert": "\n"},
-    {
-      "insert": "woshilianjie",
-      "attributes": {"a": "http://www.baidu.com"}
-    },
-    {"insert": "\n"},
-    {"insert": "\n"}
-  ];
   late String newsTitle = '';
+  final ZefyrController _controller = ZefyrController();
   NewsEdit({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final ZefyrController _controller =
-        ZefyrController(NotusDocument.fromJson(doc));
     return Scaffold(
       appBar: CustomAppbar(
         'edit',
@@ -51,19 +38,38 @@ class NewsEdit extends StatelessWidget {
             onTap: () {
               // 富文本编辑器输出内容
               print(jsonEncode(_controller.document));
+
               if (newsTitle != '') {
+                // 循环找出不是图片和超链接的内容存入content中
+                String content = '';
+                List target = jsonDecode(jsonEncode(_controller.document));
+                for (var i = 0; i < target.length; i++) {
+                  if (target[i]['insert'] is String &&
+                      target[i]['attributes'] == null &&
+                      target[i]['insert'] != '\n') {
+                    print(target[i]['insert']);
+                    content = target[i]['insert'];
+                    break;
+                  }
+                }
+
                 var jsondata = {
                   "news_title": newsTitle,
-                  "news_content": jsonEncode(_controller.document)
+                  "news_content": jsonEncode(_controller.document),
+                  "content": content
                 };
                 // Dio().post('http://10.0.2.2:3000/article/postArticle',
                 //     data: jsondata);
-                getx.Get.to(() => TagSelect(), arguments: jsondata);
+                getx.Get.off(() => TagSelect(), arguments: jsondata);
               } else {
                 getx.Get.snackbar('提示', '请填入标题');
               }
             },
-            child: Text('下一步'),
+            child: Image.asset(
+              'lib/assets/icons/Send_hor_fill.png',
+              height: 25.r,
+              width: 25.r,
+            ),
           ),
         ),
       ),
@@ -168,47 +174,28 @@ class CustomInsertImageButton extends StatelessWidget {
   CustomInsertImageButton({Key? key, required this.controller})
       : super(key: key);
 
-  //  Future<String> upload(File imageFile) async {
-  //     // open a bytestream
-  //     var stream = http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-  //     // get file length
-  //     var length = await imageFile.length();
+  pickImage() async {
+    ImageSource gallerySource = ImageSource.gallery;
+    final file =
+        await _picker.pickImage(source: gallerySource, imageQuality: 65);
+    final index = controller.selection.baseOffset;
+    final length = controller.selection.extentOffset - index;
 
-  //     // string to uri
-  //     var uri = Uri.parse(server + "/upload");
+    if (file != null) {
+      FormData formdata = FormData.fromMap({
+        "image": await MultipartFile.fromFile(file.path, filename: file.name)
+      });
+      // print('object');
 
-  //     // create multipart request
-  //     var request = http.MultipartRequest("POST", uri);
-
-  //     // multipart that takes file
-  //     var multipartFile = http.MultipartFile('note', stream, length,
-  //         filename: basename(imageFile.path));
-
-  //     // add file to multipart
-  //     request.files.add(multipartFile);
-
-  //     // send
-  //     var response = await request.send();
-  //     // listen for response.join()
-  //     return response.stream.transform(utf8.decoder).join();
-  //   }
-
-  Future<String?> pickImage(ImageSource source) async {
-    final file = await _picker.pickImage(source: source, imageQuality: 65);
-
-    FormData formdata = FormData.fromMap({
-      "image": await MultipartFile.fromFile(file!.path, filename: file.name)
-    });
-    print('object');
-
-    var respone = await Dio().post<String>(
-        HttpOptions.BASE_URL + "/article/imgPost",
-        data: formdata);
-    print(respone);
-
-    print(formdata);
-    return 'http://10.0.2.2/track-api-nodejs/public/images/article/' +
-        respone.toString();
+      DioUtil().post('/article/imgPost', data: formdata, success: (res) {
+        print(res);
+        var info = 'http://10.0.2.2/track-api-nodejs/public/images/article/' +
+            res.toString();
+        controller.replaceText(index, length, BlockEmbed(info));
+      }, error: (error) {
+        print(error);
+      });
+    }
   }
 
   @override
@@ -216,19 +203,12 @@ class CustomInsertImageButton extends StatelessWidget {
     return InkWell(
       child: Image.asset('lib/assets/icons/Img_box_fill.png', height: 25.r),
       onTap: () {
-        final index = controller.selection.baseOffset;
-        final length = controller.selection.extentOffset - index;
-        ImageSource gallerySource = ImageSource.gallery;
-        final image = pickImage(gallerySource);
+        pickImage();
         // controller.replaceText(
         //     index,
         //     length,
         //     BlockEmbed(
         //         'https://img0.baidu.com/it/u=2064213898,2801034448&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'));
-        image.then((value) {
-          print(value);
-          controller.replaceText(index, length, BlockEmbed(value!));
-        });
       },
     );
   }
@@ -308,13 +288,25 @@ class _TagSelectState extends State<TagSelect> {
     return Scaffold(
       appBar: CustomAppbar(
         'TagSelect',
+        leading: InkWell(
+          onTap: () => getx.Get.back(),
+          child: Image.asset(
+            'lib/assets/icons/Refund_back.png',
+            height: 25.r,
+            width: 25.r,
+          ),
+        ),
         ending: InkWell(
           onTap: () {
             arguments['hashtag'] = _tagList[tagIndex];
             // print(arguments);
-            getx.Get.to(() => CoverSelect(), arguments: arguments);
+            getx.Get.off(() => CoverSelect(), arguments: arguments);
           },
-          child: const Text('下一步'),
+          child: Image.asset(
+            'lib/assets/icons/Send_hor_fill.png',
+            height: 25.r,
+            width: 25.r,
+          ),
         ),
       ),
       body: Column(
@@ -422,7 +414,13 @@ class _CoverSelectState extends State<CoverSelect> {
         widget: InkWell(
           onTap: pickImage,
           child: imgUrl == ''
-              ? Image.asset('lib/assets/icons/Add_round_fill.png')
+              ? Center(
+                  child: Image.asset(
+                    'lib/assets/icons/Add_round_fill.png',
+                    height: 27.r,
+                    width: 27.r,
+                  ),
+                )
               : ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10.r)),
                   child: Image.network(
@@ -443,16 +441,15 @@ class _CoverSelectState extends State<CoverSelect> {
         "image": await MultipartFile.fromFile(file.path, filename: file.name)
       });
 
-      var respone = await Dio().post<String>(
-          HttpOptions.BASE_URL + "/article/imgPost",
-          data: formdata);
-      print(respone);
-
-      print(formdata);
-      setState(() {
-        imgIndex = -1;
-        imgUrl = 'http://10.0.2.2/track-api-nodejs/public/images/article/' +
-            respone.toString();
+      DioUtil().post('/article/imgPost', data: formdata, success: (res) {
+        print(res);
+        setState(() {
+          imgIndex = -1;
+          imgUrl = 'http://10.0.2.2/track-api-nodejs/public/images/article/' +
+              res.toString();
+        });
+      }, error: (error) {
+        print(error);
       });
     }
   }
@@ -464,6 +461,14 @@ class _CoverSelectState extends State<CoverSelect> {
     return Scaffold(
       appBar: CustomAppbar(
         'CoverSelect',
+        leading: InkWell(
+          onTap: () => getx.Get.back(),
+          child: Image.asset(
+            'lib/assets/icons/Refund_back.png',
+            height: 25.r,
+            width: 25.r,
+          ),
+        ),
         ending: InkWell(
           onTap: () {
             if (imgIndex != -1) {
@@ -471,11 +476,23 @@ class _CoverSelectState extends State<CoverSelect> {
             } else {
               arguments['news_img'] = imgUrl;
             }
-            Dio().post(HttpOptions.BASE_URL + '/article/postArticle',
-                data: arguments);
-            print(arguments);
+            print('上传的数据：$arguments');
+            DioUtil().post('/article/postArticle', data: arguments,
+                success: (res) {
+              print(res);
+              if (res['status'] == 0) {
+                getx.Get.back();
+                getx.Get.snackbar('提示', '文章上传成功');
+              }
+            }, error: (error) {
+              print(error);
+            });
           },
-          child: const Text('下一步'),
+          child: Image.asset(
+            'lib/assets/icons/Send_fill.png',
+            height: 25.r,
+            width: 25.r,
+          ),
         ),
       ),
       body: Column(

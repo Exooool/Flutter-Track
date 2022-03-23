@@ -15,7 +15,7 @@ class User {
   late List focus;
   late List collection;
 
-  User();
+  User({this.userId = -1});
 
   User.fromMap(Map<String, dynamic> json) {
     userId = json['user_id'];

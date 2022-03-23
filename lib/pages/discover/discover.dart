@@ -130,9 +130,12 @@ class _DiscoverPageState extends State<DiscoverPage>
                   PublicCard(
                       margin: EdgeInsets.only(top: 25.h),
                       radius: 90.r,
-                      height: 45.r,
-                      width: 45.r,
-                      widget: Icon(Icons.close))
+                      height: 48.r,
+                      width: 48.r,
+                      widget: Center(
+                        child: Image.asset('lib/assets/icons/Close.png',
+                            height: 33.r, width: 33.r),
+                      ))
                 ],
               ),
             ),
@@ -167,7 +170,10 @@ class _DiscoverPageState extends State<DiscoverPage>
           width: 72.r,
           onTap: () => Get.toNamed('/newsEdit'),
           margin: EdgeInsets.only(bottom: 122.h),
-          widget: Icon(Icons.add),
+          widget: Center(
+            child: Image.asset('lib/assets/icons/Add.png',
+                height: 44.r, width: 44.r),
+          ),
         ),
         body: Padding(
           padding: EdgeInsets.only(

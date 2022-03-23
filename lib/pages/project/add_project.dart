@@ -372,11 +372,11 @@ class AddProject extends StatelessWidget {
                       // 集合所有数据
                       var data = {
                         'project_img': c.imgUrl.value,
-                        'endTime': c.endTime.value,
+                        'end_time': c.endTime.value,
                         'single_time': jsonEncode(c.singleTime),
                         'project_title': c.projectTitle.value,
                         'frequency': jsonEncode(c.frequency),
-                        'reminder_time': c.reminderTime.value,
+                        'remainder_time': c.reminderTime.value,
                         'stage_list': jsonEncode(c.stageList)
                       };
 

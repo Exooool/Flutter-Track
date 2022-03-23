@@ -107,7 +107,7 @@ class DioUtil {
     }
   }
 
-  void logPost(String url,
+  logPost(String url,
       {Map<String, dynamic>? data, required success, required error}) async {
     Response response;
     // 设置极光api的认证
@@ -133,8 +133,35 @@ class DioUtil {
     }
   }
 
-  void imgPost(String url,
-      {Map<String, dynamic>? data, required success, required error}) {}
+  // Future<String> imgPost(String url,
+  //     {Map<String, dynamic>? data, required success, required error}) async {
+  //   Response response;
+
+  //   // 取token数据
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var token = prefs.getString("token");
+  //   if (token != null) {
+  //     options.headers["Authorization"] = token;
+
+  //     dio = Dio(options);
+
+  //     try {
+  //       if (data == null) {
+  //         response = await dio.post(url);
+  //       } else {
+  //         response = await dio.post(url, data: data);
+  //       }
+
+  //       if (response.statusCode == 200) {
+  //         success(response.data);
+  //       } else {
+  //         error(response.statusCode, "数据服务出现异常！");
+  //       }
+  //     } on DioError catch (e) {
+  //       error(e);
+  //     }
+  //   }
+  // }
 
   Future<bool> isNet() async {
     try {

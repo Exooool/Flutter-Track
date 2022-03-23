@@ -4,28 +4,28 @@ import 'package:flutter_track/model/user_model.dart';
 import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 
-class UserController extends GetxController {
+class UserModelController extends GetxController {
   RxList target = [].obs;
   RxList collect = [].obs;
   RxList article = [].obs;
-
+  final arguments = Get.arguments;
   var user = User().obs;
 
   getUserInfo() {
-    DioUtil().post('/users/get', success: (resuslt) {
-      print(resuslt);
+    DioUtil().post('/users/get', data: arguments, success: (resuslt) {
+      // print(resuslt);
       user.value = User.fromMap(resuslt['data'][0]);
 
       // 获取用户的资讯
-      DioUtil().post('/news/getUserNews', success: (res) {
-        print('用户发布的资讯$res');
+      DioUtil().post('/news/getUserNews', data: arguments, success: (res) {
+        print('发布的$res');
         article.value = res['data'];
       }, error: (error) {
         print('接口请求错误$error');
       });
 
       // 获取用户的计划
-      DioUtil().post('/project/get', success: (res) {
+      DioUtil().post('/project/get', data: arguments, success: (res) {
         print(res);
         target.value = res['data'];
       }, error: (error) {
@@ -40,8 +40,8 @@ class UserController extends GetxController {
       } else {
         DioUtil().post('/news/getCollectNew', data: {"news_id": list},
             success: (res) {
+          print('收藏的$res');
           collect.value = res['data'];
-          print(res);
         }, error: (error) {
           print('接口请求错误$error');
         });
@@ -55,5 +55,6 @@ class UserController extends GetxController {
   void onInit() {
     super.onInit();
     getUserInfo();
+    // print(user.value.userId);
   }
 }

@@ -7,11 +7,9 @@ import 'package:flutter_track/model/project_model.dart';
 import 'package:flutter_track/pages/components/project_card.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 
-// 测试数据
-import 'package:flutter_track/assets/test.dart';
-
 // 样式导入
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/service/service.dart';
 
 class ProjectPage extends StatefulWidget {
   ProjectPage({Key? key}) : super(key: key);
@@ -91,19 +89,32 @@ class _ProjectPageState extends State<ProjectPage>
           onTap: () {
             Navigator.pushNamed(context, '/add_project');
           },
-          child: Image.asset('lib/assets/icons/Add.png',
-              height: 44.r, width: 44.r),
+          child: Center(
+            child: Image.asset('lib/assets/icons/Add.png',
+                height: 44.r, width: 44.r),
+          ),
         ));
   }
 
   // 获取计划
-  List<Widget> _getProject() {
-    List<Widget> list = [];
-    var l = projectData['project'] as List<dynamic>;
-    list = l.map((e) {
-      return ProjectCard(Project.fromMap(e));
-    }).toList();
-    return list;
+  // List<Widget> _getProject() {
+  //   List<Widget> list = [];
+  //   var l = projectData['project'] as List<dynamic>;
+  //   list = l.map((e) {
+  //     return ProjectCard(Project.fromMap(e));
+  //   }).toList();
+  //   return list;
+  // }
+
+  _getProject() {
+    DioUtil().post('/project/get', success: (res) {
+      print(res);
+      setState(() {
+        projectList = res['data'];
+      });
+    }, error: (error) {
+      print(error);
+    });
   }
 
   // List<Widget> _getGroup(List list) {
@@ -121,6 +132,7 @@ class _ProjectPageState extends State<ProjectPage>
         TabController(length: 2, vsync: this, initialIndex: 0);
     _tabInteriorController =
         TabController(length: 2, vsync: this, initialIndex: 0);
+    _getProject();
   }
 
   @override
@@ -187,9 +199,13 @@ class _ProjectPageState extends State<ProjectPage>
                           ),
                         ),
                       ),
-                      Column(
-                        children: _getProject(),
-                      ),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: projectList.length,
+                          itemBuilder: (context, index) {
+                            return ProjectCard(
+                                Project.fromMap(projectList[index]));
+                          }),
                       Center(
                         child: PublicCard(
                           margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
@@ -204,10 +220,14 @@ class _ProjectPageState extends State<ProjectPage>
                           ),
                         ),
                       ),
-                      Column(
-                        children: _getProject(),
-                      ),
-                      Center(child: projectAddButton())
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: projectList.length,
+                          itemBuilder: (context, index) {
+                            return ProjectCard(
+                                Project.fromMap(projectList[index]));
+                          }),
+                      Center(child: projectAddButton()),
                     ],
                   ),
                 ],

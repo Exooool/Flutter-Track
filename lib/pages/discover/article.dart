@@ -7,6 +7,8 @@ import 'package:flutter_track/model/news_model.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/discover/article_comment.dart';
+import 'package:flutter_track/pages/user/user_model.dart';
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 import 'package:zefyrka/zefyrka.dart';
 
@@ -54,8 +56,44 @@ class _ArticlePageState extends State<ArticlePage>
 
   _getNew() {
     news = Get.arguments['news'];
+    DioUtil().post('/news/view', data: {'news_id': news.newsId},
+        success: (res) {
+      print(res);
+    }, error: (error) {
+      print(error);
+    });
     _controller =
         ZefyrController(NotusDocument.fromJson(jsonDecode(news.newsContent)));
+  }
+
+  // 收藏
+  _star() {
+    DioUtil().post('/news/star', data: {'news_id': news.newsId},
+        success: (res) {
+      print(res);
+      if (res['status'] == 0) {
+        Get.snackbar('提示', '收藏成功');
+      } else {
+        Get.snackbar('提示', '取消收藏');
+      }
+    }, error: (error) {
+      print(error);
+    });
+  }
+
+  // 点赞
+  _like() {
+    DioUtil().post('/news/like', data: {'news_id': news.newsId},
+        success: (res) {
+      print(res);
+      if (res['status'] == 0) {
+        Get.snackbar('提示', '点赞成功');
+      } else {
+        Get.snackbar('提示', '你已经点赞');
+      }
+    }, error: (error) {
+      print(error);
+    });
   }
 
   // Future _getNew() async {
@@ -113,16 +151,23 @@ class _ArticlePageState extends State<ArticlePage>
                   // 作者栏
                   InkWell(
                     onTap: () {
-                      print('点击');
+                      Get.to(() => UserModelPage(),
+                          arguments: {'query_user_id': news.userId});
                     },
                     child: Row(
                       children: <Widget>[
                         ClipOval(
-                          child: Image.network(
-                            news.userImg,
-                            height: 66.r,
-                            width: 66.r,
-                          ),
+                          child: news.userImg == ''
+                              ? Image.asset(
+                                  'lib/assets/images/defaultUserImg.png',
+                                  height: 66.r,
+                                  width: 66.r,
+                                )
+                              : Image.network(
+                                  news.userImg,
+                                  height: 66.r,
+                                  width: 66.r,
+                                ),
                         ),
                         SizedBox(width: 12.w),
                         Text(news.userName)
@@ -185,7 +230,7 @@ class _ArticlePageState extends State<ArticlePage>
                 ),
                 SizedBox(width: 3.w),
                 Text(
-                  news.likeNum.toString(),
+                  '${news.likeNum.toList().length}',
                   style: TextStyle(fontSize: MyFontSize.font10),
                 ),
               ]),
@@ -217,6 +262,7 @@ class _ArticlePageState extends State<ArticlePage>
                   radius: 90.r,
                   height: 72.r,
                   width: 72.r,
+                  onTap: _like,
                   widget: Center(
                       child: Image.asset(
                     'lib/assets/icons/Favorite_fill.png',
@@ -256,6 +302,7 @@ class _ArticlePageState extends State<ArticlePage>
                   radius: 90.r,
                   height: 72.r,
                   width: 72.r,
+                  onTap: _star,
                   widget: Center(
                       child: Image.asset(
                     'lib/assets/icons/Star.png',

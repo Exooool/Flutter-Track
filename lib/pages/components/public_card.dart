@@ -53,6 +53,7 @@ class PublicCard extends StatelessWidget {
   final bool notWhite;
   final Function()? onTap;
   final Function()? onLongPress;
+  final int type;
   const PublicCard(
       {Key? key,
       this.height,
@@ -63,7 +64,8 @@ class PublicCard extends StatelessWidget {
       required this.widget,
       this.notWhite = false,
       this.onTap,
-      this.onLongPress})
+      this.onLongPress,
+      this.type = 0})
       : super(key: key);
 
   @override
@@ -71,25 +73,36 @@ class PublicCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       onLongPress: onLongPress,
-      child: Container(
-          margin: margin,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(radius)),
-              gradient: notWhite
-                  ? MyWidgetStyle.mainLinearGradient
-                  : MyWidgetStyle.secondLinearGradient),
-          height: height,
-          width: width,
-          child: CustomPaint(
-            painter: BorderGradientPainter(
-                radius: radius,
-                strokeWidth: 2,
-                gradient: MyWidgetStyle.borderLinearGradient),
-            child: Container(
+      child: type == 1
+          ? Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(radius)),
+                  color: const Color.fromRGBO(233, 238, 255, 1)),
+              margin: margin,
               padding: padding,
               child: widget,
-            ),
-          )),
+            )
+          : Container(
+              margin: margin,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(radius)),
+                  gradient: notWhite
+                      ? MyWidgetStyle.mainLinearGradient
+                      : MyWidgetStyle.secondLinearGradient),
+              height: height,
+              width: width,
+              child: CustomPaint(
+                painter: BorderGradientPainter(
+                    radius: radius,
+                    strokeWidth: 2,
+                    gradient: MyWidgetStyle.borderLinearGradient),
+                child: Container(
+                  padding: padding,
+                  child: widget,
+                ),
+              )),
     );
   }
 }

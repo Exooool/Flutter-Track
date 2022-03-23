@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:date_format/date_format.dart';
@@ -50,9 +51,8 @@ class BorderGradientPainter extends CustomPainter {
 
 class ArticleCard extends StatelessWidget {
   final Article news;
-  final bool small;
-  const ArticleCard(this.news, {Key? key, this.small = false})
-      : super(key: key);
+  final int type;
+  const ArticleCard(this.news, {Key? key, this.type = 0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +62,7 @@ class ArticleCard extends StatelessWidget {
           child: PublicCard(
             radius: 10.r,
             width: 366.w,
+            type: type,
             // 传递news对象给文章页面
             onTap: () => Get.to(() => ArticlePage(), arguments: {'news': news}),
             widget: Padding(
@@ -94,12 +95,17 @@ class ArticleCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 ClipOval(
-                                  child: Image.network(
-                                    news.userImg,
-                                    height: 24.h,
-                                    width: 24.h,
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: news.userImg == ''
+                                      ? Image.asset(
+                                          'lib/assets/images/defaultUserImg.png',
+                                          height: 24.r,
+                                          width: 24.r,
+                                        )
+                                      : Image.network(
+                                          news.userImg,
+                                          height: 24.r,
+                                          width: 24.r,
+                                        ),
                                 ),
                                 SizedBox(width: 10.w),
                                 Text(
@@ -121,7 +127,7 @@ class ArticleCard extends StatelessWidget {
                             ),
                             SizedBox(height: 8.h),
                             Text(
-                              news.newsContent,
+                              news.content,
                               maxLines: 5,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(fontSize: MyFontSize.font12),
@@ -195,7 +201,7 @@ class ArticleCard extends StatelessWidget {
                           ),
                           SizedBox(width: 3.w),
                           Text(
-                            news.likeNum.toString(),
+                            '${news.likeNum.toList().length}',
                             style: TextStyle(fontSize: MyFontSize.font10),
                           ),
                         ])

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Article {
   late int newsId;
   late String newsTitle;
@@ -6,12 +8,12 @@ class Article {
   late String userImg;
   late String newsTime;
   late int viewNum;
-  late int likeNum;
+  late List likeNum;
   late int commentNum;
   late String newsContent;
   late String hashtag;
   late String newsImg;
-
+  late String content;
   // 定义命名构造函数
   Article.fromMap(Map<String, dynamic> json) {
     newsId = json['news_id'];
@@ -19,7 +21,7 @@ class Article {
     // author = User.fromMap(json['author']);
     newsTime = json['news_time'];
     viewNum = json['view_num'];
-    likeNum = json['like_num'];
+    likeNum = jsonDecode(json['like_num']);
     commentNum = json['comment_num'];
     newsContent = json['news_content'];
     newsImg = json['news_img'];
@@ -27,6 +29,7 @@ class Article {
     userId = json['user_id'];
     userName = json['user_name'];
     userImg = json['user_img'];
+    content = json['content'];
     // comment = (json["comment"] as List<dynamic>).map((item) {
     //   return Comment.fromMap(item);
     // }).toList();

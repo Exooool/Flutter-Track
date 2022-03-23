@@ -48,7 +48,7 @@ class ProjectCard extends StatelessWidget {
                       widget: Container()),
                   SizedBox(width: 17.w),
                   Text(
-                    project.projectTtile,
+                    project.projectTitle,
                     style: TextStyle(fontSize: MyFontSize.font18),
                   )
                 ],
@@ -99,7 +99,7 @@ class ProjectCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          project.projectTtile,
+                          project.projectTitle,
                           style: TextStyle(
                               fontSize: MyFontSize.font18,
                               fontWeight: FontWeight.w600,
@@ -109,13 +109,13 @@ class ProjectCard extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: MyFontSize.font10,
                                 color: MyColor.fontBlack)),
-                        Text(
-                          project.stageList[0].reminderTime,
-                          style: TextStyle(
-                              fontSize: MyFontSize.font12,
-                              fontWeight: FontWeight.w600,
-                              color: MyColor.fontBlack),
-                        )
+                        // Text(
+                        //   project.stageList[0].remainder_time,
+                        //   style: TextStyle(
+                        //       fontSize: MyFontSize.font12,
+                        //       fontWeight: FontWeight.w600,
+                        //       color: MyColor.fontBlack),
+                        // )
                       ],
                     ),
                   )

@@ -1,8 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_track/assets/test.dart';
 
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 
@@ -20,15 +17,21 @@ class UserPage extends StatelessWidget {
   final UserController c = Get.put(UserController());
 
   // 侧边按钮
-  Widget slideButton(String title, Function() onPressed) {
-    return CustomButton(
-        title: title,
-        shadow: false,
-        height: 24.h,
-        width: 80.w,
+  Widget slideButton(String title, Function() onTap) {
+    return PublicCard(
+        radius: 90.r,
+        notWhite: true,
+        padding:
+            EdgeInsets.only(top: 5.h, bottom: 5.h, left: 12.w, right: 12.w),
         margin: EdgeInsets.only(bottom: 12.h, left: 6.w, right: 6.w),
-        fontSize: MyFontSize.font14,
-        onPressed: onPressed);
+        onTap: onTap,
+        widget: Center(
+          child: Text(
+            title,
+            style: TextStyle(
+                fontSize: MyFontSize.font14, color: MyColor.fontWhite),
+          ),
+        ));
   }
 
   @override
