@@ -11,6 +11,8 @@ class Project {
   late String secret;
   late int remainderTime;
   late List stageList;
+  late List studyTime;
+  late DateTime createTime;
   Project.fromMap(Map<String, dynamic> json) {
     projectImg = json['project_img'];
     projectId = json['project_id'];
@@ -22,6 +24,8 @@ class Project {
     singleTime = jsonDecode(json['single_time']);
     remainderTime = json['remainder_time'];
     secret = json['secret'];
+    studyTime = jsonDecode(json['study_time']);
+    createTime = DateTime.parse(json['create_time']);
     // stageList = (json['stageList'] as List<dynamic>).map((item) {
     //   return Stage.fromMap(item);
     // }).toList();

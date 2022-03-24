@@ -9,7 +9,11 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ProjectCard extends StatelessWidget {
   final Project project;
-  const ProjectCard(this.project, {Key? key}) : super(key: key);
+  final DateTime now = DateTime.now();
+  late String stage;
+  late int nowStage;
+
+  ProjectCard(this.project, {Key? key}) : super(key: key);
 
   // 颜色对应
   // final Map<String, Color> tfColor = const {
@@ -29,6 +33,60 @@ class ProjectCard extends StatelessWidget {
   //   "fColor14": Color.fromRGBO(255, 255, 255, 1),
   // };
 
+  checkStage() {
+    int totalStage = project.stageList.length;
+    nowStage = totalStage;
+
+    if (project.stageList[0]['endTime'] != null) {
+      // 这是分了阶段的判断
+      for (var i = 0; i < totalStage; i++) {
+        DateTime set = DateTime.parse(project.stageList[i]['endTime']);
+        if (set.isAfter(now)) {
+          // 如果第i阶段的截止时间比现在的时间大，说明现在处于第i阶段
+          nowStage = i + 1;
+          break;
+        }
+      }
+    } else {
+      // 这是没有分阶段的判断
+      DateTime set = DateTime.parse(project.endTime);
+      if (set.isAfter(now)) {
+        nowStage = 1;
+      }
+    }
+
+    stage = '阶段 $nowStage/$totalStage';
+
+    // print(now);
+    // print(project.stageList);
+    // print(project.endTime);
+    // print('当前时间: $now，现在处于$nowStage/$totalStage');
+  }
+
+  String frequency() {
+    final week = ['一', '二', '三', '四', '五', '六', '日'];
+
+    String listConcat(data) {
+      String str = '';
+      List list = data;
+      if (list.length == 7) {
+        str = '每天';
+      } else {
+        for (var i = 0; i < list.length; i++) {
+          str += ' ' + week[list[i]];
+        }
+      }
+      return str;
+    }
+
+    if (project.stageList[0]['endTime'] != null) {
+      return listConcat(project.stageList[nowStage - 1]['frequency']['week']) +
+          project.stageList[nowStage - 1]['frequency']['time'];
+    } else {
+      return listConcat(project.frequency['week']) + project.frequency['time'];
+    }
+  }
+
   Widget longPressDialog() {
     return SizedBox(
       height: 266.h,
@@ -42,25 +100,63 @@ class ProjectCard extends StatelessWidget {
               widget: Row(
                 children: <Widget>[
                   PublicCard(
-                      radius: 90.r,
-                      height: 50.r,
-                      width: 50.r,
-                      widget: Container()),
+                    radius: 90.r,
+                    height: 50.r,
+                    width: 50.r,
+                    widget: Center(
+                      child: project.projectImg.contains('http')
+                          ? ClipOval(
+                              child: Image.network(
+                              project.projectImg,
+                              height: 60.r,
+                              width: 60.r,
+                              fit: BoxFit.cover,
+                            ))
+                          : Image.asset('lib/assets/images/project' +
+                              project.projectImg +
+                              '.png'),
+                    ),
+                  ),
                   SizedBox(width: 17.w),
                   Text(
                     project.projectTitle,
-                    style: TextStyle(fontSize: MyFontSize.font18),
+                    style: TextStyle(
+                        fontSize: MyFontSize.font18,
+                        fontWeight: FontWeight.w600,
+                        color: MyColor.fontBlack),
                   )
                 ],
               )),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              PublicCard(
-                  radius: 90.r, height: 72.r, width: 72.r, widget: Container()),
+              Column(children: <Widget>[
+                PublicCard(
+                    radius: 90.r,
+                    height: 72.r,
+                    width: 72.r,
+                    margin: EdgeInsets.only(bottom: 8.h),
+                    widget: Center(
+                      child: Image.asset('lib/assets/icons/Pen_fill.png',
+                          height: 44.r, width: 44.r),
+                    )),
+                Text('修改计划', style: TextStyle(fontSize: MyFontSize.font16))
+              ]),
               SizedBox(width: 24.w),
-              PublicCard(
-                  radius: 90.r, height: 72.r, width: 72.r, widget: Container()),
+              Column(
+                children: [
+                  PublicCard(
+                      radius: 90.r,
+                      height: 72.r,
+                      width: 72.r,
+                      margin: EdgeInsets.only(bottom: 8.h),
+                      widget: Center(
+                        child: Image.asset('lib/assets/icons/Trash.png',
+                            height: 44.r, width: 44.r),
+                      )),
+                  Text('删除计划', style: TextStyle(fontSize: MyFontSize.font16))
+                ],
+              )
             ],
           )
         ],
@@ -70,6 +166,9 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 计算当前阶段
+    checkStage();
+
     return PublicCard(
         height: 72.h,
         radius: 90.r,
@@ -89,7 +188,19 @@ class ProjectCard extends StatelessWidget {
                     radius: 90.r,
                     height: 60.r,
                     width: 60.r,
-                    widget: Icon(Icons.ac_unit),
+                    widget: Center(
+                      child: project.projectImg.contains('http')
+                          ? ClipOval(
+                              child: Image.network(
+                              project.projectImg,
+                              height: 60.r,
+                              width: 60.r,
+                              fit: BoxFit.cover,
+                            ))
+                          : Image.asset('lib/assets/images/project' +
+                              project.projectImg +
+                              '.png'),
+                    ),
                   ),
                   // 计划信息
                   Padding(
@@ -105,17 +216,19 @@ class ProjectCard extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                               color: MyColor.fontBlack),
                         ),
-                        Text('已加入小组',
-                            style: TextStyle(
-                                fontSize: MyFontSize.font10,
-                                color: MyColor.fontBlack)),
-                        // Text(
-                        //   project.stageList[0].remainder_time,
-                        //   style: TextStyle(
-                        //       fontSize: MyFontSize.font12,
-                        //       fontWeight: FontWeight.w600,
-                        //       color: MyColor.fontBlack),
-                        // )
+                        Row(
+                          children: <Widget>[
+                            Text(stage,
+                                style: TextStyle(
+                                    fontSize: MyFontSize.font12,
+                                    color: MyColor.fontBlack)),
+                            SizedBox(width: 12.w),
+                            Text(frequency(),
+                                style: TextStyle(
+                                    fontSize: MyFontSize.font12,
+                                    color: MyColor.fontBlack))
+                          ],
+                        )
                       ],
                     ),
                   )

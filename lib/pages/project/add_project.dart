@@ -244,6 +244,7 @@ class AddProject extends StatelessWidget {
       body: GetX<AddProjectController>(
         builder: (controller) {
           return ListView(
+            physics: const BouncingScrollPhysics(),
             padding: EdgeInsets.only(bottom: 109.h),
             children: <Widget>[
               // 头像
@@ -370,17 +371,9 @@ class AddProject extends StatelessWidget {
                     width: 104.w,
                     onPressed: () {
                       // 集合所有数据
-                      var data = {
-                        'project_img': c.imgUrl.value,
-                        'end_time': c.endTime.value,
-                        'single_time': jsonEncode(c.singleTime),
-                        'project_title': c.projectTitle.value,
-                        'frequency': jsonEncode(c.frequency),
-                        'remainder_time': c.reminderTime.value,
-                        'stage_list': jsonEncode(c.stageList)
-                      };
 
                       bool flag = true;
+                      String endTime = c.endTime.value;
                       // 进行数据验证
                       if (c.projectTitle.value == '') {
                         flag = false;
@@ -389,16 +382,20 @@ class AddProject extends StatelessWidget {
                         for (var i = 0; i < c.stageList.length; i++) {
                           if (c.stageList[i]['content'] == null ||
                               c.stageList[i]['content'] == '' ||
+                              c.imgUrl.value == '' ||
                               c.stageList[i]['endTime'] == '' ||
                               c.stageList[i]['endTime'] == null ||
-                              c.stageList[i]['singleTime']['type'] == null ||
-                              c.stageList[i]['frequency']['week'] == null ||
+                              c.stageList[i]['singleTime'] == null ||
+                              c.stageList[i]['frequency'] == null ||
                               c.stageList[i]['reminderTime'] == 9) {
                             flag = false;
                           }
                         }
+                        endTime = c.stageList[c.stageList.length - 1]
+                                ['endTime'] ??
+                            '';
                       } else {
-                        // 判断部分阶段
+                        // 判断不分阶段
                         if (c.endTime.value == '' ||
                             c.singleTime['type'] == null ||
                             c.frequency['week'] == null ||
@@ -406,6 +403,19 @@ class AddProject extends StatelessWidget {
                           flag = false;
                         }
                       }
+
+                      // 统一
+                      var data = {
+                        'project_img': c.imgUrl.value,
+                        'end_time': endTime,
+                        'single_time': jsonEncode(c.singleTime),
+                        'project_title': c.projectTitle.value,
+                        'frequency': jsonEncode(c.frequency),
+                        'remainder_time': c.reminderTime.value,
+                        'stage_list': jsonEncode(c.stageList)
+                      };
+
+                      print(data);
 
                       if (flag) {
                         if (c.isJoin.value == 0) {

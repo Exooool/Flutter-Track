@@ -1,7 +1,6 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
-import 'package:flutter_track/config/http_config.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/service/service.dart';

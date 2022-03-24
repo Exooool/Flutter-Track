@@ -26,7 +26,8 @@ class _ProjectPageState extends State<ProjectPage>
   late TabController _tabInteriorController;
 
   Map groupList = {'matched': [], 'matching': []};
-  List projectList = [];
+  List projectList1 = [];
+  List projectList2 = [];
   // 自定义tab样式
   Widget mainTab(String content, {bool show = true}) {
     return show
@@ -108,10 +109,24 @@ class _ProjectPageState extends State<ProjectPage>
 
   _getProject() {
     DioUtil().post('/project/get', success: (res) {
-      print(res);
-      setState(() {
-        projectList = res['data'];
-      });
+      // print(res);
+      // setState(() {
+      //   list = res['data'];
+      // });
+
+      DateTime now = DateTime.now();
+      List list = res['data'];
+      for (var i = 0; i < list.length; i++) {
+        DateTime time = DateTime.parse(list[i]['create_time']);
+        print(time.difference(now).inHours);
+        // 判断创建时间是否小于一个小时，小于放在projectlist1，否则放在projectlist2
+        if (time.difference(now).inHours < 1) {
+          projectList1.add(list[i]);
+        } else {
+          projectList2.add(list[i]);
+        }
+      }
+      setState(() {});
     }, error: (error) {
       print(error);
     });
@@ -183,7 +198,7 @@ class _ProjectPageState extends State<ProjectPage>
                   ListView(
                     physics: const BouncingScrollPhysics(),
                     padding: EdgeInsets.only(
-                        top: 35.h, left: 24.w, right: 24.w, bottom: 100.h),
+                        top: 35.h, left: 24.w, right: 24.w, bottom: 150.h),
                     children: [
                       Center(
                         child: PublicCard(
@@ -201,10 +216,12 @@ class _ProjectPageState extends State<ProjectPage>
                       ),
                       ListView.builder(
                           shrinkWrap: true,
-                          itemCount: projectList.length,
+                          padding: EdgeInsets.zero,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: projectList1.length,
                           itemBuilder: (context, index) {
                             return ProjectCard(
-                                Project.fromMap(projectList[index]));
+                                Project.fromMap(projectList1[index]));
                           }),
                       Center(
                         child: PublicCard(
@@ -222,10 +239,12 @@ class _ProjectPageState extends State<ProjectPage>
                       ),
                       ListView.builder(
                           shrinkWrap: true,
-                          itemCount: projectList.length,
+                          padding: EdgeInsets.zero,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: projectList2.length,
                           itemBuilder: (context, index) {
                             return ProjectCard(
-                                Project.fromMap(projectList[index]));
+                                Project.fromMap(projectList2[index]));
                           }),
                       Center(child: projectAddButton()),
                     ],
