@@ -204,6 +204,7 @@ class UserPage extends StatelessWidget {
                       // tab切换栏
                       Expanded(
                           child: TwoLayerTab(
+                        type: 1,
                         exteriorTabs: const [
                           {'title': '目标', 'nums': '08'},
                           {'title': '收藏', 'nums': '99+'},

@@ -89,6 +89,7 @@ flutter:
       - lib/assets/images/
       - lib/assets/icons/
       - lib/assets/gifs/
+      - lib/assets/clock/
       
   fonts:
     - family: MyIcons

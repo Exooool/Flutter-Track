@@ -15,13 +15,15 @@ class TwoLayerTab extends StatefulWidget {
   final List interiorTabs;
   final List exteriorViews;
   final List interiorViews;
-  const TwoLayerTab({
-    Key? key,
-    required this.exteriorTabs,
-    required this.interiorTabs,
-    required this.exteriorViews,
-    required this.interiorViews,
-  }) : super(key: key);
+  final int type; // 1表示个人主页  2表示他人主页
+  const TwoLayerTab(
+      {Key? key,
+      required this.exteriorTabs,
+      required this.interiorTabs,
+      required this.exteriorViews,
+      required this.interiorViews,
+      required this.type})
+      : super(key: key);
 
   @override
   State<TwoLayerTab> createState() => _TwoLayerTabState();
@@ -79,7 +81,10 @@ class _TwoLayerTabState extends State<TwoLayerTab>
   List<Widget> _getProject(List projectList) {
     List<Widget> list = [];
     list = projectList.map((e) {
-      return ProjectCard(Project.fromMap(e));
+      return ProjectCard(
+        Project.fromMap(e),
+        type: widget.type,
+      );
     }).toList();
     return list;
   }

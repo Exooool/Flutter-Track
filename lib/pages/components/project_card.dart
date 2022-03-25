@@ -10,28 +10,14 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 class ProjectCard extends StatelessWidget {
   final Project project;
   final DateTime now = DateTime.now();
+  final int type; //0表示默认在project页能删除和修改计划、1表示在个人页展示只能设置可见与不可见，2表示在他人主页不能进行任何操作
   late String stage;
   late int nowStage;
-
-  ProjectCard(this.project, {Key? key}) : super(key: key);
-
-  // 颜色对应
-  // final Map<String, Color> tfColor = const {
-  //   "fColor1": Color.fromRGBO(255, 128, 128, 1),
-  //   "fColor2": Color.fromRGBO(255, 191, 128, 1),
-  //   "fColor3": Color.fromRGBO(255, 255, 128, 1),
-  //   "fColor4": Color.fromRGBO(191, 255, 128, 1),
-  //   "fColor5": Color.fromRGBO(128, 255, 128, 1),
-  //   "fColor6": Color.fromRGBO(128, 255, 191, 1),
-  //   "fColor7": Color.fromRGBO(128, 255, 255, 1),
-  //   "fColor8": Color.fromRGBO(128, 191, 255, 1),
-  //   "fColor9": Color.fromRGBO(128, 128, 255, 1),
-  //   "fColor10": Color.fromRGBO(191, 128, 255, 1),
-  //   "fColor11": Color.fromRGBO(255, 128, 255, 1),
-  //   "fColor12": Color.fromRGBO(255, 128, 191, 1),
-  //   "fColor13": Color.fromRGBO(0, 0, 0, 1),
-  //   "fColor14": Color.fromRGBO(255, 255, 255, 1),
-  // };
+  late Function? delete;
+  late Function? change;
+  ProjectCard(this.project,
+      {Key? key, required this.type, this.delete, this.change})
+      : super(key: key);
 
   checkStage() {
     int totalStage = project.stageList.length;
@@ -135,6 +121,10 @@ class ProjectCard extends StatelessWidget {
                     radius: 90.r,
                     height: 72.r,
                     width: 72.r,
+                    onTap: () {
+                      change!(project.projectId);
+                      Get.back();
+                    },
                     margin: EdgeInsets.only(bottom: 8.h),
                     widget: Center(
                       child: Image.asset('lib/assets/icons/Pen_fill.png',
@@ -149,6 +139,10 @@ class ProjectCard extends StatelessWidget {
                       radius: 90.r,
                       height: 72.r,
                       width: 72.r,
+                      onTap: () {
+                        delete!(project.projectId);
+                        Get.back();
+                      },
                       margin: EdgeInsets.only(bottom: 8.h),
                       widget: Center(
                         child: Image.asset('lib/assets/icons/Trash.png',
@@ -173,7 +167,10 @@ class ProjectCard extends StatelessWidget {
         height: 72.h,
         radius: 90.r,
         onLongPress: () {
-          Get.bottomSheet(longPressDialog(), barrierColor: Colors.transparent);
+          if (type == 0) {
+            Get.bottomSheet(longPressDialog(),
+                barrierColor: Colors.transparent);
+          } else if (type == 1) {}
         },
         margin: EdgeInsets.only(top: 6.h, bottom: 6.h),
         widget: Padding(

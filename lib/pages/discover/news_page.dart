@@ -69,13 +69,15 @@ class _NewsPageState extends State<NewsPage> {
       print('当前请求长度为$listIndex，获取数据长度为${res.length}');
       listIndex += res.length;
 
-      setState(() {
-        if (refersh) {
-          datalist = res;
-        } else {
-          datalist.addAll(res);
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (refersh) {
+            datalist = res;
+          } else {
+            datalist.addAll(res);
+          }
+        });
+      }
     }, error: (error) {});
   }
 

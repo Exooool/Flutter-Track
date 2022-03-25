@@ -22,94 +22,6 @@ class InformationPage extends StatelessWidget {
 
   InformationPage({Key? key}) : super(key: key);
 
-  String getData() {
-    List weekList;
-    List timeList;
-    weekList = (informationData['data'] as List<dynamic>).map((item) {
-      return item['week'];
-    }).toList();
-
-    timeList = (informationData['data'] as List<dynamic>).map((item) {
-      return item['time'];
-    }).toList();
-
-    // print(weekList);
-    // print(timeList);
-
-    var list = {
-      'textStyle': {'color': 'rgba(0, 0, 0, 1)'},
-      'tooltip': {'trigger': "axis"},
-      'xAxis': {
-        'type': 'category',
-        'axisTick': {'show': false},
-        'axisLine': {'show': false},
-        'data': weekList
-      },
-      'yAxis': {
-        'min': 0,
-        'offset': 14.w,
-        'axisTick': {
-          'inside': true,
-          'show': true,
-          'length': 12.w,
-          'lineStyle': {'color': "rgba(0, 0, 0, 0.1)"}
-        },
-        'minorTick': {
-          'show': true,
-          'splitNumber': 3,
-          'length': 12.w,
-          'lineStyle': {'color': "rgba(0, 0, 0, 0.1)"}
-        },
-        'splitLine': false,
-        'type': 'value',
-        'axisLabel': {'formatter': '{value}h'},
-        'position': 'right'
-      },
-      'dataZoom': [
-        {
-          'id': 'dataZoomX',
-          'type': 'inside',
-          'startValue': 0,
-          'endValue': 30,
-          'throttle': 0,
-          'filterMode': 'filter'
-        }
-      ],
-      'grid': {
-        'top': '12px',
-        'left': '0px',
-        'right': '48px',
-        'bottom': '36px',
-      },
-      'backgroundColor': '',
-      'series': [
-        {
-          'data': timeList,
-          'type': 'bar',
-          'showBackground': true,
-          'backgroundStyle': {
-            'borderWidth': 0.1,
-            'borderColor': "rgba(107, 101, 244, 1)",
-            'borderRadius': [30, 30, 0, 0],
-            'color': "rgba(255, 255, 255, 0)"
-          },
-          'itemStyle': {
-            'normal': {
-              'color': 'rgba(107, 101, 244, 1)',
-              //柱形图圆角，初始化效果
-              'barBorderRadius': [30, 30, 0, 0]
-            }
-          }
-        }
-      ]
-    };
-
-    // print(list);
-    return const JsonEncoder().convert(list);
-  }
-
-  final List weekList = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-
   // 排行榜数据
   final rankingListData = [
     {
@@ -118,7 +30,7 @@ class InformationPage extends StatelessWidget {
   ];
 
   // 排行榜
-  Widget rankingList(int index, String userName, String school) {
+  Widget rankingList(int index, String img, String userName, String school) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       child: Row(
@@ -126,11 +38,18 @@ class InformationPage extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text('$index.', style: MyFontStyle.rankTitle),
-              SizedBox(width: 22.w),
-              const ClipOval(
-                child: Icon(Icons.person),
+              SizedBox(
+                width: 22.w,
+                child: Text('$index.', style: MyFontStyle.rankTitle),
               ),
+              SizedBox(width: 22.w),
+              ClipOval(
+                child: img == ''
+                    ? Image.asset('lib/assets/images/defaultUserImg.png',
+                        height: 36.r, width: 36.r)
+                    : Image.network(img, height: 36.r, width: 36.r),
+              ),
+              SizedBox(width: 12.w),
               Text(userName, style: MyFontStyle.rankUser)
             ],
           ),
@@ -182,14 +101,14 @@ class InformationPage extends StatelessWidget {
                               fontSize: MyFontSize.font16),
                         ),
                         Text(
-                          '${informationData['level']}',
+                          '${c.user.value.exp ~/ 1000}',
                           style: TextStyle(
                               color: MyColor.fontBlack,
                               fontSize: MyFontSize.font19),
                         ),
                         Expanded(
                             child: LinearPercentIndicator(
-                                percent: 0.5,
+                                percent: (c.user.value.exp % 1000) / 1000,
                                 barRadius: const Radius.circular(48),
                                 // backgroundColor: Colors.transparent,
                                 linearGradient:
@@ -197,12 +116,23 @@ class InformationPage extends StatelessWidget {
                       ],
                     ),
                   )),
-                  CustomButton(
-                      margin: EdgeInsets.only(left: 12.w),
-                      title: '签到',
-                      height: 42.h,
-                      width: 80.w,
-                      onPressed: () {})
+                  Opacity(
+                    opacity: c.isSign.value ? 0.5 : 1,
+                    child: CustomButton(
+                        margin: EdgeInsets.only(left: 12.w),
+                        title: '签到',
+                        height: 42.h,
+                        width: 80.w,
+                        onPressed: () {
+                          if (!c.isSign.value) {
+                            c.sign();
+                            Get.snackbar('提示', '签到成功');
+                            c.getInformation();
+                          } else {
+                            Get.snackbar('提示', '你已经签到过了');
+                          }
+                        }),
+                  )
                 ],
               ),
 
@@ -212,15 +142,16 @@ class InformationPage extends StatelessWidget {
                 Center(
                   child: Column(
                     children: <Widget>[
+                      SizedBox(height: 10.h),
                       Image.asset(
-                        'lib/assets/images/logo.png',
+                        c.clock(),
                         height: 154.r,
                         width: 154.r,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('5',
+                          Text('${c.nowDatStudyTime.value ~/ 60}',
                               style: TextStyle(
                                   fontSize: MyFontSize.font28,
                                   fontWeight: FontWeight.w600)),
@@ -228,7 +159,7 @@ class InformationPage extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: MyFontSize.font14,
                                   fontWeight: FontWeight.w600)),
-                          Text('18',
+                          Text('${c.nowDatStudyTime.value % 60}',
                               style: TextStyle(
                                   fontSize: MyFontSize.font28,
                                   fontWeight: FontWeight.w600)),
@@ -252,43 +183,51 @@ class InformationPage extends StatelessWidget {
                   children: [
                     DefaultTextStyle(
                         style: const TextStyle(color: MyColor.fontBlack),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('平均每天',
-                                style: TextStyle(fontSize: MyFontSize.font12)),
-                            Row(
-                              children: [
-                                Text('5',
-                                    style: TextStyle(
-                                        fontSize: MyFontSize.font28,
-                                        fontWeight: FontWeight.w600)),
-                                Text('小时',
-                                    style: TextStyle(
-                                        fontSize: MyFontSize.font14,
-                                        fontWeight: FontWeight.w600)),
-                                Text('18',
-                                    style: TextStyle(
-                                        fontSize: MyFontSize.font28,
-                                        fontWeight: FontWeight.w600)),
-                                Text('分钟',
-                                    style: TextStyle(
-                                        fontSize: MyFontSize.font14,
-                                        fontWeight: FontWeight.w600))
-                              ],
-                            ),
-                            Text('2022年1月16号至1月22号',
-                                style: TextStyle(fontSize: MyFontSize.font12))
-                          ],
-                        )),
+                        child: c.averDayStudyTime.value == 0
+                            ? const SizedBox()
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('平均每天',
+                                      style: TextStyle(
+                                          fontSize: MyFontSize.font12)),
+                                  Row(
+                                    children: [
+                                      Text('${c.averDayStudyTime.value ~/ 60}',
+                                          style: TextStyle(
+                                              fontSize: MyFontSize.font28,
+                                              fontWeight: FontWeight.w600)),
+                                      Text('小时',
+                                          style: TextStyle(
+                                              fontSize: MyFontSize.font14,
+                                              fontWeight: FontWeight.w600)),
+                                      Text('${c.averDayStudyTime.value % 60}',
+                                          style: TextStyle(
+                                              fontSize: MyFontSize.font28,
+                                              fontWeight: FontWeight.w600)),
+                                      Text('分钟',
+                                          style: TextStyle(
+                                              fontSize: MyFontSize.font14,
+                                              fontWeight: FontWeight.w600))
+                                    ],
+                                  ),
+                                  Text('2022年1月16号至1月22号',
+                                      style: TextStyle(
+                                          fontSize: MyFontSize.font12))
+                                ],
+                              )),
                     Container(
                       color: Colors.transparent,
                       // echarts使用flutter webview会出现背景颜色是白色的情况
                       // 解决方法修改echarts源码 在它的build方法中的webview构造函数中添加以下代码
                       // backgroundColor: Colors.transparent
-                      child: Echarts(
-                        option: getData(),
-                      ),
+                      child: c.averDayStudyTime.value == 0
+                          ? const Center(
+                              child: Text('你还没有学习过，快去创建一个计划吧'),
+                            )
+                          : Echarts(
+                              option: c.getData(),
+                            ),
                       height: 200.h,
                     ),
                   ],
@@ -296,16 +235,19 @@ class InformationPage extends StatelessWidget {
                   subTitle: const ['周', '月', '年'],
                   onTapOne: () {
                     c.dataBarIndex.value = 0;
+                    c.dataTime.value = 7;
                   },
                   onTapTwo: () {
                     c.dataBarIndex.value = 1;
+                    c.dataTime.value = 30;
                   },
                   onTapThree: () {
                     c.dataBarIndex.value = 2;
+                    c.dataTime.value = 365;
                   }),
               SizedBox(height: 24.h),
               UnionWidget(
-                  height: 600,
+                  height: 600.h,
                   index: c.rankBarIndex.value,
                   children: [
                     const SizedBox(
@@ -314,10 +256,13 @@ class InformationPage extends StatelessWidget {
                     ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 10,
+                        itemCount: c.rankList.length,
                         itemBuilder: (context, index) {
                           return rankingList(
-                              index + 1, 'Gutabled', '北京理工大学珠海学院');
+                              index + 1,
+                              c.rankList[index]['user_img'],
+                              c.rankList[index]['user_name'],
+                              c.rankList[index]['college']);
                         })
                   ],
                   title: '排行榜',

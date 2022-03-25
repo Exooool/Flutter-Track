@@ -14,6 +14,7 @@ class User {
   late List fans;
   late List focus;
   late List collection;
+  late String? lastSign;
 
   User({this.userId = -1});
 
@@ -31,5 +32,6 @@ class User {
     fans = jsonDecode(json['fans']);
     focus = jsonDecode(json['focus']);
     collection = jsonDecode(json['collection']);
+    lastSign = json['last_sign'];
   }
 }

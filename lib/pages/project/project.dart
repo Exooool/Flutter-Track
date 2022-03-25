@@ -10,6 +10,7 @@ import 'package:flutter_track/pages/components/public_card.dart';
 // 样式导入
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/service/service.dart';
+import 'package:get/get.dart';
 
 class ProjectPage extends StatefulWidget {
   ProjectPage({Key? key}) : super(key: key);
@@ -114,13 +115,17 @@ class _ProjectPageState extends State<ProjectPage>
       //   list = res['data'];
       // });
 
+      // 清空数据 然后请求替换数据
+      projectList1 = [];
+      projectList2 = [];
+
       DateTime now = DateTime.now();
       List list = res['data'];
       for (var i = 0; i < list.length; i++) {
         DateTime time = DateTime.parse(list[i]['create_time']);
-        print(time.difference(now).inHours);
+        // print(time.difference(now).inHours);
         // 判断创建时间是否小于一个小时，小于放在projectlist1，否则放在projectlist2
-        if (time.difference(now).inHours < 1) {
+        if (time.difference(now).inHours.abs() < 1) {
           projectList1.add(list[i]);
         } else {
           projectList2.add(list[i]);
@@ -221,7 +226,21 @@ class _ProjectPageState extends State<ProjectPage>
                           itemCount: projectList1.length,
                           itemBuilder: (context, index) {
                             return ProjectCard(
-                                Project.fromMap(projectList1[index]));
+                              Project.fromMap(projectList1[index]),
+                              delete: (id) {
+                                DioUtil().post('/project/remove',
+                                    data: {'project_id': id}, success: (res) {
+                                  print(res);
+
+                                  _getProject();
+                                  Get.snackbar('提示', '删除成功');
+                                }, error: (error) {
+                                  print(error);
+                                });
+                              },
+                              change: () {},
+                              type: 0,
+                            );
                           }),
                       Center(
                         child: PublicCard(
@@ -244,7 +263,21 @@ class _ProjectPageState extends State<ProjectPage>
                           itemCount: projectList2.length,
                           itemBuilder: (context, index) {
                             return ProjectCard(
-                                Project.fromMap(projectList2[index]));
+                              Project.fromMap(projectList2[index]),
+                              delete: (id) {
+                                DioUtil().post('/project/remove',
+                                    data: {'project_id': id}, success: (res) {
+                                  print(res);
+
+                                  _getProject();
+                                  Get.snackbar('提示', '删除成功');
+                                }, error: (error) {
+                                  print(error);
+                                });
+                              },
+                              change: () {},
+                              type: 0,
+                            );
                           }),
                       Center(child: projectAddButton()),
                     ],
