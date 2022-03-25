@@ -52,7 +52,7 @@ class DioUtil {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
-    if (token == null) {
+    if (token == null || token == '') {
       return;
     }
     options.headers["Authorization"] = token;
@@ -83,7 +83,7 @@ class DioUtil {
     // 取token数据
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
-    if (token == null) {
+    if (token == null || token == '') {
       return;
     }
     options.headers["Authorization"] = token;

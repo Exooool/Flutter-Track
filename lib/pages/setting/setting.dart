@@ -5,13 +5,14 @@ import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/expansion_list.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
 
-  Widget itemRow(String title, {Function()? function, bool inner = true}) {
+  Widget itemRow(String title, {Function()? onTap, bool inner = true}) {
     return InkWell(
-      onTap: function,
+      onTap: onTap,
       child: PublicCard(
           height: inner ? 24.h : 36.h,
           margin: EdgeInsets.only(bottom: 12.h),
@@ -138,7 +139,11 @@ class SettingPage extends StatelessWidget {
           itemRow('关于我们', inner: false),
           itemRow('意见反馈', inner: false),
           itemRow('联系我们', inner: false),
-          itemRow('退出登陆', inner: false),
+          itemRow('退出登陆', inner: false, onTap: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setString('token', '');
+            Get.offAllNamed('/log');
+          }),
         ],
       ),
     );

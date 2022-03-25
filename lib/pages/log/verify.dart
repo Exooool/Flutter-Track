@@ -127,6 +127,8 @@ class _VerifyPageState extends State<VerifyPage> {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setString('token', res.data['token']);
 
+                print('用户登录成功token为：${res.data['token']}');
+
                 if (res.data['first']) {
                   Get.offNamed('/sex_info');
                 } else {

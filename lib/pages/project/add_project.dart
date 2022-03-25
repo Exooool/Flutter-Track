@@ -52,7 +52,6 @@ class AddProject extends StatelessWidget {
                           child: component,
                         )
                       : TextField(
-                          controller: TextEditingController(text: value),
                           onChanged: (value) {
                             onChanged!(value);
                           },
@@ -399,6 +398,7 @@ class AddProject extends StatelessWidget {
                         if (c.endTime.value == '' ||
                             c.singleTime['type'] == null ||
                             c.frequency['week'] == null ||
+                            c.imgUrl.value == '' ||
                             c.reminderTime.value == 9) {
                           flag = false;
                         }

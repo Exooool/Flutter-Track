@@ -13,6 +13,7 @@ class ProjectCard extends StatelessWidget {
   final int type; //0表示默认在project页能删除和修改计划、1表示在个人页展示只能设置可见与不可见，2表示在他人主页不能进行任何操作
   late String stage;
   late int nowStage;
+  late int projectLength;
   late Function? delete;
   late Function? change;
   ProjectCard(this.project,
@@ -43,6 +44,10 @@ class ProjectCard extends StatelessWidget {
 
     stage = '阶段 $nowStage/$totalStage';
 
+    DateTime start = project.createTime;
+    DateTime end = DateTime.parse(project.endTime);
+    projectLength = start.difference(end).inDays.abs();
+    print('计划一共$projectLength天');
     // print(now);
     // print(project.stageList);
     // print(project.endTime);
@@ -236,9 +241,10 @@ class ProjectCard extends StatelessWidget {
                 child: CircularPercentIndicator(
                   radius: 36.r,
                   lineWidth: 10.r,
-                  percent: 0.1,
+                  percent:
+                      (project.studyTime.length ~/ projectLength).toDouble(),
                   center: Text(
-                    "10%",
+                    "${(project.studyTime.length ~/ projectLength) * 100}%",
                     style: TextStyle(
                       fontSize: MyFontSize.font16,
                       color: MyColor.fontBlack,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/model/project_model.dart';
+import 'package:flutter_track/pages/components/group_card.dart';
 import 'package:flutter_track/pages/components/project_card.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 
@@ -26,7 +27,8 @@ class _ProjectPageState extends State<ProjectPage>
   // 内层tab的controller
   late TabController _tabInteriorController;
 
-  Map groupList = {'matched': [], 'matching': []};
+  List groupListMatched = [{}];
+  List groupListMatching = [];
   List projectList1 = [];
   List projectList2 = [];
   // 自定义tab样式
@@ -159,15 +161,6 @@ class _ProjectPageState extends State<ProjectPage>
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        // ElevatedButton(
-        //     onPressed: () {
-        //       // var maplist = jsonDecode(data.toString());
-        //       var json = data['data'] as Map;
-        //       // print(Article.fromMap(json));
-        //       print(Article.fromMap(json['news'][0]));
-        //     },
-        //     child: Text('click'))
-
         Container(
           margin: EdgeInsets.only(
               top: MediaQueryData.fromWindow(window).padding.top + 12.h),
@@ -219,29 +212,32 @@ class _ProjectPageState extends State<ProjectPage>
                           ),
                         ),
                       ),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: projectList1.length,
-                          itemBuilder: (context, index) {
-                            return ProjectCard(
-                              Project.fromMap(projectList1[index]),
-                              delete: (id) {
-                                DioUtil().post('/project/remove',
-                                    data: {'project_id': id}, success: (res) {
-                                  print(res);
+                      projectList1.isEmpty
+                          ? const Center(child: Text('显示60分钟内将进行的计划'))
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: projectList1.length,
+                              itemBuilder: (context, index) {
+                                return ProjectCard(
+                                  Project.fromMap(projectList1[index]),
+                                  delete: (id) {
+                                    DioUtil().post('/project/remove',
+                                        data: {'project_id': id},
+                                        success: (res) {
+                                      print(res);
 
-                                  _getProject();
-                                  Get.snackbar('提示', '删除成功');
-                                }, error: (error) {
-                                  print(error);
-                                });
-                              },
-                              change: () {},
-                              type: 0,
-                            );
-                          }),
+                                      _getProject();
+                                      Get.snackbar('提示', '删除成功');
+                                    }, error: (error) {
+                                      print(error);
+                                    });
+                                  },
+                                  change: () {},
+                                  type: 0,
+                                );
+                              }),
                       Center(
                         child: PublicCard(
                           margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
@@ -256,29 +252,38 @@ class _ProjectPageState extends State<ProjectPage>
                           ),
                         ),
                       ),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: projectList2.length,
-                          itemBuilder: (context, index) {
-                            return ProjectCard(
-                              Project.fromMap(projectList2[index]),
-                              delete: (id) {
-                                DioUtil().post('/project/remove',
-                                    data: {'project_id': id}, success: (res) {
-                                  print(res);
+                      projectList2.isEmpty
+                          ? Center(
+                              child: Column(
+                              children: const [
+                                Text('暂无计划'),
+                                Text('快添加计划试试吧～'),
+                              ],
+                            ))
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: projectList2.length,
+                              itemBuilder: (context, index) {
+                                return ProjectCard(
+                                  Project.fromMap(projectList2[index]),
+                                  delete: (id) {
+                                    DioUtil().post('/project/remove',
+                                        data: {'project_id': id},
+                                        success: (res) {
+                                      print(res);
 
-                                  _getProject();
-                                  Get.snackbar('提示', '删除成功');
-                                }, error: (error) {
-                                  print(error);
-                                });
-                              },
-                              change: () {},
-                              type: 0,
-                            );
-                          }),
+                                      _getProject();
+                                      Get.snackbar('提示', '删除成功');
+                                    }, error: (error) {
+                                      print(error);
+                                    });
+                                  },
+                                  change: () {},
+                                  type: 0,
+                                );
+                              }),
                       Center(child: projectAddButton()),
                     ],
                   ),
@@ -317,7 +322,7 @@ class _ProjectPageState extends State<ProjectPage>
                           physics: const NeverScrollableScrollPhysics(),
                           controller: _tabInteriorController,
                           children: <Widget>[
-                        groupList['matched'].isEmpty
+                        groupListMatched.isEmpty
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -326,10 +331,13 @@ class _ProjectPageState extends State<ProjectPage>
                                   Text('快去添加计划试试吧～')
                                 ],
                               )
-                            : ListView(
-                                children: const [],
-                              ),
-                        groupList['matching'].isEmpty
+                            : ListView.builder(
+                                padding: EdgeInsets.zero,
+                                itemCount: groupListMatched.length,
+                                itemBuilder: (context, index) {
+                                  return GroupCard();
+                                }),
+                        groupListMatching.isEmpty
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -338,9 +346,12 @@ class _ProjectPageState extends State<ProjectPage>
                                   Text('快去添加计划试试吧～')
                                 ],
                               )
-                            : ListView(
-                                children: const [],
-                              ),
+                            : ListView.builder(
+                                padding: EdgeInsets.zero,
+                                itemCount: groupListMatching.length,
+                                itemBuilder: (context, index) {
+                                  return GroupCard();
+                                }),
                       ]))
                 ],
               ),

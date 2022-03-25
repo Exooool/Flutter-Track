@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/assets/test.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/config/http_config.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -89,22 +91,15 @@ class _BasicInfoState extends State<BasicInfo> {
         "image":
             await dio.MultipartFile.fromFile(file.path, filename: file.name)
       });
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      dio.Options options = dio.Options(headers: {
-        'authorization': prefs.getString('token'),
-        'content-type': 'application/json'
-      });
 
-      var respone = await dio.Dio().post<String>(
-          HttpOptions.BASE_URL + "/article/imgPost",
-          data: formdata,
-          options: options);
-      print(respone);
-
-      print(formdata);
-      setState(() {
-        imgUrl = 'http://10.0.2.2/track-api-nodejs/public/images/article/' +
-            respone.toString();
+      DioUtil().post('/article/imgPost', data: formdata, success: (res) {
+        print(res);
+        setState(() {
+          imgUrl = 'http://10.0.2.2/track-api-nodejs/public/images/article/' +
+              res.toString();
+        });
+      }, error: (error) {
+        print(error);
       });
     }
   }
@@ -118,38 +113,31 @@ class _BasicInfoState extends State<BasicInfo> {
           title: '基本信息',
           leading: InkWell(
             onTap: () => Get.back(),
-            child: const Text('返回'),
+            child: Image.asset(
+              'lib/assets/icons/Refund_back.png',
+              height: 25.r,
+              width: 25.r,
+            ),
           ),
         ),
         body: Stack(children: <Widget>[
           ListView(
             children: [
               Center(
-                child: Neumorphic(
-                  style: const NeumorphicStyle(
-                      shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
-                      shadowLightColorEmboss: Color.fromRGBO(255, 255, 255, 1),
-                      depth: -3,
-                      color: Color.fromRGBO(238, 238, 246, 1),
-                      // color: Color(0xffEFECF0),
-                      boxShape: NeumorphicBoxShape.stadium()),
-                  child: SizedBox(
-                      height: 88.r,
-                      width: 88.r,
-                      child: InkWell(
-                        onTap: pickImage,
-                        child: imgUrl == ''
-                            ? Container()
-                            : ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.r)),
-                                child: Image.network(
-                                  imgUrl,
-                                  fit: BoxFit.cover,
-                                ),
+                child: SizedBox(
+                    height: 88.r,
+                    width: 88.r,
+                    child: InkWell(
+                      onTap: pickImage,
+                      child: imgUrl == ''
+                          ? Image.asset('lib/assets/images/defaultUserImg.png')
+                          : ClipOval(
+                              child: Image.network(
+                                imgUrl,
+                                fit: BoxFit.cover,
                               ),
-                      )),
-                ),
+                            ),
+                    )),
               ),
               Container(
                   alignment: Alignment.center,
@@ -289,7 +277,11 @@ class _InterestTagState extends State<InterestTag> {
           title: '您的兴趣',
           leading: InkWell(
             onTap: () => Get.back(),
-            child: const Text('返回'),
+            child: Image.asset(
+              'lib/assets/icons/Refund_back.png',
+              height: 25.r,
+              width: 25.r,
+            ),
           ),
         ),
         body: Stack(
@@ -353,21 +345,18 @@ class _InterestTagState extends State<InterestTag> {
 
                     // 请求端口修改数据
 
-                    dio.Options options = dio.Options(headers: {
-                      'authorization': prefs.getString('token'),
-                      'content-type': 'application/json'
+                    DioUtil().post('/users/update', data: widget.infoJson,
+                        success: (res) {
+                      if (res['status'] == 0) {
+                        print('修改成功');
+                        Get.offAllNamed('/home');
+                      } else {
+                        print('修改失败');
+                        Get.snackbar('提示', '网络错误');
+                      }
+                    }, error: (error) {
+                      print(error);
                     });
-
-                    var res = await dio.Dio().post(
-                        HttpOptions.BASE_URL + '/users/update',
-                        data: widget.infoJson,
-                        options: options);
-                    print(res.data);
-                    if (res.data['status'] == 0) {
-                      Get.offAllNamed('/home');
-                    } else {
-                      Get.snackbar('提示', '网络错误');
-                    }
                   },
                 ))
           ],
@@ -395,7 +384,11 @@ class _SexSelectorState extends State<SexSelector> {
           title: '您的性别',
           leading: InkWell(
             onTap: () => Get.back(),
-            child: const Text('返回'),
+            child: Image.asset(
+              'lib/assets/icons/Refund_back.png',
+              height: 25.r,
+              width: 25.r,
+            ),
           ),
         ),
         body: Stack(
@@ -412,9 +405,14 @@ class _SexSelectorState extends State<SexSelector> {
                         setState(() {});
                       },
                       child: Opacity(
-                        opacity: sexIndex == 0 ? 1 : 0.5,
-                        child: Image.asset('lib/assets/images/male.png'),
-                      ),
+                          opacity: sexIndex == 0 ? 1 : 0.5,
+                          child: Column(
+                            children: [
+                              Image.asset('lib/assets/images/male.png'),
+                              Text('男生',
+                                  style: TextStyle(fontSize: MyFontSize.font16))
+                            ],
+                          )),
                     ),
                     InkWell(
                       onTap: () {
@@ -422,9 +420,14 @@ class _SexSelectorState extends State<SexSelector> {
                         setState(() {});
                       },
                       child: Opacity(
-                        opacity: sexIndex == 1 ? 1 : 0.5,
-                        child: Image.asset('lib/assets/images/female.png'),
-                      ),
+                          opacity: sexIndex == 1 ? 1 : 0.5,
+                          child: Column(
+                            children: [
+                              Image.asset('lib/assets/images/female.png'),
+                              Text('女生',
+                                  style: TextStyle(fontSize: MyFontSize.font16))
+                            ],
+                          )),
                     ),
                   ],
                 ),

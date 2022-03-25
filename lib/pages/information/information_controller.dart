@@ -46,13 +46,17 @@ class InformationController extends GetxController {
   ];
 
   clock() {
-    int h = (nowDatStudyTime.value ~/ 60) * 2;
-    int m = nowDatStudyTime.value % 60;
-    if (m < 30) {
-      h--;
+    if (nowDatStudyTime.value != 0) {
+      int h = (nowDatStudyTime.value ~/ 60) * 2;
+      int m = nowDatStudyTime.value % 60;
+      if (m < 30) {
+        h--;
+      }
+      print(h);
+      return 'lib/assets/clock/' + clockList[h];
+    } else {
+      return 'lib/assets/clock/1.png';
     }
-    print(h);
-    return 'lib/assets/clock/' + clockList[h];
   }
 
   getInformation() {
@@ -80,7 +84,9 @@ class InformationController extends GetxController {
         }
       }
 
-      averDayStudyTime.value = user.value.totalTime ~/ studyList.length;
+      if (studyList.isNotEmpty) {
+        averDayStudyTime.value = user.value.totalTime ~/ studyList.length;
+      }
     }, error: (error) {
       print(error);
     });

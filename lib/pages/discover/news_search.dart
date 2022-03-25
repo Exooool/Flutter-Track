@@ -12,6 +12,8 @@ import 'package:get/get.dart';
 
 class NewsSearchController extends GetxController {
   RxList searchList = [].obs;
+  // RxString searchValue = ''.obs;
+
 }
 
 class NewsSearch extends StatelessWidget {
@@ -81,7 +83,18 @@ class NewsSearch extends StatelessWidget {
               title,
               style: TextStyle(fontSize: MyFontSize.font12),
             ),
-            Icon(Icons.close)
+            SizedBox(width: 15.w),
+            InkWell(
+              onTap: () {},
+              child: Opacity(
+                opacity: 0.5,
+                child: Image.asset(
+                  'lib/assets/icons/Trash.png',
+                  height: 25.r,
+                  width: 25.r,
+                ),
+              ),
+            )
           ],
         ));
   }
@@ -168,7 +181,10 @@ class NewsSearch extends StatelessWidget {
               Row(
                 children: <Widget>[
                   InkWell(
-                    onTap: () => Get.back(),
+                    onTap: () {
+                      Get.back();
+                      c.searchList.value = [];
+                    },
                     child: Image.asset(
                       'lib/assets/icons/Refund_back.png',
                       height: 25.r,

@@ -235,7 +235,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                     height: 30.h,
                     margin: EdgeInsets.only(top: 12.h, left: 24.w, right: 24.w),
                     radius: 60.r,
-                    onTap: () => Get.to(NewsSearch()),
+                    onTap: () => Get.to(() => NewsSearch()),
                     widget: Padding(
                       padding: EdgeInsets.only(left: 16.w),
                       child: Row(

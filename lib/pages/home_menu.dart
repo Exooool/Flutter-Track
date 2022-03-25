@@ -102,7 +102,8 @@ class _HomeMenuState extends State<HomeMenu> {
   loginVerify() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
-    if (token == null) {
+    if (token == null || token == '') {
+      print('未登录：$token');
       Get.offAllNamed('/log');
       // Get.snackbar('提示', '未登录');
     } else {
