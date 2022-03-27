@@ -9,6 +9,7 @@ import 'package:flutter_track/model/news_model.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/discover/article.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BorderGradientPainter extends CustomPainter {
   final Paint _paint = Paint();
@@ -64,7 +65,36 @@ class ArticleCard extends StatelessWidget {
             width: 366.w,
             type: type,
             // 传递news对象给文章页面
-            onTap: () => Get.to(() => ArticlePage(), arguments: {'news': news}),
+            onTap: () async {
+              List list = [];
+              bool flag = false;
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+
+              Map historyString = {
+                'news_id': news.newsId,
+                'news_img': news.newsImg,
+                'user_name': news.userName,
+                'news_title': news.newsTitle
+              };
+              if (prefs.getString('history') != null) {
+                list = jsonDecode(prefs.getString('history')!);
+              }
+              for (var i = 0; i < list.length; i++) {
+                if (list[i]['news_id'] == news.newsId) {
+                  list.add(list.removeAt(i));
+                  flag = true;
+                  break;
+                }
+              }
+
+              if (!flag) {
+                list.add(historyString);
+              }
+
+              prefs.setString('history', jsonEncode(list));
+
+              Get.to(() => ArticlePage(), arguments: {'news_id': news.newsId});
+            },
             widget: Padding(
               padding: EdgeInsets.all(12.r),
               child: Column(
@@ -105,6 +135,7 @@ class ArticleCard extends StatelessWidget {
                                           news.userImg,
                                           height: 24.r,
                                           width: 24.r,
+                                          fit: BoxFit.cover,
                                         ),
                                 ),
                                 SizedBox(width: 10.w),
@@ -115,14 +146,16 @@ class ArticleCard extends StatelessWidget {
                                       fontWeight: FontWeight.w600),
                                 ),
                                 SizedBox(width: 10.w),
-                                Text(
+                                Expanded(
+                                    child: Text(
                                   formatDate(DateTime.parse(news.newsTime),
                                       [yyyy, '.', mm, '.', dd]),
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       height: 1.6,
                                       fontSize: MyFontSize.font12,
                                       fontWeight: FontWeight.w400),
-                                )
+                                ))
                               ],
                             ),
                             SizedBox(height: 8.h),

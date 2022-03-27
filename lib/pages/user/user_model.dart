@@ -101,7 +101,7 @@ class UserModelPage extends StatelessWidget {
                                         style: TextStyle(
                                             color: MyColor.fontWhite,
                                             fontSize: MyFontSize.font12)),
-                                    Text('${c.user.value.exp % 1000}',
+                                    Text('${c.user.value.exp ~/ 1000}',
                                         style: TextStyle(
                                             color: MyColor.fontWhite,
                                             fontSize: MyFontSize.font16))

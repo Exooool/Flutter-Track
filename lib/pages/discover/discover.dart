@@ -12,9 +12,6 @@ import 'package:get/get.dart';
 
 import './news_page.dart';
 
-import 'package:flutter_track/model/news_model.dart';
-import 'package:flutter_track/assets/test.dart';
-
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({Key? key}) : super(key: key);
 

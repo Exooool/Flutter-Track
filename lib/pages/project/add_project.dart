@@ -2,16 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
 
 import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/project/component/single_time.dart';
+import 'package:flutter_track/pages/project/invite_group.dart';
+import 'package:flutter_track/pages/project/match_group.dart';
 import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
-
-import 'dart:io';
 
 import 'package:toggle_switch/toggle_switch.dart';
 import 'component/form_datetime_picker.dart';
@@ -394,6 +395,7 @@ class AddProject extends StatelessWidget {
                                 ['endTime'] ??
                             '';
                       } else {
+                        c.stageList.value = [{}];
                         // 判断不分阶段
                         if (c.endTime.value == '' ||
                             c.singleTime['type'] == null ||
@@ -416,12 +418,34 @@ class AddProject extends StatelessWidget {
                       };
 
                       print(data);
-
+                      // flag标志信息是否填写完整
                       if (flag) {
+                        // 是否加入互助小组 0 是 1 否
                         if (c.isJoin.value == 0) {
+                          // 选择匹配模式 0 系统匹配 1 自行邀请
+                          if (c.isMatch.value == 0) {
+                            Get.to(() => MatchGroup());
+                          } else {
+                            Get.to(() => InviteGroup());
+                          }
                         } else {
+                          // 加载动画
+                          Get.dialog(Material(
+                            color: Colors.transparent,
+                            child: Column(
+                              children: const [
+                                SpinKitFoldingCube(
+                                  color: Colors.white,
+                                  size: 50.0,
+                                ),
+                                Text('加载中')
+                              ],
+                            ),
+                          ));
+
                           DioUtil().post('/project/add', data: data,
                               success: (success) {
+                            Get.back();
                             print('请求成功,服务端返回:$success');
                             if (success['status'] == 0) {
                               Get.back();

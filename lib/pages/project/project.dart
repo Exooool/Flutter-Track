@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_track/model/project_model.dart';
 import 'package:flutter_track/pages/components/group_card.dart';
 import 'package:flutter_track/pages/components/project_card.dart';
@@ -116,6 +117,7 @@ class _ProjectPageState extends State<ProjectPage>
       // setState(() {
       //   list = res['data'];
       // });
+      print('计划列表$res');
 
       // 清空数据 然后请求替换数据
       projectList1 = [];

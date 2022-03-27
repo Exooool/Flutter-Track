@@ -46,8 +46,10 @@ class ProjectCard extends StatelessWidget {
 
     DateTime start = project.createTime;
     DateTime end = DateTime.parse(project.endTime);
-    projectLength = start.difference(end).inDays.abs();
+
+    projectLength = start.difference(end).inDays.abs() + 1;
     print('计划一共$projectLength天');
+
     // print(now);
     // print(project.stageList);
     // print(project.endTime);

@@ -60,10 +60,12 @@ class ArticleComment extends StatelessWidget {
                       style: TextStyle(
                           fontSize: MyFontSize.font16,
                           fontWeight: FontWeight.w600)),
-                  Text(data['content'],
-                      style: TextStyle(
-                          fontSize: MyFontSize.font12,
-                          fontWeight: FontWeight.w400)),
+                  SizedBox(
+                      width: 220.w,
+                      child: Text(data['content'],
+                          style: TextStyle(
+                              fontSize: MyFontSize.font12,
+                              fontWeight: FontWeight.w400)))
                 ],
               ),
             ],

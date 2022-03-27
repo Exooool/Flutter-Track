@@ -1,5 +1,7 @@
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:get/get.dart';
 
@@ -22,66 +24,27 @@ class MatchGroup extends StatelessWidget {
                   height: 25.r,
                   width: 25.r,
                 ))),
-        body: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        body: Column(
           children: <Widget>[
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Neumorphic(
-                  style: const NeumorphicStyle(
-                      shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
-                      shadowLightColorEmboss: Color.fromRGBO(255, 255, 255, 1),
-                      depth: -3,
-                      color: Color.fromRGBO(238, 238, 246, 1),
-                      // color: Color(0xffEFECF0),
-                      boxShape: NeumorphicBoxShape.stadium(),
-                      lightSource: LightSource.topLeft),
-                  child: const SizedBox(
-                    height: 120,
-                    width: 120,
-                  ),
-                ),
-                Neumorphic(
-                  style: const NeumorphicStyle(
-                      shadowDarkColorEmboss: Color.fromRGBO(8, 52, 84, 0.4),
-                      shadowLightColorEmboss: Color.fromRGBO(255, 255, 255, 1),
-                      depth: 3,
-                      color: Color.fromRGBO(238, 238, 246, 1),
-                      // color: Color(0xffEFECF0),
-                      boxShape: NeumorphicBoxShape.stadium(),
-                      lightSource: LightSource.topLeft),
-                  child: const SizedBox(
-                    height: 80,
-                    width: 80,
-                  ),
-                ),
-                CircularPercentIndicator(
-                  radius: 60,
-                  lineWidth: 20.0,
-                  percent: 1,
-                  animation: true,
-                  animationDuration: 4000,
-                  animateFromLastPercent: true,
-                  startAngle: 270.0,
-                  curve: Curves.easeOutSine,
-                  restartAnimation: true,
-                  // maskFilter: MaskFilter(),
-                  circularStrokeCap: CircularStrokeCap.round,
-                  backgroundColor: Colors.transparent,
-                  linearGradient: const LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [
-                        Color.fromRGBO(107, 101, 244, 1),
-                        Color.fromRGBO(51, 84, 244, 1)
-                      ]),
-                )
-              ],
-            ),
-            const Text('正在匹配小组成员')
+            Image.asset('lib/assets/gifs/匹配中.gif'),
+            Text('正在匹配小组成员',
+                style: TextStyle(
+                    fontWeight: FontWeight.w600, fontSize: MyFontSize.font16)),
+            Text('匹配完成系统将提醒您进入',
+                style: TextStyle(
+                    fontSize: MyFontSize.font12, color: MyColor.fontGrey)),
+            PublicCard(
+                radius: 90.r,
+                notWhite: true,
+                onTap: () => Get.back(),
+                margin: EdgeInsets.only(top: 42.h),
+                padding: EdgeInsets.only(
+                    left: 20.w, right: 20.w, top: 13.h, bottom: 13.h),
+                widget: const Text(
+                  '返回首页',
+                  style: TextStyle(color: MyColor.fontWhite),
+                ))
           ],
-        )));
+        ));
   }
 }

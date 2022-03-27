@@ -103,6 +103,7 @@ class UserPage extends StatelessWidget {
                                         c.user.value.userImg,
                                         height: 84.r,
                                         width: 84.r,
+                                        fit: BoxFit.cover,
                                       ),
                               ),
                             ),
@@ -123,7 +124,7 @@ class UserPage extends StatelessWidget {
                                         style: TextStyle(
                                             color: MyColor.fontWhite,
                                             fontSize: MyFontSize.font12)),
-                                    Text('${c.user.value.exp % 1000}',
+                                    Text('${c.user.value.exp ~/ 1000}',
                                         style: TextStyle(
                                             color: MyColor.fontWhite,
                                             fontSize: MyFontSize.font16))

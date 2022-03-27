@@ -1,14 +1,11 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_track/config/http_config.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:flutter_track/model/news_model.dart';
 import 'package:flutter_track/pages/components/article_card.dart';
 import 'package:flutter_track/service/service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 class NewsPage extends StatefulWidget {
   String category;
@@ -56,12 +53,6 @@ class _NewsPageState extends State<NewsPage> {
     } else {
       data = {"start": listIndex, "hashtag": widget.category};
     }
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    Options options = Options(headers: {
-      'authorization': prefs.getString('token'),
-      'content-type': 'application/json'
-    });
 
     DioUtil().post('/news/newslist', data: data, success: (success) {
       List res = success['data'];

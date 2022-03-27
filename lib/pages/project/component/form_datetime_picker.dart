@@ -73,7 +73,7 @@ class FormDateTimePicker extends StatelessWidget {
           child: BlurWidget(customPicker(
             adapter: DateTimePickerAdapter(
                 maxValue: maxTime,
-                minValue: minTime,
+                minValue: minTime.add(const Duration(days: 1)),
                 isNumberMonth: true,
                 type: 7),
             onConfirm: (Picker picker, List value) {
@@ -154,7 +154,9 @@ class FormDateTimePicker extends StatelessWidget {
             children: [
               customPicker(
                   adapter: DateTimePickerAdapter(
-                      maxHour: 24, customColumnType: [3, 4]),
+                      value: DateTime(2022),
+                      maxHour: 24,
+                      customColumnType: [3, 4]),
                   onConfirm: (Picker picker, List value) {
                     print(picker.adapter.text.substring(11, 16));
                     frequency['time'] = picker.adapter.text.substring(11, 16);

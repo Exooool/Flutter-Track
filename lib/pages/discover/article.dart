@@ -3,7 +3,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
-import 'package:flutter_track/model/news_model.dart';
+
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/discover/article_comment.dart';
@@ -22,7 +22,9 @@ class ArticlePage extends StatefulWidget {
 class _ArticlePageState extends State<ArticlePage>
     with TickerProviderStateMixin {
   late ZefyrController _controller = ZefyrController();
-  late Article news;
+  Map news = {};
+  int nowUserId = 00;
+  late int newsId;
 
   // 动画参数
   late AnimationController controller;
@@ -55,22 +57,42 @@ class _ArticlePageState extends State<ArticlePage>
   }
 
   _getNew() {
-    news = Get.arguments['news'];
-    DioUtil().post('/news/view', data: {'news_id': news.newsId},
-        success: (res) {
-      print(res);
+    newsId = Get.arguments['news_id'];
+
+    // 查询文章信息
+    DioUtil().post('/news/view', data: {'news_id': newsId}, success: (res) {
+      print(res['data'][0]);
+
+      if (mounted) {
+        setState(() {
+          news = res['data'][0];
+          _controller = ZefyrController(
+              NotusDocument.fromJson(jsonDecode(news['news_content'])));
+        });
+      }
     }, error: (error) {
       print(error);
     });
-    _controller =
-        ZefyrController(NotusDocument.fromJson(jsonDecode(news.newsContent)));
+
+    // 获取当前用户id
+    DioUtil().get('/users/id', success: (res) {
+      print(res);
+
+      if (mounted) {
+        setState(() {
+          nowUserId = res['user_id'];
+        });
+      }
+    }, error: (error) {
+      print(error);
+    });
   }
 
   // 收藏
   _star() {
-    DioUtil().post('/news/star', data: {'news_id': news.newsId},
-        success: (res) {
+    DioUtil().post('/news/star', data: {'news_id': newsId}, success: (res) {
       print(res);
+
       if (res['status'] == 0) {
         Get.snackbar('提示', '收藏成功');
       } else {
@@ -83,9 +105,9 @@ class _ArticlePageState extends State<ArticlePage>
 
   // 点赞
   _like() {
-    DioUtil().post('/news/like', data: {'news_id': news.newsId},
-        success: (res) {
+    DioUtil().post('/news/like', data: {'news_id': newsId}, success: (res) {
       print(res);
+
       if (res['status'] == 0) {
         Get.snackbar('提示', '点赞成功');
       } else {
@@ -95,26 +117,6 @@ class _ArticlePageState extends State<ArticlePage>
       print(error);
     });
   }
-
-  // Future _getNew() async {
-  //   // 获取传递过来的参数
-  //   final arguments = Get.arguments;
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   Options options = Options(headers: {
-  //     'authorization': prefs.getString('token'),
-  //     'content-type': 'application/json'
-  //   });
-
-  //   var response = await Dio().post(HttpOptions.BASE_URL + '/news/getNew',
-  //       data: arguments, options: options);
-  //   List res = response.data['data'];
-
-  //   newsContetnt = jsonDecode(res[0]['news_content']);
-  //   // print(newsContetnt);
-  //   // print(res[0]['news_content']);
-  //   _controller = ZefyrController(NotusDocument.fromJson(newsContetnt));
-  //   setState(() {});
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -138,205 +140,218 @@ class _ArticlePageState extends State<ArticlePage>
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          // 文章主要内容
-          ListView(
-            padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 7.h),
-            physics: const BouncingScrollPhysics(),
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  // 作者栏
-                  InkWell(
-                    onTap: () {
-                      Get.to(() => UserModelPage(),
-                          arguments: {'query_user_id': news.userId});
-                    },
-                    child: Row(
+      body: news['news_id'] == null
+          ? Container()
+          : Stack(
+              children: [
+                // 文章主要内容
+                ListView(
+                  padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 7.h),
+                  physics: const BouncingScrollPhysics(),
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        ClipOval(
-                          child: news.userImg == ''
-                              ? Image.asset(
-                                  'lib/assets/images/defaultUserImg.png',
-                                  height: 66.r,
-                                  width: 66.r,
-                                )
-                              : Image.network(
-                                  news.userImg,
-                                  height: 66.r,
-                                  width: 66.r,
-                                ),
+                        // 作者栏
+                        InkWell(
+                          onTap: () {
+                            if (news['user_id'] != nowUserId) {
+                              Get.to(() => UserModelPage(), arguments: {
+                                'query_user_id': news['user_id']
+                              });
+                            }
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              ClipOval(
+                                child: news['user_img'] == ''
+                                    ? Image.asset(
+                                        'lib/assets/images/defaultUserImg.png',
+                                        height: 66.r,
+                                        width: 66.r,
+                                      )
+                                    : Image.network(
+                                        news['user_img'],
+                                        height: 66.r,
+                                        width: 66.r,
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                              SizedBox(width: 12.w),
+                              Text(news['user_name'])
+                            ],
+                          ),
                         ),
-                        SizedBox(width: 12.w),
-                        Text(news.userName)
+                        Visibility(
+                          visible: news['user_id'] == nowUserId ? false : true,
+                          child: PublicCard(
+                              radius: 90.r,
+                              padding: EdgeInsets.only(
+                                  left: 20.w,
+                                  right: 20.w,
+                                  top: 6.h,
+                                  bottom: 6.h),
+                              notWhite: true,
+                              widget: Center(
+                                child: Text(
+                                  '关注',
+                                  style: TextStyle(
+                                      fontSize: MyFontSize.font16,
+                                      color: MyColor.fontWhite),
+                                ),
+                              )),
+                        )
                       ],
                     ),
-                  ),
-                  PublicCard(
-                      radius: 90.r,
-                      padding: EdgeInsets.only(
-                          left: 20.w, right: 20.w, top: 6.h, bottom: 6.h),
-                      notWhite: true,
-                      widget: Center(
-                        child: Text(
-                          '关注',
-                          style: TextStyle(
-                              fontSize: MyFontSize.font16,
-                              color: MyColor.fontWhite),
-                        ),
-                      ))
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
-                child: Text(
-                  news.newsTitle,
-                  style: TextStyle(fontSize: MyFontSize.font22),
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
+                      child: Text(
+                        news['news_title'],
+                        style: TextStyle(fontSize: MyFontSize.font22),
+                      ),
+                    ),
+                    Row(children: [
+                      Image.asset(
+                        'lib/assets/icons/View_fill.png',
+                        height: 18.r,
+                        width: 18.r,
+                      ),
+                      SizedBox(width: 3.w),
+                      Text(
+                        news['view_num'].toString(),
+                        style: TextStyle(fontSize: MyFontSize.font10),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(left: 18.w, right: 12.w),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'lib/assets/icons/Chat_fill.png',
+                                height: 18.r,
+                                width: 18.r,
+                              ),
+                              SizedBox(width: 3.w),
+                              Text(
+                                news['comment_num'].toString(),
+                                style: TextStyle(fontSize: MyFontSize.font10),
+                              ),
+                            ],
+                          )),
+                      Image.asset(
+                        'lib/assets/icons/Favorite_fill.png',
+                        height: 18.r,
+                        width: 18.r,
+                      ),
+                      SizedBox(width: 3.w),
+                      Text(
+                        '${jsonDecode(news['like_num']).length}',
+                        style: TextStyle(fontSize: MyFontSize.font10),
+                      ),
+                    ]),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5.h),
+                      child: Text(
+                        formatDate(DateTime.parse(news['news_time']),
+                            [yyyy, '.', mm, '.', dd]),
+                        style: TextStyle(fontSize: MyFontSize.font10),
+                      ),
+                    ),
+                    ZefyrEditor(
+                      focusNode: FocusNode(canRequestFocus: false),
+                      readOnly: true,
+                      padding: EdgeInsets.only(top: 7.h),
+                      controller: _controller,
+                      embedBuilder: customZefyrEmbedBuilder,
+                    ),
+                  ],
                 ),
-              ),
-              Row(children: [
-                Image.asset(
-                  'lib/assets/icons/View_fill.png',
-                  height: 18.r,
-                  width: 18.r,
-                ),
-                SizedBox(width: 3.w),
-                Text(
-                  news.viewNum.toString(),
-                  style: TextStyle(fontSize: MyFontSize.font10),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(left: 18.w, right: 12.w),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'lib/assets/icons/Chat_fill.png',
-                          height: 18.r,
-                          width: 18.r,
-                        ),
-                        SizedBox(width: 3.w),
-                        Text(
-                          news.commentNum.toString(),
-                          style: TextStyle(fontSize: MyFontSize.font10),
-                        ),
-                      ],
+
+                // 弹出
+                Positioned(
+                    right: animation1.value.dx,
+                    bottom: animation1.value.dy,
+                    child: Opacity(
+                      opacity: opacityAnimation.value,
+                      child: PublicCard(
+                        radius: 90.r,
+                        height: 72.r,
+                        width: 72.r,
+                        onTap: _like,
+                        widget: Center(
+                            child: Image.asset(
+                          'lib/assets/icons/Favorite_fill.png',
+                          height: 44.r,
+                          width: 44.r,
+                        )),
+                      ),
                     )),
-                Image.asset(
-                  'lib/assets/icons/Favorite_fill.png',
-                  height: 18.r,
-                  width: 18.r,
-                ),
-                SizedBox(width: 3.w),
-                Text(
-                  '${news.likeNum.toList().length}',
-                  style: TextStyle(fontSize: MyFontSize.font10),
-                ),
-              ]),
-              Padding(
-                padding: EdgeInsets.only(top: 5.h),
-                child: Text(
-                  formatDate(
-                      DateTime.parse(news.newsTime), [yyyy, '.', mm, '.', dd]),
-                  style: TextStyle(fontSize: MyFontSize.font10),
-                ),
-              ),
-              ZefyrEditor(
-                focusNode: FocusNode(canRequestFocus: false),
-                readOnly: true,
-                padding: EdgeInsets.only(top: 7.h),
-                controller: _controller,
-                embedBuilder: customZefyrEmbedBuilder,
-              ),
-            ],
-          ),
+                Positioned(
+                    right: animation2.value.dx,
+                    bottom: animation2.value.dy,
+                    child: Opacity(
+                      opacity: opacityAnimation.value,
+                      child: PublicCard(
+                        radius: 90.r,
+                        height: 72.r,
+                        width: 72.r,
+                        onTap: () => Get.to(() => ArticleComment(), arguments: {
+                          'user_id': news['user_id'],
+                          'news_id': news['news_id']
+                        }),
+                        widget: Center(
+                            child: Image.asset(
+                          'lib/assets/icons/Chat_fill.png',
+                          height: 44.r,
+                          width: 44.r,
+                        )),
+                      ),
+                    )),
 
-          // 弹出
-          Positioned(
-              right: animation1.value.dx,
-              bottom: animation1.value.dy,
-              child: Opacity(
-                opacity: opacityAnimation.value,
-                child: PublicCard(
-                  radius: 90.r,
-                  height: 72.r,
-                  width: 72.r,
-                  onTap: _like,
-                  widget: Center(
-                      child: Image.asset(
-                    'lib/assets/icons/Favorite_fill.png',
-                    height: 44.r,
-                    width: 44.r,
-                  )),
-                ),
-              )),
-          Positioned(
-              right: animation2.value.dx,
-              bottom: animation2.value.dy,
-              child: Opacity(
-                opacity: opacityAnimation.value,
-                child: PublicCard(
-                  radius: 90.r,
-                  height: 72.r,
-                  width: 72.r,
-                  onTap: () => Get.to(() => ArticleComment(), arguments: {
-                    'user_id': news.userId,
-                    'news_id': news.newsId
-                  }),
-                  widget: Center(
-                      child: Image.asset(
-                    'lib/assets/icons/Chat_fill.png',
-                    height: 44.r,
-                    width: 44.r,
-                  )),
-                ),
-              )),
+                Positioned(
+                    right: animation3.value.dx,
+                    bottom: animation3.value.dy,
+                    child: Opacity(
+                      opacity: opacityAnimation.value,
+                      child: PublicCard(
+                        radius: 90.r,
+                        height: 72.r,
+                        width: 72.r,
+                        onTap: _star,
+                        widget: Center(
+                            child: Image.asset(
+                          'lib/assets/icons/Star.png',
+                          height: 44.r,
+                          width: 44.r,
+                        )),
+                      ),
+                    )),
 
-          Positioned(
-              right: animation3.value.dx,
-              bottom: animation3.value.dy,
-              child: Opacity(
-                opacity: opacityAnimation.value,
-                child: PublicCard(
-                  radius: 90.r,
-                  height: 72.r,
-                  width: 72.r,
-                  onTap: _star,
-                  widget: Center(
-                      child: Image.asset(
-                    'lib/assets/icons/Star.png',
-                    height: 44.r,
-                    width: 44.r,
-                  )),
+                // 评论、点赞等功能那个
+                Positioned(
+                  right: 15.r,
+                  bottom: 60.r,
+                  child: PublicCard(
+                      radius: 90.r,
+                      height: 72.r,
+                      width: 72.r,
+                      onTap: () {
+                        if (controller.status == AnimationStatus.completed) {
+                          controller.reverse();
+                        } else if (controller.status ==
+                            AnimationStatus.dismissed) {
+                          controller.forward();
+                        }
+                      },
+                      widget: Center(
+                        child: Image.asset(
+                          'lib/assets/icons/More.png',
+                          height: 44.r,
+                          width: 44.r,
+                        ),
+                      )),
                 ),
-              )),
-
-          // 评论、点赞等功能那个
-          Positioned(
-            right: 15.r,
-            bottom: 60.r,
-            child: PublicCard(
-                radius: 90.r,
-                height: 72.r,
-                width: 72.r,
-                onTap: () {
-                  if (controller.status == AnimationStatus.completed) {
-                    controller.reverse();
-                  } else if (controller.status == AnimationStatus.dismissed) {
-                    controller.forward();
-                  }
-                },
-                widget: Center(
-                  child: Image.asset(
-                    'lib/assets/icons/More.png',
-                    height: 44.r,
-                    width: 44.r,
-                  ),
-                )),
-          ),
-        ],
-      ),
+              ],
+            ),
     );
   }
 }

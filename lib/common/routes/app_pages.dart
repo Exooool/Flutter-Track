@@ -32,7 +32,7 @@ class AppPages {
     GetPage(name: '/newsEdit', page: () => NewsEdit()),
     GetPage(name: '/article', page: () => ArticlePage()),
     GetPage(name: '/message', page: () => MessagePage()),
-    GetPage(name: '/history', page: () => const HistoryPage()),
+    GetPage(name: '/history', page: () => HistoryPage()),
     GetPage(name: '/chart', page: () => ChartPage()),
   ];
 }
