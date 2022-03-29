@@ -3,7 +3,7 @@ import 'dart:convert';
 class Project {
   late String projectImg;
   late int projectId;
-  late String? groupId;
+  late int? groupId;
   late String projectTitle;
   late String endTime;
   late Map singleTime;
@@ -29,6 +29,44 @@ class Project {
     // stageList = (json['stageList'] as List<dynamic>).map((item) {
     //   return Stage.fromMap(item);
     // }).toList();
+  }
+
+  // 获取当前阶段
+  nowStage() {
+    int totalStage = stageList.length;
+    int nowStage = totalStage;
+    DateTime now = DateTime.now();
+    if (stageList[0]['endTime'] != null) {
+      // 这是分了阶段的判断
+      for (var i = 0; i < totalStage; i++) {
+        DateTime set = DateTime.parse(stageList[i]['endTime']);
+        if (set.isAfter(now)) {
+          // 如果第i阶段的截止时间比现在的时间大，说明现在处于第i阶段
+          nowStage = i + 1;
+          break;
+        }
+      }
+    } else {
+      // 这是没有分阶段的判断
+      DateTime set = DateTime.parse(endTime);
+      if (set.isAfter(now)) {
+        nowStage = 1;
+      }
+    }
+
+    return nowStage;
+  }
+
+  // 获取当前
+
+  // 转化singleTime
+  singleTimeTf(Map map) {
+    final singleTimeType = [30, 60, 90, 120, 150];
+    if (map['type'] != 5) {
+      return singleTimeType[map['type']];
+    } else {
+      return map['custom'];
+    }
   }
 }
 

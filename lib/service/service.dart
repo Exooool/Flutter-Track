@@ -72,8 +72,11 @@ class DioUtil {
         error(response.statusCode, "数据服务出现异常！");
       }
     } on DioError catch (e) {
-      // final NetError netError = ExceptionHandle.handleException(e);
-      error(e);
+      if (e.type == DioErrorType.connectTimeout) {
+        error('网络异常，连接超时');
+      } else {
+        error(e);
+      }
     }
   }
 
@@ -104,7 +107,11 @@ class DioUtil {
         error(response.statusCode, "数据服务出现异常！");
       }
     } on DioError catch (e) {
-      error(e);
+      if (e.type == DioErrorType.connectTimeout) {
+        error('网络异常，连接超时');
+      } else {
+        error(e);
+      }
     }
   }
 
@@ -130,7 +137,9 @@ class DioUtil {
     } on DioError catch (e) {
       if (e.type == DioErrorType.connectTimeout) {
         error('网络异常，连接超时');
-      } else {}
+      } else {
+        error(e);
+      }
     }
   }
 

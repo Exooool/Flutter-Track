@@ -12,7 +12,7 @@ class GroupCardController extends GetxController {
 
 class GroupCard extends StatelessWidget {
   GroupCard({Key? key}) : super(key: key);
-  GroupCardController c = Get.put(GroupCardController());
+  final GroupCardController c = Get.put(GroupCardController());
 
   userItem(int pos, String projectName) {
     return InkWell(

@@ -4,6 +4,7 @@ import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/model/project_model.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:flutter_track/pages/project/project_study.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -173,6 +174,9 @@ class ProjectCard extends StatelessWidget {
     return PublicCard(
         height: 72.h,
         radius: 90.r,
+        onTap: () {
+          Get.to(() => ProjectStudy(), arguments: {'project': project});
+        },
         onLongPress: () {
           if (type == 0) {
             Get.bottomSheet(longPressDialog(),
@@ -188,23 +192,39 @@ class ProjectCard extends StatelessWidget {
               Row(
                 children: <Widget>[
                   // 头像
-                  PublicCard(
-                    radius: 90.r,
-                    height: 60.r,
-                    width: 60.r,
-                    widget: Center(
-                      child: project.projectImg.contains('http')
-                          ? ClipOval(
-                              child: Image.network(
-                              project.projectImg,
-                              height: 60.r,
-                              width: 60.r,
-                              fit: BoxFit.cover,
-                            ))
-                          : Image.asset('lib/assets/images/project' +
-                              project.projectImg +
-                              '.png'),
-                    ),
+                  Stack(
+                    children: [
+                      PublicCard(
+                        radius: 90.r,
+                        height: 60.r,
+                        width: 60.r,
+                        widget: Center(
+                          child: project.projectImg.contains('http')
+                              ? ClipOval(
+                                  child: Image.network(
+                                  project.projectImg,
+                                  height: 60.r,
+                                  width: 60.r,
+                                  fit: BoxFit.cover,
+                                ))
+                              : Image.asset('lib/assets/images/project' +
+                                  project.projectImg +
+                                  '.png'),
+                        ),
+                      ),
+                      Visibility(
+                          visible: project.groupId != null ? true : false,
+                          child: Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: PublicCard(
+                                  radius: 90.r,
+                                  widget: Image.asset(
+                                    'lib/assets/images/group.png',
+                                    width: 18.r,
+                                    height: 22.r,
+                                  ))))
+                    ],
                   ),
                   // 计划信息
                   Padding(

@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:flutter_track/model/project_model.dart';
 import 'package:flutter_track/pages/components/group_card.dart';
 import 'package:flutter_track/pages/components/project_card.dart';
@@ -161,6 +161,25 @@ class _ProjectPageState extends State<ProjectPage>
 
   @override
   Widget build(BuildContext context) {
+    final JPush jpush = JPush();
+    jpush.applyPushAuthority();
+    jpush.setup(
+      appKey: "7c512da646446cc69f9c55a5", // 极光中的appkey
+      channel: "theChannel",
+      production: false,
+      debug: true,
+    );
+    jpush.addEventHandler(
+        onReceiveNotification: (Map<String, dynamic> message) async {
+      debugPrint("接收到推送: $message");
+    }, onOpenNotification: (Map<String, dynamic> message) async {
+      debugPrint("通过点击推送进入app: $message");
+    }, onReceiveMessage: (Map<String, dynamic> message) async {
+      debugPrint("接收到自定义消息: $message");
+    }, onReceiveNotificationAuthorization:
+            (Map<String, dynamic> message) async {
+      debugPrint("通知权限状态: $message");
+    });
     return Column(
       children: <Widget>[
         Container(
@@ -254,6 +273,26 @@ class _ProjectPageState extends State<ProjectPage>
                           ),
                         ),
                       ),
+                      ElevatedButton(
+                          onPressed: () {
+                            jpush.getRegistrationID().then((rid) {
+                              print("当前设备的rid： ${rid}");
+                            });
+                            var fireDate = DateTime.fromMillisecondsSinceEpoch(
+                                DateTime.now().millisecondsSinceEpoch + 3000);
+                            var localNotification = LocalNotification(
+                                id: 234,
+                                title: "本地推送",
+                                buildId: 1,
+                                content:
+                                    "😁 随便写点内容，时间 ${DateTime.now().toIso8601String()}",
+                                fireTime: DateTime.now(), // 立即发送
+                                subtitle: "副标题 123456",
+                                extra: {"myInfo": "推送信息balabla"} // 携带数据
+                                );
+                            jpush.sendLocalNotification(localNotification);
+                          },
+                          child: Text('123')),
                       projectList2.isEmpty
                           ? Center(
                               child: Column(

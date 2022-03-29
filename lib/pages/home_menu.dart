@@ -103,11 +103,11 @@ class _HomeMenuState extends State<HomeMenu> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
     if (token == null || token == '') {
-      print('未登录：$token');
+      debugPrint('未登录：$token');
       Get.offAllNamed('/log');
       // Get.snackbar('提示', '未登录');
     } else {
-      print('该用户已登录：$token');
+      debugPrint('该用户已登录：$token');
     }
   }
 
