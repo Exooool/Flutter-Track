@@ -5,7 +5,6 @@ import 'package:flutter_track/pages/components/custom_appbar.dart';
 
 // 样式导入
 import 'package:flutter_track/common/style/my_style.dart';
-import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 
 import 'package:flutter_track/pages/components/two_layer_tab.dart';
@@ -198,7 +197,10 @@ class UserPage extends StatelessWidget {
                         children: <Widget>[
                           // slideButton('兑换商店', () {}),
                           slideButton('历史记录', () => Get.toNamed('history')),
-                          slideButton('我的消息', () => Get.toNamed('message'))
+                          slideButton(
+                              '我的消息',
+                              () => Get.toNamed('message',
+                                  arguments: {'user': c.user.value}))
                         ],
                       ),
 

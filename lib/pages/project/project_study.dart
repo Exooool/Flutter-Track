@@ -81,6 +81,8 @@ class ProjectStudyController extends GetxController {
     int studyTime = (totalSingleTime.value - singleTime.value) ~/ 60;
     // 小于1就退出
     if (studyTime < 1) {
+      Get.back();
+      Get.back();
       return;
     }
     String dateTime = DateTime.now().toString().substring(0, 10);
@@ -90,6 +92,30 @@ class ProjectStudyController extends GetxController {
       'project_id': project.projectId
     }, success: (res) {
       print(res);
+      // 第一次back退出dialog
+      Get.back();
+      // 第二次退出计时
+      Get.back();
+      if (res['status'] == 0) {
+        Get.dialog(
+            CustomDialog(
+              height: 330.h,
+              width: 318.w,
+              title: '提示',
+              content: '数据上传成功',
+              subContent: '您本次学习时间为：$studyTime',
+            ),
+            barrierColor: Colors.transparent);
+      } else {
+        Get.dialog(
+            CustomDialog(
+              height: 330.h,
+              width: 318.w,
+              title: '提示',
+              content: '数据上传异常',
+            ),
+            barrierColor: Colors.transparent);
+      }
     }, error: (error) {
       print(error);
     });
@@ -105,7 +131,6 @@ class ProjectStudyController extends GetxController {
 
   @override
   void onClose() {
-    // TODO: implement onClose
     super.onClose();
     timer.cancel();
   }
@@ -196,11 +221,7 @@ class ProjectStudy extends StatelessWidget {
           Get.back();
         },
         onConfirm: () {
-          // 第一次back退出dialog
-          // Get.back();
           c.checkStudyTime();
-          // 第二次退出计时
-          // Get.back();
         },
       ),
       barrierColor: Colors.transparent,
@@ -226,134 +247,141 @@ class ProjectStudy extends StatelessWidget {
             debugPrint('点击外侧');
             c.show.value = 0;
           },
-          child: GetX<ProjectStudyController>(builder: (_) {
-            return Stack(
-              children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    // 倒计时界面
-                    Center(
-                      child: Stack(
-                        children: <Widget>[
-                          Image.asset(
-                            'lib/assets/images/timer.png',
-                            height: 306.r,
-                            width: 306.r,
-                            fit: BoxFit.cover,
-                          ),
-                          Positioned(
-                              child: Container(
-                            height: 306.r,
-                            width: 306.r,
-                            alignment: Alignment.center,
-                            child: Text(
-                              '${c.addZero(c.singleTime ~/ 3600)}:${c.addZero((c.singleTime ~/ 60) % 60)}:${c.addZero(c.singleTime % 60)}',
-                              style: TextStyle(
-                                  fontSize: MyFontSize.font20,
-                                  foreground: MyFontStyle.textlinearForeground,
-                                  fontWeight: FontWeight.w700),
+          child: WillPopScope(
+            onWillPop: () async {
+              showDialog();
+              return false;
+            },
+            child: GetX<ProjectStudyController>(builder: (_) {
+              return Stack(
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      // 倒计时界面
+                      Center(
+                        child: Stack(
+                          children: <Widget>[
+                            Image.asset(
+                              'lib/assets/images/timer.png',
+                              height: 306.r,
+                              width: 306.r,
+                              fit: BoxFit.cover,
                             ),
-                          ))
-                        ],
-                      ),
-                    ),
-
-                    // 计划名称
-                    Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(bottom: 21.h),
-                      child: Text(
-                        c.project.projectTitle,
-                        style: TextStyle(
-                            fontSize: MyFontSize.font18,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    // 计划阶段
-                    Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(bottom: 5.h),
-                      child: Text(
-                        '阶段${c.project.nowStage()}/${c.project.stageList.length}',
-                        style: TextStyle(
-                            fontSize: MyFontSize.font18,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    // 当前阶段内容
-                    Center(
-                      child: Text(
-                        c.content.value,
-                        style: TextStyle(
-                            fontSize: MyFontSize.font14,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ),
-
-                    // 关闭按钮
-                  ],
-                ),
-                Positioned(
-                  top: 0,
-                  child:
-                      // 小组成员
-                      Container(
-                    width: MediaQueryData.fromWindow(window).size.width,
-                    alignment: Alignment.center,
-                    child: c.groupUserList.isNotEmpty
-                        ? Padding(
-                            padding: EdgeInsets.only(bottom: 74.h),
-                            child: Stack(
-                              children: [
-                                Column(
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: getUser(),
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        '点击头像可查看组员信息',
-                                        style: TextStyle(
-                                            fontSize: MyFontSize.font12,
-                                            color: MyColor.fontGrey),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        : Container(),
-                  ),
-                ),
-
-                // 关闭按钮
-                Positioned(
-                    bottom: 44.h,
-                    child: Container(
-                      width: MediaQueryData.fromWindow(window).size.width,
-                      alignment: Alignment.center,
-                      child: PublicCard(
-                        radius: 90.r,
-                        height: 48.r,
-                        width: 48.r,
-                        // 退出前进行弹窗提醒
-                        onTap: () => showDialog(),
-                        widget: Center(
-                          child: Image.asset(
-                            'lib/assets/icons/Close.png',
-                            height: 33.r,
-                            width: 33.r,
-                          ),
+                            Positioned(
+                                child: Container(
+                              height: 306.r,
+                              width: 306.r,
+                              alignment: Alignment.center,
+                              child: Text(
+                                '${c.addZero(c.singleTime ~/ 3600)}:${c.addZero((c.singleTime ~/ 60) % 60)}:${c.addZero(c.singleTime % 60)}',
+                                style: TextStyle(
+                                    fontSize: MyFontSize.font20,
+                                    foreground:
+                                        MyFontStyle.textlinearForeground,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ))
+                          ],
                         ),
                       ),
-                    ))
-              ],
-            );
-          }),
+
+                      // 计划名称
+                      Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(bottom: 21.h),
+                        child: Text(
+                          c.project.projectTitle,
+                          style: TextStyle(
+                              fontSize: MyFontSize.font18,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      // 计划阶段
+                      Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(bottom: 5.h),
+                        child: Text(
+                          '阶段${c.project.nowStage()}/${c.project.stageList.length}',
+                          style: TextStyle(
+                              fontSize: MyFontSize.font18,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      // 当前阶段内容
+                      Center(
+                        child: Text(
+                          c.content.value,
+                          style: TextStyle(
+                              fontSize: MyFontSize.font14,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ),
+
+                      // 关闭按钮
+                    ],
+                  ),
+                  Positioned(
+                    top: 0,
+                    child:
+                        // 小组成员
+                        Container(
+                      width: MediaQueryData.fromWindow(window).size.width,
+                      alignment: Alignment.center,
+                      child: c.groupUserList.isNotEmpty
+                          ? Padding(
+                              padding: EdgeInsets.only(bottom: 74.h),
+                              child: Stack(
+                                children: [
+                                  Column(
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: getUser(),
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          '点击头像可查看组员信息',
+                                          style: TextStyle(
+                                              fontSize: MyFontSize.font12,
+                                              color: MyColor.fontGrey),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container(),
+                    ),
+                  ),
+
+                  // 关闭按钮
+                  Positioned(
+                      bottom: 44.h,
+                      child: Container(
+                        width: MediaQueryData.fromWindow(window).size.width,
+                        alignment: Alignment.center,
+                        child: PublicCard(
+                          radius: 90.r,
+                          height: 48.r,
+                          width: 48.r,
+                          // 退出前进行弹窗提醒
+                          onTap: () => showDialog(),
+                          widget: Center(
+                            child: Image.asset(
+                              'lib/assets/icons/Close.png',
+                              height: 33.r,
+                              width: 33.r,
+                            ),
+                          ),
+                        ),
+                      ))
+                ],
+              );
+            }),
+          ),
         ));
   }
 }

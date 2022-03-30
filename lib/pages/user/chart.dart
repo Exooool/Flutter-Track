@@ -4,15 +4,19 @@ import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:get/get.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class ChartPageController extends GetxController {
-  var charList = [
-    {'userName': 'Gutled', 'content': '你好', 'to': false},
-    {'userName': '夏天', 'content': '我不好', 'to': true},
-    {'userName': '夏天', 'content': '我不好', 'to': true},
-    {'userName': '夏天', 'content': '我不好', 'to': true},
-    {'userName': '夏天', 'content': '我不好', 'to': true}
-  ].obs;
+  var chartList = [].obs;
+  final io.Socket socket = Get.arguments['socket'];
+
+  @override
+  void onInit() {
+    super.onInit();
+    socket.on('message', (data) {
+      print(data);
+    });
+  }
 }
 
 class ChartPage extends StatelessWidget {
@@ -144,7 +148,7 @@ class ChartPage extends StatelessWidget {
                 child: ListView(
               padding: EdgeInsets.only(left: 24.w, right: 24.w),
               physics: const BouncingScrollPhysics(),
-              children: getChart(c.charList.toList()),
+              children: getChart(c.chartList.toList()),
             )),
             // 输入框
             input()

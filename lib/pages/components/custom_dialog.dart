@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:get/get.dart';
 
 class CustomDialog extends StatelessWidget {
   final double height;
@@ -93,7 +94,7 @@ class CustomDialog extends StatelessWidget {
                                   PublicCard(
                                       radius: 90.r,
                                       notWhite: true,
-                                      onTap: onCancel,
+                                      onTap: onCancel ?? () => Get.back(),
                                       padding: EdgeInsets.only(
                                           left: 24.w,
                                           right: 24.w,
@@ -107,7 +108,7 @@ class CustomDialog extends StatelessWidget {
                                   PublicCard(
                                       radius: 90.r,
                                       notWhite: true,
-                                      onTap: onConfirm,
+                                      onTap: onConfirm ?? () => Get.back(),
                                       padding: EdgeInsets.only(
                                           left: 24.w,
                                           right: 24.w,

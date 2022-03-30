@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/model/user_model.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:get/get.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:socket_io_client/socket_io_client.dart';
 
 class MessagePageController extends GetxController {
+  final User user = Get.arguments['user'];
+  late final io.Socket socket;
   var chartMessageList = [
     {'name': 'Gutabled', 'content': '私信内容。。。', 'time': '19:00'},
     {'name': 'Gutabled', 'content': '私信内容。。。', 'time': '19:00'},
@@ -16,6 +21,19 @@ class MessagePageController extends GetxController {
     {'name': 'Gutabled', 'content': '私信内容。。。', 'time': '19:00'},
     {'name': 'Gutabled', 'content': '私信内容。。。', 'time': '19:00'}
   ].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    socket = io.io(
+        'http://10.0.2.2:3001',
+        OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+            // .setExtraHeaders({'foo': 'bar'}) // optional
+            .build());
+    socket.onConnect((_) {
+      socket.emit('join', '${user.userId}');
+    });
+  }
 }
 
 class MessagePage extends StatelessWidget {
@@ -62,7 +80,7 @@ class MessagePage extends StatelessWidget {
   // 行
   Widget messageRow(String title, String trailing, {String subtitle = ''}) {
     return InkWell(
-      onTap: () => Get.toNamed('/chart'),
+      onTap: () => Get.toNamed('/chart', arguments: {'socket': c.socket}),
       child: Padding(
         padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 12.h),
         child: Row(

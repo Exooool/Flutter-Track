@@ -273,26 +273,26 @@ class _ProjectPageState extends State<ProjectPage>
                           ),
                         ),
                       ),
-                      ElevatedButton(
-                          onPressed: () {
-                            jpush.getRegistrationID().then((rid) {
-                              print("当前设备的rid： ${rid}");
-                            });
-                            var fireDate = DateTime.fromMillisecondsSinceEpoch(
-                                DateTime.now().millisecondsSinceEpoch + 3000);
-                            var localNotification = LocalNotification(
-                                id: 234,
-                                title: "本地推送",
-                                buildId: 1,
-                                content:
-                                    "😁 随便写点内容，时间 ${DateTime.now().toIso8601String()}",
-                                fireTime: DateTime.now(), // 立即发送
-                                subtitle: "副标题 123456",
-                                extra: {"myInfo": "推送信息balabla"} // 携带数据
-                                );
-                            jpush.sendLocalNotification(localNotification);
-                          },
-                          child: Text('123')),
+                      // ElevatedButton(
+                      //     onPressed: () {
+                      //       jpush.getRegistrationID().then((rid) {
+                      //         print("当前设备的rid： ${rid}");
+                      //       });
+                      //       var fireDate = DateTime.fromMillisecondsSinceEpoch(
+                      //           DateTime.now().millisecondsSinceEpoch + 3000);
+                      //       var localNotification = LocalNotification(
+                      //           id: 234,
+                      //           title: "本地推送",
+                      //           buildId: 1,
+                      //           content:
+                      //               "😁 随便写点内容，时间 ${DateTime.now().toIso8601String()}",
+                      //           fireTime: DateTime.now(), // 立即发送
+                      //           subtitle: "副标题 123456",
+                      //           extra: {"myInfo": "推送信息balabla"} // 携带数据
+                      //           );
+                      //       jpush.sendLocalNotification(localNotification);
+                      //     },
+                      //     child: Text('123')),
                       projectList2.isEmpty
                           ? Center(
                               child: Column(

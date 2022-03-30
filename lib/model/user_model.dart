@@ -9,7 +9,7 @@ class User {
   late String college;
   late String major;
   late int exp;
-  late List studyTime;
+  late Map studyTime;
   late int totalTime;
   late List fans;
   late List focus;

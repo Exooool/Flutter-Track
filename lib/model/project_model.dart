@@ -11,7 +11,7 @@ class Project {
   late String secret;
   late int remainderTime;
   late List stageList;
-  late List studyTime;
+  late Map studyTime;
   late DateTime createTime;
   Project.fromMap(Map<String, dynamic> json) {
     projectImg = json['project_img'];

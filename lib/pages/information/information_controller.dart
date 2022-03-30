@@ -49,7 +49,7 @@ class InformationController extends GetxController {
     if (nowDatStudyTime.value != 0) {
       int h = (nowDatStudyTime.value ~/ 60) * 2;
       int m = nowDatStudyTime.value % 60;
-      if (m < 30) {
+      if (m < 30 && h != 0) {
         h--;
       }
       print(h);
@@ -75,14 +75,15 @@ class InformationController extends GetxController {
       }
 
       // 查找当日学习时间
-      List studyList = user.value.studyTime;
-      for (var i = 0; i < studyList.length; i++) {
-        DateTime dateTime = DateTime.parse(studyList[i]['date']);
+      Map studyList = user.value.studyTime;
+
+      studyList.forEach((key, value) {
+        DateTime dateTime = DateTime.parse(key);
         if (dateTime.difference(now).inDays.abs() < 1) {
-          nowDatStudyTime.value = studyList[i]['time'];
-          break;
+          nowDatStudyTime.value = value;
         }
-      }
+      });
+      for (var i = 0; i < studyList.length; i++) {}
 
       if (studyList.isNotEmpty) {
         averDayStudyTime.value = user.value.totalTime ~/ studyList.length;
@@ -112,17 +113,14 @@ class InformationController extends GetxController {
   String getData() {
     List weekList = [];
     List timeList = [];
-    List studyList = user.value.studyTime;
+    Map studyList = user.value.studyTime;
     if (studyList.isEmpty) {
     } else {
-      weekList = studyList.map((item) {
-        DateTime dt = DateTime.parse(item['date']);
-        return weekListCN[dt.weekday - 1];
-      }).toList();
-
-      timeList = studyList.map((item) {
-        return (item['time'] / 60).toStringAsFixed(1);
-      }).toList();
+      studyList.forEach((key, value) {
+        DateTime dt = DateTime.parse(key);
+        weekList.add(weekListCN[dt.weekday - 1]);
+        timeList.add((value / 60).toStringAsFixed(1));
+      });
     }
 
     // print(weekList);
