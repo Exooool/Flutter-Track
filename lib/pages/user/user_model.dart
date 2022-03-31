@@ -58,8 +58,13 @@ class UserModelPage extends StatelessWidget {
         ),
         body: GetX<UserModelController>(builder: (controller) {
           return c.user.value.userId == -1
-              ? const Center(
-                  child: Text('加载失败,请重试'),
+              ? InkWell(
+                  onTap: () {
+                    c.getUserInfo();
+                  },
+                  child: const Center(
+                    child: Text('加载失败，点击重新刷新'),
+                  ),
                 )
               : Container(
                   padding: EdgeInsets.only(left: 24.w, right: 24.w),

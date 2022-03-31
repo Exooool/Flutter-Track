@@ -1,40 +1,66 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
+// import 'package:flutter_track/model/user_model.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:flutter_track/pages/user/message.dart';
 import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart' as io;
+// import 'package:socket_io_client/socket_io_client.dart' as io;
 
-class ChartPageController extends GetxController {
-  var chartList = [].obs;
-  final io.Socket socket = Get.arguments['socket'];
+// class ChartPageController extends GetxController {
+//   RxList chartList = [].obs;
+//   final io.Socket socket = Get.arguments['socket'];
+//   final User user = Get.arguments['user'];
+//   late String otherUserImg;
+//   late int otherUserId;
+//   late int chartId;
+//   RxString inputValue = ''.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    socket.on('message', (data) {
-      print(data);
-    });
-  }
-}
+//   // 初始化聊天状态
+//   _getInit() {
+//     Map m = Get.arguments['chart_info'];
+//     chartList.value = jsonDecode(m['chart_data']);
+//     otherUserImg = m['user_img'];
+//     otherUserId = m['user_id'];
+//     chartId = m['chart_id'];
+//   }
+
+//   @override
+//   void onInit() {
+//     _getInit();
+//     socket.on('message', (data) {
+//       print(data);
+//     });
+
+//     super.onInit();
+//   }
+// }
 
 class ChartPage extends StatelessWidget {
   ChartPage({Key? key}) : super(key: key);
-  final ChartPageController c = Get.put(ChartPageController());
+  // final ChartPageController c = Get.put(ChartPageController());
+  final int chartIndex = Get.arguments;
+  final TextEditingController controller = TextEditingController();
+  final MessagePageController o = Get.find();
 
-  Widget fromChart(String content) {
+  Widget fromChart(String content, String img) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           ClipOval(
-            child: Container(
+            child: SizedBox(
               height: 56.r,
               width: 56.r,
-              decoration: const BoxDecoration(
-                  gradient: MyWidgetStyle.mainLinearGradient),
+              child: img == ''
+                  ? Image.asset('lib/assets/images/defaultUserImg.png')
+                  : Image.network(
+                      img,
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
           SizedBox(width: 12.w),
@@ -48,7 +74,7 @@ class ChartPage extends StatelessWidget {
     );
   }
 
-  Widget toChart(String content) {
+  Widget toChart(String content, String img) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: Row(
@@ -62,16 +88,43 @@ class ChartPage extends StatelessWidget {
               widget: Text(content)),
           SizedBox(width: 12.w),
           ClipOval(
-            child: Container(
+            child: SizedBox(
               height: 56.r,
               width: 56.r,
-              decoration: const BoxDecoration(
-                  gradient: MyWidgetStyle.mainLinearGradient),
+              child: img == ''
+                  ? Image.asset('lib/assets/images/defaultUserImg.png')
+                  : Image.network(
+                      img,
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  submit() {
+    Map chartData = o.chartMessageList[chartIndex];
+    List chartList = jsonDecode(chartData['chart_data']);
+    if (controller.text.isNotEmpty) {
+      print(controller.text);
+      String value = controller.text;
+      String now = DateTime.now().toString();
+
+      var newMessage = {
+        'time': now,
+        'content': value,
+        'user_id': o.user.userId
+      };
+      chartList.add(newMessage);
+      o.socket.emit('message',
+          [chartList, newMessage, chartData['user_id'], chartData['chart_id']]);
+      // 清空输入框
+      controller.text = '';
+      o.chartMessageList[chartIndex]['chart_data'] = jsonEncode(chartList);
+      o.onMessage();
+    }
   }
 
   Widget input() {
@@ -87,6 +140,8 @@ class ChartPage extends StatelessWidget {
                 padding: EdgeInsets.only(left: 24.w, right: 24.w),
                 widget: Center(
                   child: TextField(
+                    controller: controller,
+                    onSubmitted: (value) => submit(),
                     decoration: InputDecoration.collapsed(
                       enabled: true,
                       hintText: '请输入你的内容',
@@ -103,6 +158,8 @@ class ChartPage extends StatelessWidget {
               height: 36.h,
               width: 68.w,
               notWhite: true,
+              // 通过socket进行发送聊天记录
+              onTap: () => submit(),
               widget: Center(
                   child: Text(
                 '发送',
@@ -114,47 +171,44 @@ class ChartPage extends StatelessWidget {
     );
   }
 
-  List<Widget> getChart(List data) {
-    List<Widget> list;
-    list = data.map((item) {
-      if (item['to']) {
-        return toChart(item['content']);
-      } else {
-        return fromChart(item['content']);
-      }
-    }).toList();
-    return list;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppbar(
-        'chart',
-        title: 'Gutabled',
-        leading: InkWell(
-          onTap: () => Get.back(),
-          child: Image.asset(
-            'lib/assets/icons/Refund_back.png',
-            height: 25.r,
-            width: 25.r,
+    return GetBuilder<MessagePageController>(builder: (_) {
+      Map chartData = o.chartMessageList[chartIndex];
+      List chartList = jsonDecode(chartData['chart_data']);
+      return Scaffold(
+          appBar: CustomAppbar(
+            'chart',
+            title: chartData['user_name'],
+            leading: InkWell(
+              onTap: () => Get.back(),
+              child: Image.asset(
+                'lib/assets/icons/Refund_back.png',
+                height: 25.r,
+                width: 25.r,
+              ),
+            ),
           ),
-        ),
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-                child: ListView(
-              padding: EdgeInsets.only(left: 24.w, right: 24.w),
-              physics: const BouncingScrollPhysics(),
-              children: getChart(c.chartList.toList()),
-            )),
-            // 输入框
-            input()
-          ],
-        ),
-      ),
-    );
+          body: Center(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                    child: ListView.builder(
+                  itemCount: chartList.length,
+                  itemBuilder: (context, index) {
+                    var temp = chartList[index];
+                    return temp['user_id'] == o.user.userId
+                        ? toChart(temp['content'], o.user.userImg)
+                        : fromChart(temp['content'], chartData['user_img']);
+                  },
+                  padding: EdgeInsets.only(left: 24.w, right: 24.w),
+                  physics: const BouncingScrollPhysics(),
+                )),
+                // 输入框
+                input()
+              ],
+            ),
+          ));
+    });
   }
 }

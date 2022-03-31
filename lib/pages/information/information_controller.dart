@@ -105,8 +105,10 @@ class InformationController extends GetxController {
     DioUtil().post('/users/sign', data: {'datetime': now.toString()},
         success: (res) {
       print(res);
+      Get.snackbar('提示', '签到成功');
     }, error: (error) {
       print(error);
+      Get.snackbar('提示', '签到失败，网络异常');
     });
   }
 
