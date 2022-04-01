@@ -28,9 +28,13 @@ class _ProjectPageState extends State<ProjectPage>
   // 内层tab的controller
   late TabController _tabInteriorController;
 
+  // 匹配成功的队列
   List groupListMatched = [{}];
+  // 正在匹配的队列
   List groupListMatching = [];
+  // 60分钟内进行的计划
   List projectList1 = [];
+  // 其余计划
   List projectList2 = [];
   // 自定义tab样式
   Widget mainTab(String content, {bool show = true}) {
@@ -101,16 +105,6 @@ class _ProjectPageState extends State<ProjectPage>
         ));
   }
 
-  // 获取计划
-  // List<Widget> _getProject() {
-  //   List<Widget> list = [];
-  //   var l = projectData['project'] as List<dynamic>;
-  //   list = l.map((e) {
-  //     return ProjectCard(Project.fromMap(e));
-  //   }).toList();
-  //   return list;
-  // }
-
   _getProject() {
     DioUtil().post('/project/get', success: (res) {
       // print(res);
@@ -141,13 +135,42 @@ class _ProjectPageState extends State<ProjectPage>
     });
   }
 
-  // List<Widget> _getGroup(List list) {
-  //   if (list.isEmpty) {
-  //     return;
-  //   } else {
-  //     return;
-  //   }
-  // }
+  // 获取互助小组信息
+  _getGroup() {
+    DioUtil().get('/project/group/get', success: (res) {
+      print('互助小组信息$res');
+      List groupInfo = res['data'];
+      Map<int, List> m = {};
+      // 对获取的数据进行解析
+      // 解析到map中
+      for (int i = 0; i < groupInfo.length; i++) {
+        if (m[groupInfo[i]['group_id']] == null) {
+          List l = [];
+          l.add(groupInfo[i]);
+          m[groupInfo[i]['group_id']] = l;
+        } else {
+          m[groupInfo[i]['group_id']]!.add(groupInfo[i]);
+        }
+      }
+      // 在通过map的key的list类型的长度来判断是不是在匹配中
+      debugPrint('----------------------');
+      // 格式化列表
+      groupListMatched = [];
+      groupListMatching = [];
+      for (int i = 0; i < m.length; i++) {
+        if (m[m.keys.toList()[i]]!.length < 3) {
+          groupListMatching.add(m[m.keys.toList()[i]]);
+        } else {
+          groupListMatched.add(m[m.keys.toList()[i]]);
+        }
+      }
+      debugPrint('匹配成功列表：$groupListMatched');
+      debugPrint('匹配中列表：$groupListMatching');
+      // print(m);
+    }, error: (error) {
+      print(error);
+    });
+  }
 
   @override
   void initState() {
@@ -157,6 +180,7 @@ class _ProjectPageState extends State<ProjectPage>
     _tabInteriorController =
         TabController(length: 2, vsync: this, initialIndex: 0);
     _getProject();
+    _getGroup();
   }
 
   @override

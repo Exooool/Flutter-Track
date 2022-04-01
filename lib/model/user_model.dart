@@ -11,8 +11,8 @@ class User {
   late int exp;
   late Map studyTime;
   late int totalTime;
-  late List fans;
-  late List focus;
+  late int befocusLength;
+  late int focusLength;
   late List collection;
   late String? lastSign;
 
@@ -29,8 +29,8 @@ class User {
     exp = json['exp'];
     studyTime = jsonDecode(json['study_time']);
     totalTime = json['total_time'];
-    fans = jsonDecode(json['fans']);
-    focus = jsonDecode(json['focus']);
+    befocusLength = json['befocus_length'];
+    focusLength = json['focus_length'];
     collection = jsonDecode(json['collection']);
     lastSign = json['last_sign'];
   }

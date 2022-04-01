@@ -68,7 +68,10 @@ class InformationController extends GetxController {
 
       // 计算签到
       if (user.value.lastSign != null) {
+        print(now);
         DateTime dateTime = DateTime.parse(user.value.lastSign!);
+        print(dateTime);
+        print('当前相差时间:${dateTime.difference(now).inDays.abs()}');
         if (dateTime.difference(now).inDays.abs() < 1) {
           isSign.value = true;
         }

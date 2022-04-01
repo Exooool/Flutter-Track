@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_track/assets/test.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:get/get.dart';

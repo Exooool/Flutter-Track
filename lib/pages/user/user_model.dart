@@ -8,13 +8,16 @@ import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 
 import 'package:flutter_track/pages/components/two_layer_tab.dart';
+import 'package:flutter_track/pages/user/user_controller.dart';
 
 import 'package:flutter_track/pages/user/user_model_controller.dart';
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 
 class UserModelPage extends StatelessWidget {
   UserModelPage({Key? key}) : super(key: key);
   final UserModelController c = Get.put(UserModelController());
+  final UserController u = Get.find();
 
   // 侧边按钮
   Widget slideButton(String title, Function() onTap) {
@@ -86,6 +89,7 @@ class UserModelPage extends StatelessWidget {
                                         c.user.value.userImg,
                                         height: 84.r,
                                         width: 84.r,
+                                        fit: BoxFit.cover,
                                       ),
                               ),
                             ),
@@ -139,7 +143,7 @@ class UserModelPage extends StatelessWidget {
                                   width: 25.r,
                                 ),
                                 SizedBox(width: 5.w),
-                                Text('${c.user.value.focus.length}',
+                                Text('${c.user.value.focusLength}',
                                     style:
                                         TextStyle(fontSize: MyFontSize.font12))
                               ],
@@ -155,7 +159,7 @@ class UserModelPage extends StatelessWidget {
                                   width: 25.r,
                                 ),
                                 SizedBox(width: 5.w),
-                                Text('${c.user.value.fans.length}',
+                                Text('${c.user.value.befocusLength}',
                                     style:
                                         TextStyle(fontSize: MyFontSize.font12))
                               ],
@@ -179,8 +183,31 @@ class UserModelPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           // slideButton('兑换商店', () {}),
-                          slideButton('关注', () => Get.toNamed('history')),
-                          slideButton('私聊', () => Get.toNamed('message'))
+                          Opacity(
+                            opacity: c.isFocus.value ? 0.5 : 1,
+                            child: slideButton('关注', () {
+                              DioUtil().post('/users/focus',
+                                  data: {'other_user_id': c.user.value.userId},
+                                  success: (res) {
+                                print(res);
+                                c.getUserInfo();
+                              }, error: (error) {
+                                print(error);
+                              });
+                            }),
+                          ),
+                          slideButton('私聊', () {
+                            DioUtil().post('/chart/create',
+                                data: {'other_user_id': c.user.value.userId},
+                                success: (res) {
+                              print(res);
+                              Get.toNamed('message',
+                                  arguments: {'user': u.user.value});
+                            }, error: (error) {
+                              Get.snackbar('提示', '私聊失败');
+                              print(error);
+                            });
+                          })
                         ],
                       ),
 

@@ -8,6 +8,7 @@ import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 
 import 'package:flutter_track/pages/components/two_layer_tab.dart';
+import 'package:flutter_track/pages/user/focus_list.dart';
 import 'package:flutter_track/pages/user/user_controller.dart';
 import 'package:get/get.dart';
 
@@ -153,6 +154,8 @@ class UserPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           InkWell(
+                            onTap: () => Get.to(() => FocusList(),
+                                arguments: {'type': 0}),
                             child: Row(
                               children: [
                                 Image.asset(
@@ -161,7 +164,7 @@ class UserPage extends StatelessWidget {
                                   width: 25.r,
                                 ),
                                 SizedBox(width: 5.w),
-                                Text('${c.user.value.focus.length}',
+                                Text('${c.user.value.focusLength}',
                                     style:
                                         TextStyle(fontSize: MyFontSize.font12))
                               ],
@@ -169,6 +172,8 @@ class UserPage extends StatelessWidget {
                           ),
                           SizedBox(width: 5.w),
                           InkWell(
+                            onTap: () => Get.to(() => FocusList(),
+                                arguments: {'type': 1}),
                             child: Row(
                               children: [
                                 Image.asset(
@@ -177,7 +182,7 @@ class UserPage extends StatelessWidget {
                                   width: 25.r,
                                 ),
                                 SizedBox(width: 5.w),
-                                Text('${c.user.value.fans.length}',
+                                Text('${c.user.value.befocusLength}',
                                     style:
                                         TextStyle(fontSize: MyFontSize.font12))
                               ],

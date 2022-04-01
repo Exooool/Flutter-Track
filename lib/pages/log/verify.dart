@@ -132,7 +132,7 @@ class _VerifyPageState extends State<VerifyPage> {
                 if (res.data['first']) {
                   Get.offNamed('/sex_info');
                 } else {
-                  Get.toNamed('/home');
+                  Get.offNamed('/home');
                 }
               } else {
                 Get.snackbar('提示', '验证码错误');

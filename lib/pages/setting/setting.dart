@@ -43,7 +43,11 @@ class SettingPage extends StatelessWidget {
         '',
         leading: InkWell(
           onTap: () => Get.back(),
-          child: const Text('返回'),
+          child: Image.asset(
+            'lib/assets/icons/Refund_back.png',
+            height: 25.r,
+            width: 25.r,
+          ),
         ),
         title: '设置',
         ending: InkWell(

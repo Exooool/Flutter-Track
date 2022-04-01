@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
-import 'package:flutter_track/config/http_config.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/custom_checkbox.dart';
@@ -103,6 +102,7 @@ class NewsEdit extends StatelessWidget {
                   ZefyrEditor(
                     // focusNode: null,
                     // readOnly: true,
+                    autofocus: true,
                     padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 7.h),
                     controller: _controller,
                     embedBuilder: customZefyrEmbedBuilder,

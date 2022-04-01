@@ -10,7 +10,6 @@ import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:socket_io_client/socket_io_client.dart';
 
 class MessagePageController extends GetxController {
   final User user = Get.arguments['user'];
@@ -32,9 +31,9 @@ class MessagePageController extends GetxController {
     List l = jsonDecode(chartMessageList[index]['chart_data']);
     if (l.isNotEmpty) {
       DateTime now = DateTime.now();
-      print(now);
+      // print(now);
       DateTime dateTime = DateTime.parse(l.removeLast()['time']);
-      if (dateTime.difference(now).inDays.abs() > 1) {
+      if (dateTime.difference(now).inDays.abs() >= 1) {
         return formatDate(dateTime, [yyyy, '.', mm, '.', dd]);
       }
       return formatDate(dateTime, [HH, ':', nn]);
@@ -65,13 +64,29 @@ class MessagePageController extends GetxController {
 
     socket = io.io(
         'http://10.0.2.2:3001',
-        OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+        io.OptionBuilder()
+            .setTransports(['websocket']) // for Flutter or Dart VM
             // .setExtraHeaders({'foo': 'bar'}) // optional
             .build());
     socket.onConnect((_) {
       socket.emit('join', '${user.userId}');
     });
-    // socket.on(event, (data) => null)
+    socket.on('message', (data) {
+      // 如果与当前用户相同接受消息
+      if (data[1] == user.userId) {
+        print(data);
+        for (var i = 0; i < chartMessageList.length; i++) {
+          if (data[2] == chartMessageList[i]['chart_id']) {
+            Map chartData = chartMessageList[i];
+            List chartList = jsonDecode(chartData['chart_data']);
+            chartList.add(data[0]);
+            chartMessageList[i]['chart_data'] = jsonEncode(chartList);
+            update();
+            break;
+          }
+        }
+      }
+    });
   }
 }
 
