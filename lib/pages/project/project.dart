@@ -107,10 +107,6 @@ class _ProjectPageState extends State<ProjectPage>
 
   _getProject() {
     DioUtil().post('/project/get', success: (res) {
-      // print(res);
-      // setState(() {
-      //   list = res['data'];
-      // });
       print('计划列表$res');
 
       // 清空数据 然后请求替换数据
@@ -163,6 +159,9 @@ class _ProjectPageState extends State<ProjectPage>
         } else {
           groupListMatched.add(m[m.keys.toList()[i]]);
         }
+      }
+      if (mounted) {
+        setState(() {});
       }
       debugPrint('匹配成功列表：$groupListMatched');
       debugPrint('匹配中列表：$groupListMatching');
@@ -267,16 +266,18 @@ class _ProjectPageState extends State<ProjectPage>
                               itemBuilder: (context, index) {
                                 return ProjectCard(
                                   Project.fromMap(projectList1[index]),
-                                  delete: (id) {
-                                    DioUtil().post('/project/remove',
-                                        data: {'project_id': id},
-                                        success: (res) {
+                                  delete: (list) {
+                                    DioUtil().post('/project/remove', data: {
+                                      'project_id': list[0],
+                                      'group_id': list[1]
+                                    }, success: (res) {
                                       print(res);
 
                                       _getProject();
+                                      _getGroup();
                                       Get.snackbar('提示', '删除成功');
                                     }, error: (error) {
-                                      print(error);
+                                      Get.snackbar('提示', error);
                                     });
                                   },
                                   change: () {},
@@ -333,16 +334,18 @@ class _ProjectPageState extends State<ProjectPage>
                               itemBuilder: (context, index) {
                                 return ProjectCard(
                                   Project.fromMap(projectList2[index]),
-                                  delete: (id) {
-                                    DioUtil().post('/project/remove',
-                                        data: {'project_id': id},
-                                        success: (res) {
+                                  delete: (list) {
+                                    DioUtil().post('/project/remove', data: {
+                                      'project_id': list[0],
+                                      'group_id': list[1]
+                                    }, success: (res) {
                                       print(res);
 
                                       _getProject();
+                                      _getGroup();
                                       Get.snackbar('提示', '删除成功');
                                     }, error: (error) {
-                                      print(error);
+                                      Get.snackbar('提示', error);
                                     });
                                   },
                                   change: () {},
@@ -400,7 +403,18 @@ class _ProjectPageState extends State<ProjectPage>
                                 padding: EdgeInsets.zero,
                                 itemCount: groupListMatched.length,
                                 itemBuilder: (context, index) {
-                                  return GroupCard();
+                                  return GroupCard(groupListMatched[index],
+                                      delete: (groupId) {
+                                    DioUtil().post('/project/group/remove',
+                                        data: {'group_id': groupId},
+                                        success: (res) {
+                                      print(res);
+                                    }, error: (error) {
+                                      print(error);
+                                    });
+
+                                    _getGroup();
+                                  });
                                 }),
                         groupListMatching.isEmpty
                             ? Column(
@@ -415,7 +429,24 @@ class _ProjectPageState extends State<ProjectPage>
                                 padding: EdgeInsets.zero,
                                 itemCount: groupListMatching.length,
                                 itemBuilder: (context, index) {
-                                  return GroupCard();
+                                  return GroupCard(
+                                    groupListMatching[index],
+                                    delete: (groupId) {
+                                      DioUtil().post('/project/group/remove',
+                                          data: {'group_id': groupId},
+                                          success: (res) {
+                                        print(res);
+                                        if (res['status'] == 0) {
+                                          Get.snackbar('提示', '删除成功');
+                                        }
+                                      }, error: (error) {
+                                        Get.snackbar('提示', error);
+                                      });
+
+                                      _getGroup();
+                                    },
+                                    type: false,
+                                  );
                                 }),
                       ]))
                 ],

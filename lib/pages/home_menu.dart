@@ -37,6 +37,7 @@ class _HomeMenuState extends State<HomeMenu> {
     return InkWell(
         onTap: () {
           setState(() {
+            _isNavShow = true;
             _index = index;
             Vibrate.feedback(FeedbackType.light);
           });

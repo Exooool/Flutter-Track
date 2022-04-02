@@ -26,7 +26,7 @@ class AppPages {
     GetPage(name: '/verify', page: () => const VerifyPage()),
     GetPage(name: '/sex_info', page: () => const SexSelector()),
     GetPage(name: '/add_project', page: () => AddProject()),
-    GetPage(name: '/match_group', page: () => const MatchGroup()),
+    GetPage(name: '/match_group', page: () => MatchGroup()),
     GetPage(name: '/invite_group', page: () => InviteGroup()),
     GetPage(name: '/setting', page: () => const SettingPage()),
     GetPage(name: '/newsEdit', page: () => NewsEdit()),

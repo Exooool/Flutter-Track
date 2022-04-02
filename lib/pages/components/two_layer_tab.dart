@@ -8,7 +8,6 @@ import 'package:flutter_track/pages/components/union_widget.dart';
 
 import 'package:flutter_track/model/project_model.dart';
 import 'package:flutter_track/pages/components/project_card.dart';
-import 'package:get/get.dart';
 
 class TwoLayerTab extends StatefulWidget {
   final List exteriorTabs;
@@ -210,7 +209,7 @@ class _TwoLayerTabState extends State<TwoLayerTab>
                                         right: 12.w,
                                         bottom: 100.h),
                                     children:
-                                        _getProject(widget.interiorViews[0]),
+                                        _getProject(widget.interiorViews[1]),
                                   ),
                                 ]))
                           ],

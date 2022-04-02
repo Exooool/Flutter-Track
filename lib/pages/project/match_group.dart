@@ -2,14 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
-import 'package:percent_indicator/percent_indicator.dart';
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 
 import '../components/custom_appbar.dart';
 
-class MatchGroup extends StatelessWidget {
-  const MatchGroup({Key? key}) : super(key: key);
+class MatchGroupController extends GetxController {
+  final Map info = Get.arguments;
+  match() {
+    DioUtil().post('/project/group/add', data: {
+      'project_id': info['project_id'],
+      'frequency': info['frequency']
+    }, success: (res) {
+      debugPrint('$res');
 
+      // 没有可以匹配的小组时 转为自动创建小组进行匹配
+      if (res['status'] == 2) {
+        debugPrint('没有可匹配的小组，创建小组');
+        //
+        DioUtil().post('/project/group/create', data: {
+          'project_id': info['project_id'],
+          'frequency': info['frequency']
+        }, success: (res) {
+          print(res);
+        }, error: (error) {
+          print(error);
+        });
+      }
+    }, error: (error) {
+      print(error);
+    });
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    // 匹配
+    match();
+  }
+}
+
+class MatchGroup extends StatelessWidget {
+  MatchGroup({Key? key}) : super(key: key);
+  final MatchGroupController c = Get.put(MatchGroupController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

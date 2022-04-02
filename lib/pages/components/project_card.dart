@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/model/project_model.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
+import 'package:flutter_track/pages/components/custom_checkbox.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/project/project_study.dart';
 import 'package:get/get.dart';
@@ -121,46 +122,87 @@ class ProjectCard extends StatelessWidget {
                   )
                 ],
               )),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(children: <Widget>[
-                PublicCard(
-                    radius: 90.r,
-                    height: 72.r,
-                    width: 72.r,
-                    onTap: () {
-                      change!(project.projectId);
-                      Get.back();
-                    },
-                    margin: EdgeInsets.only(bottom: 8.h),
-                    widget: Center(
-                      child: Image.asset('lib/assets/icons/Pen_fill.png',
-                          height: 44.r, width: 44.r),
-                    )),
-                Text('修改计划', style: TextStyle(fontSize: MyFontSize.font16))
-              ]),
-              SizedBox(width: 24.w),
-              Column(
-                children: [
-                  PublicCard(
-                      radius: 90.r,
-                      height: 72.r,
-                      width: 72.r,
-                      onTap: () {
-                        delete!(project.projectId);
-                        Get.back();
-                      },
-                      margin: EdgeInsets.only(bottom: 8.h),
-                      widget: Center(
-                        child: Image.asset('lib/assets/icons/Trash.png',
-                            height: 44.r, width: 44.r),
-                      )),
-                  Text('删除计划', style: TextStyle(fontSize: MyFontSize.font16))
-                ],
-              )
-            ],
-          )
+          type == 0
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Column(children: <Widget>[
+                      PublicCard(
+                          radius: 90.r,
+                          height: 72.r,
+                          width: 72.r,
+                          onTap: () {
+                            change!(project.projectId);
+                            Get.back();
+                          },
+                          margin: EdgeInsets.only(bottom: 8.h),
+                          widget: Center(
+                            child: Image.asset('lib/assets/icons/Pen_fill.png',
+                                height: 44.r, width: 44.r),
+                          )),
+                      Text('修改计划',
+                          style: TextStyle(fontSize: MyFontSize.font16))
+                    ]),
+                    SizedBox(width: 24.w),
+                    Column(
+                      children: [
+                        PublicCard(
+                            radius: 90.r,
+                            height: 72.r,
+                            width: 72.r,
+                            onTap: () {
+                              Get.back();
+                              delete!([project.projectId, project.groupId]);
+                            },
+                            margin: EdgeInsets.only(bottom: 8.h),
+                            widget: Center(
+                              child: Image.asset('lib/assets/icons/Trash.png',
+                                  height: 44.r, width: 44.r),
+                            )),
+                        Text('删除计划',
+                            style: TextStyle(fontSize: MyFontSize.font16))
+                      ],
+                    )
+                  ],
+                )
+              : Column(
+                  children: <Widget>[
+                    PublicCard(
+                        radius: 90.r,
+                        margin: EdgeInsets.only(
+                            left: 36.w, right: 36.w, bottom: 12.h),
+                        padding: EdgeInsets.only(left: 12.w, right: 12.w),
+                        widget: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('对外可见',
+                                style: TextStyle(fontSize: MyFontSize.font16)),
+                            CustomCheckBox(
+                                value: project.secret != 'true',
+                                onChanged: (value) {
+                                  print(value);
+                                })
+                          ],
+                        )),
+                    PublicCard(
+                        radius: 90.r,
+                        margin: EdgeInsets.only(
+                            left: 36.w, right: 36.w, bottom: 12.h),
+                        padding: EdgeInsets.only(left: 12.w, right: 12.w),
+                        widget: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('自己可见',
+                                style: TextStyle(fontSize: MyFontSize.font16)),
+                            CustomCheckBox(
+                                value: project.secret == 'true',
+                                onChanged: (value) {
+                                  print(value);
+                                })
+                          ],
+                        ))
+                  ],
+                )
         ],
       )),
     );
@@ -175,13 +217,15 @@ class ProjectCard extends StatelessWidget {
         height: 72.h,
         radius: 90.r,
         onTap: () {
-          Get.to(() => ProjectStudy(), arguments: {'project': project});
+          if (type == 0) {
+            Get.to(() => ProjectStudy(), arguments: {'project': project});
+          }
         },
         onLongPress: () {
-          if (type == 0) {
+          if (type != 2) {
             Get.bottomSheet(longPressDialog(),
                 barrierColor: Colors.transparent);
-          } else if (type == 1) {}
+          }
         },
         margin: EdgeInsets.only(top: 6.h, bottom: 6.h),
         widget: Padding(
@@ -242,14 +286,25 @@ class ProjectCard extends StatelessWidget {
                         ),
                         Row(
                           children: <Widget>[
-                            Text(stage,
-                                style: TextStyle(
-                                    fontSize: MyFontSize.font12,
-                                    color: MyColor.fontBlack)),
+                            type == 0
+                                ? Text(stage,
+                                    style: TextStyle(
+                                        fontSize: MyFontSize.font12,
+                                        color: MyColor.fontBlack))
+                                : Container(),
+                            type == 1
+                                ? Image.asset(
+                                    'lib/assets/icons/Time_fill.png',
+                                    height: 18.r,
+                                    width: 18.r,
+                                  )
+                                : Container(),
                             SizedBox(width: 12.w),
                             Text(frequency(),
                                 style: TextStyle(
-                                    fontSize: MyFontSize.font12,
+                                    fontSize: type == 0
+                                        ? MyFontSize.font12
+                                        : MyFontSize.font14,
                                     color: MyColor.fontBlack))
                           ],
                         )

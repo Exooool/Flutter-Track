@@ -15,6 +15,9 @@ class DioUtil {
   //服务器ip
   static const String baseUrl = 'http://10.0.2.2:3000';
   static const String imgBaseUrl = 'http://10.0.2.2:3000';
+
+  // static const String baseUrl = 'http://119.91.27.93:3000';
+  // static const String imgBaseUrl = 'http://119.91.27.93:3000';
   BaseOptions options = BaseOptions();
 
   DioUtil() {

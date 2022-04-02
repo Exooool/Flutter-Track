@@ -130,9 +130,9 @@ class _VerifyPageState extends State<VerifyPage> {
                 print('用户登录成功token为：${res.data['token']}');
 
                 if (res.data['first']) {
-                  Get.offNamed('/sex_info');
+                  Get.offAllNamed('/sex_info');
                 } else {
-                  Get.offNamed('/home');
+                  Get.offAllNamed('/home');
                 }
               } else {
                 Get.snackbar('提示', '验证码错误');

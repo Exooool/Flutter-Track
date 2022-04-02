@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_track/assets/test.dart';
+
 import 'package:flutter_track/common/style/my_style.dart';
-import 'package:flutter_track/config/http_config.dart';
+
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
@@ -95,7 +95,7 @@ class _BasicInfoState extends State<BasicInfo> {
       DioUtil().post('/article/imgPost', data: formdata, success: (res) {
         print(res);
         setState(() {
-          imgUrl = 'http://10.0.2.2/track-api-nodejs/public/images/article/' +
+          imgUrl = 'http://10.0.2.2/track-api-nodejs/public/images/' +
               res.toString();
         });
       }, error: (error) {

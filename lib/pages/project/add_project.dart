@@ -258,7 +258,12 @@ class AddProject extends StatelessWidget {
                       width: 88.r,
                       onTap: c.selectImage,
                       widget: c.imgUrl.value == ''
-                          ? const SizedBox()
+                          ? Center(
+                              child: Image.asset(
+                              'lib/assets/icons/Add.png',
+                              height: 51.r,
+                              width: 51.r,
+                            ))
                           : GetUtils.isNum(c.imgUrl.value)
                               ? ClipOval(
                                   child: Image.asset(
@@ -374,6 +379,7 @@ class AddProject extends StatelessWidget {
 
                       bool flag = true;
                       String endTime = c.endTime.value;
+
                       // 进行数据验证
                       if (c.projectTitle.value == '') {
                         flag = false;
@@ -418,43 +424,67 @@ class AddProject extends StatelessWidget {
                       };
 
                       print(data);
+
                       // flag标志信息是否填写完整
                       if (flag) {
-                        // 是否加入互助小组 0 是 1 否
-                        if (c.isJoin.value == 0) {
-                          // 选择匹配模式 0 系统匹配 1 自行邀请
-                          if (c.isMatch.value == 0) {
-                            Get.to(() => MatchGroup());
-                          } else {
-                            Get.to(() => InviteGroup());
-                          }
+                        // 匹配用到的时间
+                        late String matchFrequency;
+                        if (c.isDivide.value == 1) {
+                          matchFrequency = c.frequency['time'];
                         } else {
-                          // 加载动画
-                          Get.dialog(Material(
-                            color: Colors.transparent,
-                            child: Column(
-                              children: const [
-                                SpinKitFoldingCube(
-                                  color: Colors.white,
-                                  size: 50.0,
-                                ),
-                                Text('加载中')
-                              ],
-                            ),
-                          ));
+                          matchFrequency = c.stageList[0]['frequency']['time'];
+                        }
+                        print(matchFrequency);
 
-                          DioUtil().post('/project/add', data: data,
-                              success: (success) {
+                        // 加载动画
+                        Get.dialog(Material(
+                          color: Colors.transparent,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SpinKitFoldingCube(
+                                color: Colors.white,
+                                size: 50.0,
+                              ),
+                              SizedBox(height: 10.h),
+                              const Text('加载中')
+                            ],
+                          ),
+                        ));
+
+                        // 添加计划
+                        DioUtil().post('/project/add', data: data,
+                            success: (res) {
+                          print(res);
+                          // 是否加入互助小组 0 是 1 否
+                          if (c.isJoin.value == 0) {
+                            // 选择匹配模式 0 系统匹配 1 自行邀请
+                            if (c.isMatch.value == 0) {
+                              // 关闭加载动画
+                              Get.back();
+                              Get.off(() => MatchGroup(), arguments: {
+                                'project_id': res['data']['project_id'],
+                                'frequency': matchFrequency
+                              });
+                            } else {
+                              // 关闭加载动画
+                              Get.back();
+                              Get.off(() => InviteGroup());
+                            }
+                          } else {
+                            // 关闭加载动画
                             Get.back();
-                            print('请求成功,服务端返回:$success');
-                            if (success['status'] == 0) {
+                            // 不加入互助小组
+                            print('请求成功,服务端返回:$res');
+                            if (res['status'] == 0) {
                               Get.back();
                               Get.snackbar('提示', '计划添加成功');
                             }
-                          }, error: (error) {
-                            print(error);
-                          });
-                        }
+                          }
+                        }, error: (error) {
+                          Get.snackbar('提示', error);
+                          print(error);
+                        });
                       } else {
                         Get.snackbar('提示', '请输入信息');
                       }

@@ -5,7 +5,10 @@ import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
+  // 对外可见
   RxList target = [].obs;
+  // 对自己可见
+  RxList targetS = [].obs;
   RxList collect = [].obs;
   RxList article = [].obs;
 
@@ -27,7 +30,20 @@ class UserController extends GetxController {
       // 获取用户的计划
       DioUtil().post('/project/get', success: (res) {
         print(res);
-        target.value = res['data'];
+        // target.value = res['data'];
+        List l = res['data'];
+        // 对计划进行分类
+        // 清空
+        target.value = [];
+        targetS.value = [];
+        for (int i = 0; i < l.length; i++) {
+          // 如果设为私密则进入targetS数组
+          if (l[i]['secret'] == 'true') {
+            targetS.add(l[i]);
+          } else {
+            target.add(l[i]);
+          }
+        }
       }, error: (error) {
         print('接口请求错误$error');
       });

@@ -100,14 +100,14 @@ class UserPage extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(left: 15.w, right: 15.w),
                             child: ClipOval(
-                              child: Container(
+                              child: SizedBox(
+                                height: 84.r,
+                                width: 84.r,
                                 child: c.user.value.userImg == ''
                                     ? Image.asset(
                                         'lib/assets/images/defaultUserImg.png')
                                     : Image.network(
                                         c.user.value.userImg,
-                                        height: 84.r,
-                                        width: 84.r,
                                         fit: BoxFit.cover,
                                       ),
                               ),
@@ -229,7 +229,7 @@ class UserPage extends StatelessWidget {
                         ],
                         // controller中的变量在数组中传递时 需要通过toList才可让Getx检测到
                         exteriorViews: [c.collect.toList(), c.article.toList()],
-                        interiorViews: [c.target.toList()],
+                        interiorViews: [c.target.toList(), c.targetS.toList()],
                       )),
                     ],
                   ),
