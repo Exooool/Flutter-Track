@@ -1,0 +1,76 @@
+PODS:
+  - Flutter (1.0.0)
+  - flutter_vibrate (0.0.1):
+    - Flutter
+  - image_picker (0.0.1):
+    - Flutter
+  - JCore (2.6.2)
+  - JPush (4.4.0):
+    - JCore (>= 2.0.0)
+  - jpush_flutter (0.0.1):
+    - Flutter
+    - JCore (= 2.6.2)
+    - JPush (= 4.4.0)
+  - JVerification (2.7.6):
+    - JCore (>= 2.1.6)
+  - jverify (0.0.1):
+    - Flutter
+    - JCore (= 2.6.2)
+    - JVerification (= 2.7.6)
+  - shared_preferences_ios (0.0.1):
+    - Flutter
+  - url_launcher_ios (0.0.1):
+    - Flutter
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - flutter_vibrate (from `.symlinks/plugins/flutter_vibrate/ios`)
+  - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - jpush_flutter (from `.symlinks/plugins/jpush_flutter/ios`)
+  - jverify (from `.symlinks/plugins/jverify/ios`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
+
+SPEC REPOS:
+  trunk:
+    - JCore
+    - JPush
+    - JVerification
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  flutter_vibrate:
+    :path: ".symlinks/plugins/flutter_vibrate/ios"
+  image_picker:
+    :path: ".symlinks/plugins/image_picker/ios"
+  jpush_flutter:
+    :path: ".symlinks/plugins/jpush_flutter/ios"
+  jverify:
+    :path: ".symlinks/plugins/jverify/ios"
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
+  image_picker: 541dcbb3b9cf32d87eacbd957845d8651d6c62c3
+  JCore: 0cb4fc5892bc97af4f27283875369ead3eaa3067
+  JPush: b7d00f2cc78766e76c8abb30a5741fe94d21e5bc
+  jpush_flutter: 87271ad6a972368a26744b9ebc60e0daeab86230
+  JVerification: ec6df3457b1caf572149a01cff106cc85b8d1f1f
+  jverify: cfeae140b442f0c3aa2575609e3c17fda0bd5a02
+  shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
+  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
+  webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
+
+PODFILE CHECKSUM: c986e11b2ab3ede0a6249842c2bc996c90212ba2
+
+COCOAPODS: 1.11.2

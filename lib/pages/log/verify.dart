@@ -119,17 +119,17 @@ class _VerifyPageState extends State<VerifyPage> {
               arguments['code'] = _code;
               print(arguments);
 
-              DioUtil().post('/login/messageVerify', data: arguments,
+              DioUtil().verify('/login/messageVerify', data: arguments,
                   success: (res) async {
-                print(res.data);
-                if (res.data['is_valid']) {
+                print(res);
+                if (res['is_valid']) {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
-                  prefs.setString('token', res.data['token']);
+                  prefs.setString('token', res['token']);
 
-                  print('用户登录成功token为：${res.data['token']}');
+                  print('用户登录成功token为：${res['token']}');
 
-                  if (res.data['first']) {
+                  if (res['first']) {
                     Get.offAllNamed('/sex_info');
                   } else {
                     Get.offAllNamed('/home');
