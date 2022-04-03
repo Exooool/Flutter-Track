@@ -33,14 +33,23 @@ class _HomeMenuState extends State<HomeMenu> {
 
   // 导航栏按钮样式
 
-  Widget _menuItem(
-      String unselected, String selected, int index, String title) {
+  Widget _menuItem(String unselected, String selected, int index, String title,
+      String dynamic) {
+    bool showDynamic = false;
     return InkWell(
         onTap: () {
           setState(() {
             _isNavShow = true;
             _index = index;
             Vibrate.feedback(FeedbackType.light);
+            showDynamic = true;
+            Timer.periodic(const Duration(seconds: 2), (timer) {
+              timer.cancel();
+              showDynamic = false;
+              print(showDynamic);
+              setState(() {});
+            });
+            print(showDynamic);
           });
         },
         child: Padding(
@@ -53,11 +62,17 @@ class _HomeMenuState extends State<HomeMenu> {
               //   color: _index == index ? Colors.blue : Colors.white,
               //   size: 40,
               // ),
-              Image.asset(
-                _index == index ? selected : unselected,
-                height: 50.r,
-                width: 50.r,
-              ),
+              showDynamic
+                  ? Image.asset(
+                      dynamic,
+                      height: 50.r,
+                      width: 50.r,
+                    )
+                  : Image.asset(
+                      _index == index ? selected : unselected,
+                      height: 50.r,
+                      width: 50.r,
+                    ),
               Text(
                 title,
                 style: const TextStyle(
@@ -87,14 +102,30 @@ class _HomeMenuState extends State<HomeMenu> {
           child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _menuItem('lib/assets/icons/nav_1.png',
-                    'lib/assets/icons/nav_fill_1.png', 0, '计划'),
-                _menuItem('lib/assets/icons/nav_2.png',
-                    'lib/assets/icons/nav_fill_2.png', 1, '发现'),
-                _menuItem('lib/assets/icons/nav_3.png',
-                    'lib/assets/icons/nav_fill_3.png', 2, '数据'),
-                _menuItem('lib/assets/icons/nav_4.png',
-                    'lib/assets/icons/nav_fill_4.png', 3, '个人'),
+                _menuItem(
+                    'lib/assets/icons/nav_1.png',
+                    'lib/assets/icons/nav_fill_1.png',
+                    0,
+                    '计划',
+                    'lib/assets/gifs/1 计划.gif'),
+                _menuItem(
+                    'lib/assets/icons/nav_2.png',
+                    'lib/assets/icons/nav_fill_2.png',
+                    1,
+                    '资讯',
+                    'lib/assets/gifs/2 资讯.gif'),
+                _menuItem(
+                    'lib/assets/icons/nav_3.png',
+                    'lib/assets/icons/nav_fill_3.png',
+                    2,
+                    '数据',
+                    'lib/assets/gifs/3 数据.gif'),
+                _menuItem(
+                    'lib/assets/icons/nav_4.png',
+                    'lib/assets/icons/nav_fill_4.png',
+                    3,
+                    '个人',
+                    'lib/assets/gifs/4 个人.gif'),
               ]),
         ),
       ],
