@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
-import 'package:flutter_track/config/http_config.dart';
+
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 import './verify_input.dart';
 import '../components/custom_appbar.dart';
@@ -118,25 +118,28 @@ class _VerifyPageState extends State<VerifyPage> {
               print(_code);
               arguments['code'] = _code;
               print(arguments);
-              var res = await Dio().post(
-                HttpOptions.BASE_URL + '/login/messageVerify',
-                data: arguments,
-              );
-              print(res.data);
-              if (res.data['is_valid']) {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.setString('token', res.data['token']);
 
-                print('用户登录成功token为：${res.data['token']}');
+              DioUtil().post('/login/messageVerify', data: arguments,
+                  success: (res) async {
+                print(res.data);
+                if (res.data['is_valid']) {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.setString('token', res.data['token']);
 
-                if (res.data['first']) {
-                  Get.offAllNamed('/sex_info');
+                  print('用户登录成功token为：${res.data['token']}');
+
+                  if (res.data['first']) {
+                    Get.offAllNamed('/sex_info');
+                  } else {
+                    Get.offAllNamed('/home');
+                  }
                 } else {
-                  Get.offAllNamed('/home');
+                  Get.snackbar('提示', '验证码错误');
                 }
-              } else {
-                Get.snackbar('提示', '验证码错误');
-              }
+              }, error: (error) {
+                Get.snackbar('提示', error);
+              });
             },
           ),
           Container(

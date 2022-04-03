@@ -359,12 +359,33 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
       });
       print(
           "通过添加监听，获取到 loginAuthSyncApi 接口返回数据，code=${event.code},message = ${event.message},operator = ${event.operator}");
-      Get.snackbar('提醒', '${event.code} ${event.message}');
+      // Get.snackbar('提醒', '${event.code} ${event.message}');
       print('${event.message}');
       var appkey = '7c512da646446cc69f9c55a5';
       var secret = '885269a543efece7e1458fce';
       var basicAuth = 'Basic ' + base64Encode(utf8.encode('$appkey:$secret'));
       print(basicAuth);
+
+      DioUtil().verify('/login/loginTokenVerify',
+          data: {'loginToken': event.message}, success: (res) async {
+        print(res);
+        if (res['is_valid']) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('token', res['token']);
+
+          print('用户登录成功token为：${res['token']}');
+
+          if (res['first']) {
+            Get.offAllNamed('/sex_info');
+          } else {
+            Get.offAllNamed('/home');
+          }
+        } else {
+          Get.snackbar('提示', '一键登录错误，请重试');
+        }
+      }, error: (error) {
+        Get.snackbar('提示', error);
+      });
 
       // api请求验证token
       // var respone = await dio.Dio()

@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 //封装图片加载控件，增加图片加载失败时加载默认图片

@@ -13,11 +13,10 @@ class DioUtil {
   late Dio dio;
 
   //服务器ip
-  static const String baseUrl = 'http://10.0.2.2:3000';
-  static const String imgBaseUrl = 'http://10.0.2.2:3000';
-
-  // static const String baseUrl = 'http://119.91.27.93:3000';
-  // static const String imgBaseUrl = 'http://119.91.27.93:3000';
+  // static const String baseUrl = 'http://10.0.2.2:3000';
+// static const String imgBaseUrl = 'http://10.0.2.2';
+  static const String baseUrl = 'http://119.91.27.93:3000';
+  static const String imgBaseUrl = 'http://119.91.27.93';
   BaseOptions options = BaseOptions();
 
   DioUtil() {
@@ -118,12 +117,39 @@ class DioUtil {
     }
   }
 
+  // 极光api
   logPost(String url,
       {Map<String, dynamic>? data, required success, required error}) async {
     Response response;
     // 设置极光api的认证
     options.headers["Authorization"] = jiguang;
     dio = Dio(options);
+
+    try {
+      if (data == null) {
+        response = await dio.post(url);
+      } else {
+        response = await dio.post(url, data: data);
+      }
+
+      if (response.statusCode == 200) {
+        success(response.data);
+      } else {
+        error(response.statusCode, "数据服务出现异常！");
+      }
+    } on DioError catch (e) {
+      if (e.type == DioErrorType.connectTimeout) {
+        error('网络异常，连接超时');
+      } else {
+        error(e);
+      }
+    }
+  }
+
+  // 登录验证
+  verify(String url,
+      {Map<String, dynamic>? data, required success, required error}) async {
+    Response response;
 
     try {
       if (data == null) {

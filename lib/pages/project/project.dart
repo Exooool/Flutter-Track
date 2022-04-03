@@ -125,7 +125,9 @@ class _ProjectPageState extends State<ProjectPage>
           projectList2.add(list[i]);
         }
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }, error: (error) {
       print(error);
     });

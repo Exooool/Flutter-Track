@@ -70,8 +70,7 @@ class AddProjectController extends GetxController {
 
       DioUtil().post('/article/imgPost', data: formdata, success: (success) {
         print(success);
-        imgUrl.value = 'http://10.0.2.2/track-api-nodejs/public/images/' +
-            success.toString();
+        imgUrl.value = DioUtil.imgBaseUrl + '/' + success.toString();
       }, error: (error) {
         print(error);
       });

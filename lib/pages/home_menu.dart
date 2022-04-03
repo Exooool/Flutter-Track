@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -54,8 +55,8 @@ class _HomeMenuState extends State<HomeMenu> {
               // ),
               Image.asset(
                 _index == index ? selected : unselected,
-                height: 40,
-                width: 40,
+                height: 50.r,
+                width: 50.r,
               ),
               Text(
                 title,

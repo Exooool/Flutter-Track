@@ -62,8 +62,11 @@ class MessagePageController extends GetxController {
     // 获取聊天列表
     getChartMessage();
 
+    // final ioUrl = 'http://10.0.2.2:3001';
+    final ioUrl = 'http://119.91.27.93:3001';
+
     socket = io.io(
-        'http://10.0.2.2:3001',
+        ioUrl,
         io.OptionBuilder()
             .setTransports(['websocket']) // for Flutter or Dart VM
             // .setExtraHeaders({'foo': 'bar'}) // optional

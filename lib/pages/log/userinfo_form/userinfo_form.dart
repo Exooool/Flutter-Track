@@ -95,8 +95,7 @@ class _BasicInfoState extends State<BasicInfo> {
       DioUtil().post('/article/imgPost', data: formdata, success: (res) {
         print(res);
         setState(() {
-          imgUrl = 'http://10.0.2.2/track-api-nodejs/public/images/' +
-              res.toString();
+          imgUrl = DioUtil.imgBaseUrl + '/' + res.toString();
         });
       }, error: (error) {
         print(error);

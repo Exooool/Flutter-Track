@@ -189,8 +189,7 @@ class CustomInsertImageButton extends StatelessWidget {
 
       DioUtil().post('/article/imgPost', data: formdata, success: (res) {
         print(res);
-        var info =
-            'http://10.0.2.2/track-api-nodejs/public/images/' + res.toString();
+        var info = DioUtil.imgBaseUrl + '/' + res.toString();
         controller.replaceText(index, length, BlockEmbed(info));
       }, error: (error) {
         print(error);
@@ -445,8 +444,7 @@ class _CoverSelectState extends State<CoverSelect> {
         print(res);
         setState(() {
           imgIndex = -1;
-          imgUrl = 'http://10.0.2.2/track-api-nodejs/public/images/' +
-              res.toString();
+          imgUrl = DioUtil.imgBaseUrl + '/' + res.toString();
         });
       }, error: (error) {
         print(error);
