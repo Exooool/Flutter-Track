@@ -119,7 +119,7 @@ class _VerifyPageState extends State<VerifyPage> {
               arguments['code'] = _code;
               print(arguments);
 
-              DioUtil().post('/login/messageVerify', data: arguments,
+              DioUtil().verify('/login/messageVerify', data: arguments,
                   success: (res) async {
                 print(res.data);
                 if (res.data['is_valid']) {
