@@ -67,17 +67,6 @@ class CustomButton extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30.r),
-            // 按钮阴影
-            // boxShadow: shadow
-            //     ? [
-            //         const BoxShadow(
-            //           color: Color.fromRGBO(56, 86, 244, 0.4), // 阴影的颜色
-            //           offset: Offset(0, 6), // 阴影与容器的距离
-            //           blurRadius: 10, // 高斯的标准偏差与盒子的形状卷积。
-            //           spreadRadius: 0, // 在应用模糊之前，框应该膨胀的量。
-            //         ),
-            //       ]
-            //     : null,
             gradient: const LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
@@ -102,8 +91,7 @@ class CustomButton extends StatelessWidget {
             child: child ??
                 Text(title,
                     style: TextStyle(
-                        fontSize: fontSize,
-                        color: const Color.fromRGBO(240, 242, 243, 1))),
+                        fontSize: fontSize, color: MyColor.fontWhite)),
             onPressed: onPressed,
           ),
         ));

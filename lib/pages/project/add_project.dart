@@ -32,7 +32,6 @@ class AddProject extends StatelessWidget {
       child: PublicCard(
         radius: 30.r,
         height: 48.h,
-        width: 366.w,
         margin: EdgeInsets.only(bottom: 12.h),
         widget: Padding(
           padding: EdgeInsets.only(left: 24.w, right: 24.w),
@@ -119,8 +118,9 @@ class AddProject extends StatelessWidget {
       },
       child: Text(
         textTransfom(data) ?? '请选择',
-        style:
-            TextStyle(color: MyColor.fontBlackO2, fontSize: MyFontSize.font16),
+        style: textTransfom(data) == null
+            ? TextStyle(color: MyColor.fontBlackO2, fontSize: MyFontSize.font16)
+            : TextStyle(color: MyColor.fontBlack, fontSize: MyFontSize.font16),
       ),
     );
   }
@@ -243,254 +243,272 @@ class AddProject extends StatelessWidget {
       ),
       body: GetX<AddProjectController>(
         builder: (controller) {
-          return ListView(
-            physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.only(bottom: 109.h),
-            children: <Widget>[
-              // 头像
-              Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.h, bottom: 6.h),
-                    child: PublicCard(
-                      radius: 90.r,
-                      height: 88.r,
-                      width: 88.r,
-                      onTap: c.selectImage,
-                      widget: c.imgUrl.value == ''
-                          ? Center(
-                              child: Image.asset(
-                              'lib/assets/icons/Add.png',
-                              height: 51.r,
-                              width: 51.r,
-                            ))
-                          : GetUtils.isNum(c.imgUrl.value)
-                              ? ClipOval(
-                                  child: Image.asset(
-                                  'lib/assets/images/project${c.imgUrl.value}.png',
-                                  fit: BoxFit.cover,
-                                ))
-                              : ClipOval(
-                                  child: Image.network(
-                                  c.imgUrl.value,
-                                  fit: BoxFit.cover,
-                                )),
+          return GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              print('点击');
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 109.h),
+              children: <Widget>[
+                // 头像
+                Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.h, bottom: 6.h),
+                      child: PublicCard(
+                        radius: 90.r,
+                        height: 88.r,
+                        width: 88.r,
+                        onTap: c.selectImage,
+                        widget: c.imgUrl.value == ''
+                            ? Center(
+                                child: Image.asset(
+                                'lib/assets/icons/Add.png',
+                                height: 51.r,
+                                width: 51.r,
+                              ))
+                            : GetUtils.isNum(c.imgUrl.value)
+                                ? ClipOval(
+                                    child: Image.asset(
+                                    'lib/assets/images/project${c.imgUrl.value}.png',
+                                    fit: BoxFit.cover,
+                                  ))
+                                : ClipOval(
+                                    child: Image.network(
+                                    c.imgUrl.value,
+                                    fit: BoxFit.cover,
+                                  )),
+                      ),
                     ),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(bottom: 12.h),
-                      child: Text('点击选择头像',
-                          style: TextStyle(
-                              fontSize: MyFontSize.font16,
-                              fontWeight: FontWeight.w500)))
-                ],
-              ),
-              // 列表
-              formInput('计划名称', value: c.projectTitle.value, onChanged: (e) {
-                c.projectTitle.value = e;
-              }),
-              formInput('分阶段完成',
-                  component: formSwitch('是', '否', c.isDivide.value, (index) {
-                    c.isDivide.value = index;
-                    print('分阶段完成：${c.isDivide}');
-                  })),
-              Visibility(
-                  visible: c.isDivide.value == 0 ? false : true,
-                  child: Column(
-                    children: <Widget>[
-                      formInput('截止时间',
-                          component: FormDateTimePicker((e) {
-                            c.endTime.value = e.substring(0, 10);
-                          }, c.endTime.value)),
-                      formInput('单次时长',
-                          component: singleTimeBottomSheet(c.singleTime, (e) {
-                            c.singleTime.value = e;
+                    Padding(
+                        padding: EdgeInsets.only(bottom: 12.h),
+                        child: Text('点击选择头像',
+                            style: TextStyle(
+                                fontSize: MyFontSize.font16,
+                                fontWeight: FontWeight.w500)))
+                  ],
+                ),
+                // 列表
+                formInput('计划名称', value: c.projectTitle.value, onChanged: (e) {
+                  c.projectTitle.value = e;
+                }),
+                formInput('分阶段完成',
+                    component: formSwitch('是', '否', c.isDivide.value, (index) {
+                      c.isDivide.value = index;
+                      print('分阶段完成：${c.isDivide}');
+                    })),
+                Visibility(
+                    visible: c.isDivide.value == 0 ? false : true,
+                    child: Column(
+                      children: <Widget>[
+                        formInput('截止时间',
+                            component: FormDateTimePicker((e) {
+                              c.endTime.value = e.substring(0, 10);
+                            }, c.endTime.value)),
+                        formInput('单次时长',
+                            component: singleTimeBottomSheet(c.singleTime, (e) {
+                              c.singleTime.value = e;
+                            })),
+                      ],
+                    )),
+                // 分阶段
+                Visibility(
+                    visible: c.isDivide.value == 0 ? true : false,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                      child: Column(
+                        children: <Widget>[
+                          ListView.builder(
+                              shrinkWrap: true, //范围内进行包裹（内容多高ListView就多高）
+                              physics:
+                                  const NeverScrollableScrollPhysics(), //禁止滚动
+                              itemCount: c.stageList.length,
+                              itemBuilder: (context, index) {
+                                return columnModel(index);
+                              }),
+                          InkWell(
+                            onTap: () {
+                              if (c.stageList.length < 10) {
+                                c.stageList.add({});
+                              } else {}
+                            },
+                            child: Container(
+                                margin: EdgeInsets.only(bottom: 12.h),
+                                child: Image.asset(
+                                  'lib/assets/icons/Add_round_fill.png',
+                                  height: 25.r,
+                                  width: 25.r,
+                                )),
+                          )
+                        ],
+                      ),
+                    )),
+                //  不分阶段
+                Visibility(
+                    visible: c.isDivide.value == 0 ? false : true,
+                    child: Column(
+                      children: <Widget>[
+                        formInput('完成频率',
+                            component: FormDateTimePicker((e) {
+                              c.frequency.value = e;
+
+                              print(c.stageList);
+                            }, frequencytoString(c.frequency.value), type: 1)),
+                        formInput('提醒时间',
+                            component: FormDateTimePicker((e) {
+                              c.reminderTime.value = e;
+                              print(c.stageList);
+                            }, reminderTimetoString(c.reminderTime.value),
+                                type: 2)),
+                      ],
+                    )),
+                formInput('是否加入互助小组',
+                    component: formSwitch('是', '否', c.isJoin.value, (index) {
+                      c.isJoin.value = index;
+                      print('是否加入互助小组${c.isJoin.value}');
+                    })),
+                Visibility(
+                    visible: c.isJoin.value == 0 ? true : false,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                      child: formInput('匹配方式',
+                          component: formSwitch('系统匹配', '自行邀请', c.isMatch.value,
+                              (index) {
+                            c.isMatch.value = index;
+                            print('匹配方式${c.isMatch.value}');
                           })),
-                    ],
-                  )),
-              // 分阶段
-              Visibility(
-                  visible: c.isDivide.value == 0 ? true : false,
-                  child: Column(
-                    children: <Widget>[
-                      ListView.builder(
-                          shrinkWrap: true, //范围内进行包裹（内容多高ListView就多高）
-                          physics: const NeverScrollableScrollPhysics(), //禁止滚动
-                          itemCount: c.stageList.length,
-                          itemBuilder: (context, index) {
-                            return columnModel(index);
-                          }),
-                      InkWell(
-                        onTap: () {
-                          if (c.stageList.length < 10) {
-                            c.stageList.add({});
-                          } else {}
-                        },
-                        child: Container(
-                            margin: EdgeInsets.only(bottom: 12.h),
-                            child: Image.asset(
-                              'lib/assets/icons/Add_round_fill.png',
-                              height: 25.r,
-                              width: 25.r,
-                            )),
-                      )
-                    ],
-                  )),
-              //  不分阶段
-              Visibility(
-                  visible: c.isDivide.value == 0 ? false : true,
-                  child: Column(
-                    children: <Widget>[
-                      formInput('完成频率',
-                          component: FormDateTimePicker((e) {
-                            c.frequency.value = e;
+                    )),
+                Center(
+                  child: CustomButton(
+                      title: '确定计划',
+                      fontSize: MyFontSize.font16,
+                      height: 48.h,
+                      width: 104.w,
+                      onPressed: () {
+                        // 集合所有数据
 
-                            print(c.stageList);
-                          }, frequencytoString(c.frequency.value), type: 1)),
-                      formInput('提醒时间',
-                          component: FormDateTimePicker((e) {
-                            c.reminderTime.value = e;
-                            print(c.stageList);
-                          }, reminderTimetoString(c.reminderTime.value),
-                              type: 2)),
-                    ],
-                  )),
-              formInput('是否加入互助小组',
-                  component: formSwitch('是', '否', c.isJoin.value, (index) {
-                    c.isJoin.value = index;
-                    print('是否加入互助小组${c.isJoin.value}');
-                  })),
-              Visibility(
-                  visible: c.isJoin.value == 0 ? true : false,
-                  child: formInput('匹配方式',
-                      component:
-                          formSwitch('系统匹配', '自行邀请', c.isMatch.value, (index) {
-                        c.isMatch.value = index;
-                        print('匹配方式${c.isMatch.value}');
-                      }))),
-              Center(
-                child: CustomButton(
-                    title: '确定计划',
-                    fontSize: MyFontSize.font16,
-                    height: 48.h,
-                    width: 104.w,
-                    onPressed: () {
-                      // 集合所有数据
+                        bool flag = true;
+                        String endTime = c.endTime.value;
 
-                      bool flag = true;
-                      String endTime = c.endTime.value;
-
-                      // 进行数据验证
-                      if (c.projectTitle.value == '') {
-                        flag = false;
-                      } else if (c.isDivide.value == 0) {
-                        // 判断分阶段的情况
-                        for (var i = 0; i < c.stageList.length; i++) {
-                          if (c.stageList[i]['content'] == null ||
-                              c.stageList[i]['content'] == '' ||
+                        // 进行数据验证
+                        if (c.projectTitle.value == '') {
+                          flag = false;
+                        } else if (c.isDivide.value == 0) {
+                          // 判断分阶段的情况
+                          for (var i = 0; i < c.stageList.length; i++) {
+                            if (c.stageList[i]['content'] == null ||
+                                c.stageList[i]['content'] == '' ||
+                                c.imgUrl.value == '' ||
+                                c.stageList[i]['endTime'] == '' ||
+                                c.stageList[i]['endTime'] == null ||
+                                c.stageList[i]['singleTime'] == null ||
+                                c.stageList[i]['frequency'] == null ||
+                                c.stageList[i]['reminderTime'] == 9) {
+                              flag = false;
+                            }
+                          }
+                          endTime = c.stageList[c.stageList.length - 1]
+                                  ['endTime'] ??
+                              '';
+                        } else {
+                          c.stageList.value = [{}];
+                          // 判断不分阶段
+                          if (c.endTime.value == '' ||
+                              c.singleTime['type'] == null ||
+                              c.frequency['week'] == null ||
                               c.imgUrl.value == '' ||
-                              c.stageList[i]['endTime'] == '' ||
-                              c.stageList[i]['endTime'] == null ||
-                              c.stageList[i]['singleTime'] == null ||
-                              c.stageList[i]['frequency'] == null ||
-                              c.stageList[i]['reminderTime'] == 9) {
+                              c.reminderTime.value == 9) {
                             flag = false;
                           }
                         }
-                        endTime = c.stageList[c.stageList.length - 1]
-                                ['endTime'] ??
-                            '';
-                      } else {
-                        c.stageList.value = [{}];
-                        // 判断不分阶段
-                        if (c.endTime.value == '' ||
-                            c.singleTime['type'] == null ||
-                            c.frequency['week'] == null ||
-                            c.imgUrl.value == '' ||
-                            c.reminderTime.value == 9) {
-                          flag = false;
-                        }
-                      }
 
-                      // 统一
-                      var data = {
-                        'project_img': c.imgUrl.value,
-                        'end_time': endTime,
-                        'single_time': jsonEncode(c.singleTime),
-                        'project_title': c.projectTitle.value,
-                        'frequency': jsonEncode(c.frequency),
-                        'remainder_time': c.reminderTime.value,
-                        'stage_list': jsonEncode(c.stageList)
-                      };
+                        // 统一
+                        var data = {
+                          'project_img': c.imgUrl.value,
+                          'end_time': endTime,
+                          'single_time': jsonEncode(c.singleTime),
+                          'project_title': c.projectTitle.value,
+                          'frequency': jsonEncode(c.frequency),
+                          'remainder_time': c.reminderTime.value,
+                          'stage_list': jsonEncode(c.stageList)
+                        };
 
-                      print(data);
+                        print(data);
 
-                      // flag标志信息是否填写完整
-                      if (flag) {
-                        // 匹配用到的时间
-                        late String matchFrequency;
-                        if (c.isDivide.value == 1) {
-                          matchFrequency = c.frequency['time'];
-                        } else {
-                          matchFrequency = c.stageList[0]['frequency']['time'];
-                        }
-                        print(matchFrequency);
+                        // flag标志信息是否填写完整
+                        if (flag) {
+                          // 匹配用到的时间
+                          late String matchFrequency;
+                          if (c.isDivide.value == 1) {
+                            matchFrequency = c.frequency['time'];
+                          } else {
+                            matchFrequency =
+                                c.stageList[0]['frequency']['time'];
+                          }
+                          print(matchFrequency);
 
-                        // 加载动画
-                        Get.dialog(Material(
-                          color: Colors.transparent,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const SpinKitFoldingCube(
-                                color: Colors.white,
-                                size: 50.0,
-                              ),
-                              SizedBox(height: 10.h),
-                              const Text('加载中')
-                            ],
-                          ),
-                        ));
+                          // 加载动画
+                          Get.dialog(Material(
+                            color: Colors.transparent,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SpinKitFoldingCube(
+                                  color: Colors.white,
+                                  size: 50.0,
+                                ),
+                                SizedBox(height: 10.h),
+                                const Text('加载中')
+                              ],
+                            ),
+                          ));
 
-                        // 添加计划
-                        DioUtil().post('/project/add', data: data,
-                            success: (res) {
-                          print(res);
-                          // 是否加入互助小组 0 是 1 否
-                          if (c.isJoin.value == 0) {
-                            // 选择匹配模式 0 系统匹配 1 自行邀请
-                            if (c.isMatch.value == 0) {
-                              // 关闭加载动画
-                              Get.back();
-                              Get.off(() => MatchGroup(), arguments: {
-                                'project_id': res['data']['project_id'],
-                                'frequency': matchFrequency
-                              });
+                          // 添加计划
+                          DioUtil().post('/project/add', data: data,
+                              success: (res) {
+                            print(res);
+                            // 是否加入互助小组 0 是 1 否
+                            if (c.isJoin.value == 0) {
+                              // 选择匹配模式 0 系统匹配 1 自行邀请
+                              if (c.isMatch.value == 0) {
+                                // 关闭加载动画
+                                Get.back();
+                                Get.off(() => MatchGroup(), arguments: {
+                                  'project_id': res['data']['project_id'],
+                                  'frequency': matchFrequency
+                                });
+                              } else {
+                                // 关闭加载动画
+                                Get.back();
+                                Get.off(() => InviteGroup(), arguments: {
+                                  'project_id': res['data']['project_id'],
+                                  'frequency': matchFrequency
+                                });
+                              }
                             } else {
                               // 关闭加载动画
                               Get.back();
-                              Get.off(() => InviteGroup());
+                              // 不加入互助小组
+                              print('请求成功,服务端返回:$res');
+                              if (res['status'] == 0) {
+                                Get.back();
+                                Get.snackbar('提示', '计划添加成功');
+                              }
                             }
-                          } else {
-                            // 关闭加载动画
-                            Get.back();
-                            // 不加入互助小组
-                            print('请求成功,服务端返回:$res');
-                            if (res['status'] == 0) {
-                              Get.back();
-                              Get.snackbar('提示', '计划添加成功');
-                            }
-                          }
-                        }, error: (error) {
-                          Get.snackbar('提示', error);
-                          print(error);
-                        });
-                      } else {
-                        Get.snackbar('提示', '请输入信息');
-                      }
-                    }),
-              ),
-            ],
+                          }, error: (error) {
+                            Get.snackbar('提示', error);
+                            print(error);
+                          });
+                        } else {
+                          Get.snackbar('提示', '请输入信息');
+                        }
+                      }),
+                ),
+              ],
+            ),
           );
         },
       ),

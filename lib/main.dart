@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_track/common/routes/app_pages.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'config/app_theme.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,23 +19,22 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       // 去除debug标签
       debugShowCheckedModeBanner: false,
-      theme: theme,
+      theme: ThemeData(
+          scaffoldBackgroundColor: const Color.fromRGBO(233, 238, 255, 1),
+          splashColor: Colors.transparent, // 取消水波纹特效
+          highlightColor: Colors.transparent, // 取消水波纹特效
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+              backgroundColor: Colors.transparent),
+          appBarTheme: AppBarTheme(),
+          primaryColor: Colors.blue,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  elevation: MaterialStateProperty.all(0),
+                  splashFactory: NoSplash.splashFactory))),
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
-      // home: HomeMenu(),
-      routingCallback: (routing) async {
-        // if (routing!.current == '/home') {
-        //   print(routing)
-        //   SharedPreferences prefs = await SharedPreferences.getInstance();
-        //   var token = prefs.getString('token');
-        //   if (token == null) {
-        //     // Get.snackbar('提示', '你还未登录');
-        //     Get.toNamed('/login');
-        //   } else {
-        //     print('这是你的token：$token');
-        //   }
-        // }
-      },
     );
   }
 }

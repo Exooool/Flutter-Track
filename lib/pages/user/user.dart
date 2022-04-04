@@ -8,6 +8,7 @@ import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 
 import 'package:flutter_track/pages/components/two_layer_tab.dart';
+import 'package:flutter_track/pages/user/alter_user_info.dart';
 import 'package:flutter_track/pages/user/focus_list.dart';
 import 'package:flutter_track/pages/user/user_controller.dart';
 import 'package:get/get.dart';
@@ -97,45 +98,49 @@ class UserPage extends StatelessWidget {
                       // 头像
                       Stack(
                         children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: 15.w, right: 15.w),
-                            child: ClipOval(
-                              child: SizedBox(
-                                height: 84.r,
-                                width: 84.r,
-                                child: c.user.value.userImg == ''
-                                    ? Image.asset(
-                                        'lib/assets/images/defaultUserImg.png')
-                                    : Image.network(
-                                        c.user.value.userImg,
-                                        fit: BoxFit.cover,
-                                      ),
+                          InkWell(
+                            onTap: () => Get.to(() => AlterUserInfo(),
+                                arguments: c.user.value),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 15.w, right: 15.w),
+                              child: ClipOval(
+                                child: SizedBox(
+                                  height: 84.r,
+                                  width: 84.r,
+                                  child: c.user.value.userImg == ''
+                                      ? Image.asset(
+                                          'lib/assets/images/defaultUserImg.png')
+                                      : Image.network(
+                                          c.user.value.userImg,
+                                          fit: BoxFit.cover,
+                                        ),
+                                ),
                               ),
                             ),
                           ),
-                          Positioned(
-                            right: 0,
-                            bottom: 0,
-                            child: PublicCard(
-                                radius: 90.r,
-                                height: 30.h,
-                                width: 61.w,
-                                notWhite: true,
-                                widget: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text('等级 Lv',
-                                        style: TextStyle(
-                                            color: MyColor.fontWhite,
-                                            fontSize: MyFontSize.font12)),
-                                    Text('${c.user.value.exp ~/ 1000}',
-                                        style: TextStyle(
-                                            color: MyColor.fontWhite,
-                                            fontSize: MyFontSize.font16))
-                                  ],
-                                )),
-                          )
+                          // Positioned(
+                          //   right: 0,
+                          //   bottom: 0,
+                          //   child: PublicCard(
+                          //       radius: 90.r,
+                          //       height: 30.h,
+                          //       width: 61.w,
+                          //       notWhite: true,
+                          //       widget: Row(
+                          //         mainAxisAlignment: MainAxisAlignment.center,
+                          //         crossAxisAlignment: CrossAxisAlignment.center,
+                          //         children: <Widget>[
+                          //           Text('等级 Lv',
+                          //               style: TextStyle(
+                          //                   color: MyColor.fontWhite,
+                          //                   fontSize: MyFontSize.font12)),
+                          //           Text('${c.user.value.exp ~/ 1000}',
+                          //               style: TextStyle(
+                          //                   color: MyColor.fontWhite,
+                          //                   fontSize: MyFontSize.font16))
+                          //         ],
+                          //       )),
+                          // )
                         ],
                       ),
 
@@ -192,14 +197,14 @@ class UserPage extends StatelessWidget {
                       ),
 
                       // 学校
-                      Padding(
-                        padding: EdgeInsets.only(top: 6.h, bottom: 6.h),
-                        child: Text(c.user.value.college,
-                            style: TextStyle(
-                                fontSize: MyFontSize.font12,
-                                color: MyColor.mainColor,
-                                fontWeight: FontWeight.w600)),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(top: 6.h, bottom: 6.h),
+                      //   child: Text(c.user.value.college,
+                      //       style: TextStyle(
+                      //           fontSize: MyFontSize.font12,
+                      //           color: MyColor.mainColor,
+                      //           fontWeight: FontWeight.w600)),
+                      // ),
 
                       // 历史记录 我的消息
                       Row(

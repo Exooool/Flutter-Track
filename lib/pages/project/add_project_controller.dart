@@ -6,7 +6,6 @@ import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:dio/dio.dart' as dio;
 
 class AddProjectController extends GetxController {

@@ -38,7 +38,7 @@ class InformationPage extends StatelessWidget {
           Row(
             children: [
               SizedBox(
-                width: 22.w,
+                width: 25.w,
                 child: Text('$index.', style: MyFontStyle.rankTitle),
               ),
               SizedBox(width: 22.w),
@@ -101,16 +101,25 @@ class InformationPage extends StatelessWidget {
                             children: [
                               const SizedBox(width: 24),
                               Text(
-                                '等级 Lv',
+                                '等级 ',
                                 style: TextStyle(
                                     color: MyColor.fontBlack,
+                                    fontFamily: MyFontFamily.pingfangSemibold,
+                                    fontSize: MyFontSize.font16),
+                              ),
+                              Text(
+                                'Lv ',
+                                style: TextStyle(
+                                    color: MyColor.fontBlack,
+                                    fontFamily: MyFontFamily.sfDisplayBold,
                                     fontSize: MyFontSize.font16),
                               ),
                               Text(
                                 '${c.user.value.exp ~/ 1000}',
                                 style: TextStyle(
                                     color: MyColor.fontBlack,
-                                    fontSize: MyFontSize.font19),
+                                    fontFamily: MyFontFamily.sfDisplayBold,
+                                    fontSize: MyFontSize.font20),
                               ),
                               Expanded(
                                   child: LinearPercentIndicator(
@@ -124,12 +133,23 @@ class InformationPage extends StatelessWidget {
                         )),
                         Opacity(
                           opacity: c.isSign.value ? 0.5 : 1,
-                          child: CustomButton(
+                          child: PublicCard(
+                              radius: 90.r,
+                              notWhite: true,
                               margin: EdgeInsets.only(left: 12.w),
-                              title: '签到',
-                              height: 42.h,
-                              width: 80.w,
-                              onPressed: () {
+                              padding: EdgeInsets.only(
+                                  left: 24.w,
+                                  right: 24.w,
+                                  top: 13.h,
+                                  bottom: 13.h),
+                              widget: Text(
+                                '签到',
+                                style: TextStyle(
+                                    fontSize: MyFontSize.font16,
+                                    color: MyColor.fontWhite,
+                                    fontFamily: MyFontFamily.pingfangSemibold),
+                              ),
+                              onTap: () {
                                 if (!c.isSign.value) {
                                   c.sign();
 

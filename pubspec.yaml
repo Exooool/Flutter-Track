@@ -97,9 +97,21 @@ flutter:
       - lib/assets/clock/
       
   fonts:
-    - family: MyIcons
+    - family: PingFangRegular
       fonts:
-        - asset: lib/assets/fonts/iconfont.ttf
+        - asset: lib/assets/fonts/PingFang Regular.ttf
+    - family: PingFangMedium
+      fonts:
+        - asset: lib/assets/fonts/PingFang Medium.ttf
+    - family: PingFangSemibold
+      fonts:
+        - asset: lib/assets/fonts/PingFang Semibold.ttf
+    - family: SFDisplaySemibold
+      fonts:
+        - asset: lib/assets/fonts/SF-Pro-Display-Semibold.otf
+    - family: SFDisplayBold
+      fonts:
+        - asset: lib/assets/fonts/SF-Pro-Display-Bold.otf
   
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

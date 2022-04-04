@@ -26,12 +26,13 @@ class _DiscoverPageState extends State<DiscoverPage>
   // 自定义tab样式
   Widget _customTab(String content) {
     return Container(
-      height: 24.h,
-      width: 60.w,
+      padding: EdgeInsets.only(left: 14.w, right: 14.w),
       alignment: Alignment.center,
       child: Text(
         content,
-        style: TextStyle(fontSize: MyFontSize.font16),
+        style: TextStyle(
+            fontSize: MyFontSize.font16,
+            fontFamily: MyFontFamily.pingfangSemibold),
       ),
     );
   }
@@ -185,7 +186,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                     alignment: AlignmentDirectional.center,
                     children: <Widget>[
                       Container(
-                          padding: EdgeInsets.only(left: 10.w, right: 46.w),
+                          padding: EdgeInsets.only(left: 10.w, right: 56.w),
                           child: TabBar(
                             physics: const BouncingScrollPhysics(),
                             // padding: const EdgeInsets.all(0),
@@ -242,12 +243,15 @@ class _DiscoverPageState extends State<DiscoverPage>
                           Opacity(
                               opacity: 0.5,
                               child: Image.asset(
-                                  'lib/assets/icons/Search_fill.png')),
+                                'lib/assets/icons/Search_fill.png',
+                                height: 24.r,
+                                width: 24.r,
+                              )),
                           SizedBox(width: 10.w),
                           Text('搜一搜',
                               style: TextStyle(
                                   fontSize: MyFontSize.font14,
-                                  color: MyColor.fontGrey))
+                                  color: MyColor.fontBlackO2))
                         ],
                       ),
                     ),

@@ -1,23 +1,35 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
-import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/custom_checkbox.dart';
+import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 
 class InviteGroupController extends GetxController {
   RxList selectIndex = [].obs;
   RxList focusList = [].obs;
+  RxInt groupId = 0.obs;
 
   _getFocusList() {
-    DioUtil().get('/users/focus/info', success: (res) {
-      // print(res);
+    DioUtil().post('/users/getFocusOrBefocusList', data: {'type': 0},
+        success: (res) {
+      print(res);
       focusList.value = res['data'];
       print(focusList);
+    }, error: (error) {
+      print(error);
+    });
+  }
+
+  _createGroup() {
+    DioUtil().post('/project/group/create', data: {
+      'project_id': Get.arguments['project_id'],
+      'frequency': Get.arguments['frequency']
+    }, success: (res) {
+      debugPrint('$res');
+      groupId.value = res['data']['group_id'];
     }, error: (error) {
       print(error);
     });
@@ -27,6 +39,8 @@ class InviteGroupController extends GetxController {
   void onInit() {
     super.onInit();
     _getFocusList();
+    // 创建互助小组
+    _createGroup();
   }
 }
 
@@ -56,6 +70,27 @@ class InviteGroup extends StatelessWidget {
               }).toList();
 
               print('被邀请人：$list');
+
+              if (c.groupId.value != 0) {
+                DioUtil().post('/project/invite', data: {
+                  'invite': list,
+                  'frequency': Get.arguments['frequency'],
+                  'project_id': Get.arguments['project_id'],
+                  'group_id': c.groupId.value
+                }, success: (res) {
+                  print(res);
+                  if (res['status'] == 0) {
+                    Get.back();
+                    Get.snackbar('提示', '邀请成功');
+                  } else {
+                    Get.snackbar('提示', '邀请失败' + res);
+                  }
+                }, error: (error) {
+                  print(error);
+                });
+              } else {
+                Get.snackbar('提示', '创建互助小组失败');
+              }
             },
             child: Image.asset(
               'lib/assets/icons/Send_fill.png',
@@ -70,22 +105,31 @@ class InviteGroup extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomButton(
-                      title: '短信邀请',
-                      shadow: false,
-                      height: 44.h,
-                      width: 112.w,
+                  PublicCard(
+                      radius: 90.r,
+                      notWhite: true,
                       margin: EdgeInsets.only(
                           left: 6.w, right: 6.w, top: 12.h, bottom: 12.h),
-                      onPressed: () {}),
-                  CustomButton(
-                      title: '复制链接',
-                      shadow: false,
-                      height: 44.h,
-                      width: 112.w,
-                      margin: EdgeInsets.only(
-                          left: 6.w, right: 6.w, top: 12.h, bottom: 12.h),
-                      onPressed: () {}),
+                      padding: EdgeInsets.only(
+                          left: 20.w, right: 20.w, top: 7.h, bottom: 7.h),
+                      onTap: () {},
+                      widget: Text('短信邀请',
+                          style: TextStyle(
+                              fontSize: MyFontSize.font16,
+                              color: MyColor.fontWhite))),
+                  PublicCard(
+                    radius: 90.r,
+                    notWhite: true,
+                    margin: EdgeInsets.only(
+                        left: 6.w, right: 6.w, top: 12.h, bottom: 12.h),
+                    padding: EdgeInsets.only(
+                        left: 20.w, right: 20.w, top: 7.h, bottom: 7.h),
+                    onTap: () {},
+                    widget: Text('复制链接',
+                        style: TextStyle(
+                            fontSize: MyFontSize.font16,
+                            color: MyColor.fontWhite)),
+                  ),
                 ],
               ),
               Text(

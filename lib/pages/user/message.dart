@@ -62,15 +62,13 @@ class MessagePageController extends GetxController {
     // 获取聊天列表
     getChartMessage();
 
-    // final ioUrl = 'http://10.0.2.2:3001';
-    final ioUrl = 'http://119.91.27.93:3001';
-
     socket = io.io(
-        ioUrl,
+        DioUtil.socketUrl,
         io.OptionBuilder()
             .setTransports(['websocket']) // for Flutter or Dart VM
             // .setExtraHeaders({'foo': 'bar'}) // optional
             .build());
+    socket.connect();
     socket.onConnect((_) {
       socket.emit('join', '${user.userId}');
     });
@@ -90,6 +88,12 @@ class MessagePageController extends GetxController {
         }
       }
     });
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    socket.close();
   }
 }
 
@@ -182,8 +186,13 @@ class MessagePage extends StatelessWidget {
                     ),
                     Visibility(
                       visible: subtitle != '',
-                      child: Text(subtitle,
-                          style: TextStyle(fontSize: MyFontSize.font12)),
+                      child: SizedBox(
+                        width: 240.w,
+                        child: Text(subtitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: MyFontSize.font12)),
+                      ),
                     )
                   ],
                 ),
@@ -231,15 +240,13 @@ class MessagePage extends StatelessWidget {
               // searchInput(),
               Column(
                 children: <Widget>[
-                  messageRow('收到的评论', '+22', 'lib/assets/icons/Message-1.png',
-                      onTap: () =>
-                          Get.to('/chart', arguments: {'socket': c.socket}),
+                  messageRow('收到的评论', '', 'lib/assets/icons/Message-1.png',
                       type: false),
-                  messageRow('被收藏', '+22', 'lib/assets/icons/Message-2.png',
+                  messageRow('被收藏', '', 'lib/assets/icons/Message-2.png',
                       type: false),
-                  messageRow('官方通知', '+22', 'lib/assets/icons/Message-3.png',
+                  messageRow('官方通知', '', 'lib/assets/icons/Message-3.png',
                       type: false),
-                  messageRow('陌生人私信', '+22', 'lib/assets/icons/Message-4.png',
+                  messageRow('陌生人私信', '', 'lib/assets/icons/Message-4.png',
                       type: false)
                 ],
               ),

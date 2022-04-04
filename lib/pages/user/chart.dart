@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
@@ -6,35 +7,16 @@ import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/user/message.dart';
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 // import 'package:socket_io_client/socket_io_client.dart' as io;
 
 // class ChartPageController extends GetxController {
-//   RxList chartList = [].obs;
-//   final io.Socket socket = Get.arguments['socket'];
-//   final User user = Get.arguments['user'];
-//   late String otherUserImg;
-//   late int otherUserId;
-//   late int chartId;
-//   RxString inputValue = ''.obs;
-
-//   // 初始化聊天状态
-//   _getInit() {
-//     Map m = Get.arguments['chart_info'];
-//     chartList.value = jsonDecode(m['chart_data']);
-//     otherUserImg = m['user_img'];
-//     otherUserId = m['user_id'];
-//     chartId = m['chart_id'];
-//   }
+//   final ScrollController scrollController = ScrollController();
 
 //   @override
 //   void onInit() {
-//     _getInit();
-//     socket.on('message', (data) {
-//       print(data);
-//     });
-
-//     super.onInit();
+//     scrollController.jumpTo(scrollController.position.maxScrollExtent);
 //   }
 // }
 
@@ -44,12 +26,14 @@ class ChartPage extends StatelessWidget {
   final int chartIndex = Get.arguments;
   final TextEditingController controller = TextEditingController();
   final MessagePageController o = Get.find();
+  // final ChartPageController c = Get.put(ChartPageController());
 
   Widget fromChart(String content, String img) {
+    int idIndex = content.indexOf('#*');
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           ClipOval(
             child: SizedBox(
@@ -64,28 +48,93 @@ class ChartPage extends StatelessWidget {
             ),
           ),
           SizedBox(width: 12.w),
-          PublicCard(
-              radius: 10.r,
-              width: 234.w,
-              padding: EdgeInsets.all(6.r),
-              widget: Text(content))
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: 234.w,
+            ),
+            child: PublicCard(
+                radius: 10.r,
+                margin: EdgeInsets.only(top: 20.h),
+                padding: EdgeInsets.only(
+                    top: 6.r, bottom: 6.r, left: 12.r, right: 12.r),
+                widget: content.contains('#*')
+                    ? RichText(
+                        text: TextSpan(children: [
+                        TextSpan(
+                          text: content.substring(0, idIndex),
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        TextSpan(
+                            text: '同意请点击此处',
+                            style: TextStyle(
+                                foreground: MyFontStyle.textlinearForeground),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                List l = content
+                                    .substring(idIndex + 2, content.length)
+                                    .split('#*');
+                                int projectId = int.parse(l[0]);
+                                int groupId = int.parse(l[1]);
+                                print('$projectId,$groupId');
+                              })
+                      ]))
+                    : Text(content)),
+          )
         ],
       ),
     );
   }
 
   Widget toChart(String content, String img) {
+    int idIndex = content.indexOf('#*');
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          PublicCard(
-              radius: 10.r,
-              width: 234.w,
-              padding: EdgeInsets.all(6.r),
-              widget: Text(content)),
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: 234.w,
+            ),
+            child: PublicCard(
+                radius: 10.r,
+                margin: EdgeInsets.only(top: 20.h),
+                padding: EdgeInsets.only(
+                    top: 6.r, bottom: 6.r, left: 12.r, right: 12.r),
+                widget: content.contains('#*')
+                    ? RichText(
+                        text: TextSpan(children: [
+                        TextSpan(
+                          text: content.substring(0, idIndex),
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        TextSpan(
+                            text: '同意请点击此处',
+                            style: TextStyle(
+                                foreground: MyFontStyle.textlinearForeground),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                List l = content
+                                    .substring(idIndex + 2, content.length)
+                                    .split('#*');
+                                int projectId = int.parse(l[0]);
+                                int groupId = int.parse(l[1]);
+                                DioUtil().post('/project/acceptInvite', data: {
+                                  'project_id': projectId,
+                                  'group_id': groupId
+                                }, success: (res) {
+                                  print(res);
+                                }, error: (error) {
+                                  print(error);
+                                });
+                                print('$projectId,$groupId');
+                              })
+                      ]))
+                    : Text(
+                        content,
+                      )),
+          ),
           SizedBox(width: 12.w),
           ClipOval(
             child: SizedBox(
@@ -194,6 +243,7 @@ class ChartPage extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                     child: ListView.builder(
+                  // controller: c.scrollController,
                   itemCount: chartList.length,
                   itemBuilder: (context, index) {
                     var temp = chartList[index];

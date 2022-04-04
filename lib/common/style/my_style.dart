@@ -35,25 +35,36 @@ class MyFontSize {
   static double font9 = 9.sp;
 }
 
+class MyFontFamily {
+  static String pingfangRegular = 'PingFangRegular';
+  static String pingfangMedium = 'PingFangMedium';
+  static String pingfangSemibold = 'PingFangSemibold';
+  static String sfDisplaySemibold = 'SFDisplaySemibold';
+  static String sfDisplayBold = 'SFDisplayBold';
+}
+
 class MyFontStyle {
   static TextStyle projectTabUnSelected = TextStyle(
       fontSize: MyFontSize.font14,
+      fontFamily: MyFontFamily.pingfangRegular,
       foreground: MyFontStyle.textlinearForeground);
-  static TextStyle projectTabSelected =
-      TextStyle(fontSize: MyFontSize.font14, color: MyColor.fontWhite);
+  static TextStyle projectTabSelected = TextStyle(
+      fontSize: MyFontSize.font14,
+      fontFamily: MyFontFamily.pingfangRegular,
+      color: MyColor.fontWhite);
   // 数据页 排行榜标题
   static TextStyle rankTitle = TextStyle(
-      fontWeight: FontWeight.w700,
+      fontFamily: MyFontFamily.sfDisplayBold,
       color: MyColor.fontBlack,
       fontSize: MyFontSize.font19);
   // 数据页 排行榜用户
   static TextStyle rankUser = TextStyle(
-      fontWeight: FontWeight.w600,
+      fontFamily: MyFontFamily.pingfangSemibold,
       color: MyColor.fontBlack,
       fontSize: MyFontSize.font12);
   // 数据页 排行榜学校
   static TextStyle rankSchool = TextStyle(
-      fontWeight: FontWeight.w600,
+      fontFamily: MyFontFamily.pingfangSemibold,
       color: MyColor.fontBlack,
       fontSize: MyFontSize.font12);
 

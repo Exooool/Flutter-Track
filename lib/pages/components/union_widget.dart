@@ -349,31 +349,26 @@ class UnionWidget extends StatelessWidget {
 
   // 小选项按钮
   Widget gradientBox(String title, bool show, Function()? onTap) {
-    return show
-        ? PublicCard(
-            radius: 90.r,
-            height: 24.h,
-            width: 60.w,
-            widget: Center(
-              child: Text(
-                title,
-                style: TextStyle(
-                    fontSize: MyFontSize.font14, color: MyColor.fontBlack),
-              ),
-            ))
-        : InkWell(
-            onTap: onTap,
-            child: Container(
-              height: 24.h,
-              width: 60.w,
-              alignment: Alignment.center,
-              child: Text(
-                title,
-                style: TextStyle(
-                    fontSize: MyFontSize.font14, color: MyColor.fontBlackO2),
-              ),
+    return PublicCard(
+        radius: 90.r,
+        onTap: onTap,
+        margin: EdgeInsets.only(left: 13.w),
+        // padding:
+        //     EdgeInsets.only(left: 23.w, right: 23.w, top: 3.h, bottom: 3.h),
+        height: 24.h,
+        width: 60.w,
+        widget: Center(
+          child: Opacity(
+            opacity: show ? 1 : 0.2,
+            child: Text(
+              title,
+              style: TextStyle(
+                  fontFamily: MyFontFamily.pingfangMedium,
+                  fontSize: MyFontSize.font14,
+                  color: MyColor.fontBlack),
             ),
-          );
+          ),
+        ));
   }
 
   @override
@@ -404,7 +399,7 @@ class UnionWidget extends StatelessWidget {
                                 title,
                                 style: TextStyle(
                                     color: MyColor.fontBlack,
-                                    fontWeight: FontWeight.w600,
+                                    fontFamily: MyFontFamily.pingfangSemibold,
                                     fontSize: MyFontSize.font16),
                               )),
                         ],
@@ -418,15 +413,19 @@ class UnionWidget extends StatelessWidget {
                                 title,
                                 style: TextStyle(
                                     color: MyColor.fontBlack,
-                                    fontWeight: FontWeight.w600,
+                                    fontFamily: MyFontFamily.pingfangSemibold,
                                     fontSize: MyFontSize.font16),
                               )),
-                          gradientBox(subTitle![0], index == 0 ? true : false,
-                              onTapOne),
-                          gradientBox(subTitle![1], index == 1 ? true : false,
-                              onTapTwo),
-                          gradientBox(subTitle![2], index == 2 ? true : false,
-                              onTapThree)
+                          Row(
+                            children: <Widget>[
+                              gradientBox(subTitle![0],
+                                  index == 0 ? true : false, onTapOne),
+                              gradientBox(subTitle![1],
+                                  index == 1 ? true : false, onTapTwo),
+                              gradientBox(subTitle![2],
+                                  index == 2 ? true : false, onTapThree)
+                            ],
+                          )
                         ],
                       ),
               ),

@@ -28,7 +28,7 @@ class AppPages {
     GetPage(name: '/add_project', page: () => AddProject()),
     GetPage(name: '/match_group', page: () => MatchGroup()),
     GetPage(name: '/invite_group', page: () => InviteGroup()),
-    GetPage(name: '/setting', page: () => const SettingPage()),
+    GetPage(name: '/setting', page: () => SettingPage()),
     GetPage(name: '/newsEdit', page: () => NewsEdit()),
     GetPage(name: '/article', page: () => ArticlePage()),
     GetPage(name: '/message', page: () => MessagePage()),

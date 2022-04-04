@@ -366,26 +366,28 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
       var basicAuth = 'Basic ' + base64Encode(utf8.encode('$appkey:$secret'));
       print(basicAuth);
 
-      DioUtil().verify('/login/loginTokenVerify',
-          data: {'loginToken': event.message}, success: (res) async {
-        print(res);
-        if (res['is_valid']) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString('token', res['token']);
+      if (event.code == 6000) {
+        DioUtil().verify('/login/loginTokenVerify',
+            data: {'loginToken': event.message}, success: (res) async {
+          print(res);
+          if (res['is_valid']) {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setString('token', res['token']);
 
-          print('用户登录成功token为：${res['token']}');
+            print('用户登录成功token为：${res['token']}');
 
-          if (res['first']) {
-            Get.offAllNamed('/sex_info');
+            if (res['first']) {
+              Get.offAllNamed('/sex_info');
+            } else {
+              Get.offAllNamed('/home');
+            }
           } else {
-            Get.offAllNamed('/home');
+            Get.snackbar('提示', '一键登录错误，请重试');
           }
-        } else {
-          Get.snackbar('提示', '一键登录错误，请重试');
-        }
-      }, error: (error) {
-        Get.snackbar('提示', error);
-      });
+        }, error: (error) {
+          Get.snackbar('提示', error);
+        });
+      }
 
       // api请求验证token
       // var respone = await dio.Dio()

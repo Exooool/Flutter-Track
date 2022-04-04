@@ -241,8 +241,11 @@ class FormDateTimePicker extends StatelessWidget {
         child: Text(
           value == '' || value == null ? '请选择' : value!,
           textAlign: TextAlign.right,
-          style: TextStyle(
-              color: MyColor.fontBlackO2, fontSize: MyFontSize.font16),
+          style: value == '' || value == null
+              ? TextStyle(
+                  color: MyColor.fontBlackO2, fontSize: MyFontSize.font16)
+              : TextStyle(
+                  color: MyColor.fontBlack, fontSize: MyFontSize.font16),
         ));
   }
 }

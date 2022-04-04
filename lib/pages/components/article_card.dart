@@ -96,7 +96,7 @@ class ArticleCard extends StatelessWidget {
               Get.to(() => ArticlePage(), arguments: {'news_id': news.newsId});
             },
             widget: Padding(
-              padding: EdgeInsets.all(12.r),
+              padding: EdgeInsets.all(12.w),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -107,9 +107,9 @@ class ArticleCard extends StatelessWidget {
                           child: Text(
                         news.newsTitle,
                         style: TextStyle(
-                            fontSize: MyFontSize.font18,
-                            fontWeight: FontWeight.w500),
-                        maxLines: 1,
+                            fontSize: MyFontSize.font19,
+                            fontFamily: MyFontFamily.pingfangMedium),
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       )),
                     ],
@@ -143,7 +143,8 @@ class ArticleCard extends StatelessWidget {
                                   news.userName,
                                   style: TextStyle(
                                       fontSize: MyFontSize.font12,
-                                      fontWeight: FontWeight.w600),
+                                      fontWeight: FontWeight.w800,
+                                      fontFamily: MyFontFamily.pingfangMedium),
                                 ),
                                 SizedBox(width: 10.w),
                                 Expanded(
@@ -152,9 +153,8 @@ class ArticleCard extends StatelessWidget {
                                       [yyyy, '.', mm, '.', dd]),
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      height: 1.6,
                                       fontSize: MyFontSize.font12,
-                                      fontWeight: FontWeight.w400),
+                                      fontFamily: MyFontFamily.pingfangRegular),
                                 ))
                               ],
                             ),
@@ -163,7 +163,9 @@ class ArticleCard extends StatelessWidget {
                               news.content,
                               maxLines: 5,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: MyFontSize.font12),
+                              style: TextStyle(
+                                  fontSize: MyFontSize.font12,
+                                  fontFamily: MyFontFamily.pingfangRegular),
                             )
                           ],
                         ),
@@ -190,14 +192,17 @@ class ArticleCard extends StatelessWidget {
                   ),
                   SizedBox(height: 15.h),
                   Padding(
-                    padding: EdgeInsets.only(right: 50.w),
+                    padding: EdgeInsets.only(right: 49.w),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           news.hashtag,
-                          style: TextStyle(fontSize: MyFontSize.font10),
+                          style: TextStyle(
+                              fontSize: MyFontSize.font10,
+                              fontFamily: MyFontFamily.pingfangMedium,
+                              color: MyColor.fontBlackO2),
                         ),
                         Row(children: [
                           Image.asset(
@@ -208,7 +213,9 @@ class ArticleCard extends StatelessWidget {
                           SizedBox(width: 3.w),
                           Text(
                             news.viewNum.toString(),
-                            style: TextStyle(fontSize: MyFontSize.font10),
+                            style: TextStyle(
+                                fontSize: MyFontSize.font10,
+                                fontFamily: MyFontFamily.pingfangRegular),
                           ),
                           Padding(
                               padding: EdgeInsets.only(left: 18.w, right: 12.w),
@@ -222,8 +229,10 @@ class ArticleCard extends StatelessWidget {
                                   SizedBox(width: 3.w),
                                   Text(
                                     news.commentNum.toString(),
-                                    style:
-                                        TextStyle(fontSize: MyFontSize.font10),
+                                    style: TextStyle(
+                                        fontSize: MyFontSize.font10,
+                                        fontFamily:
+                                            MyFontFamily.pingfangRegular),
                                   ),
                                 ],
                               )),
@@ -235,7 +244,9 @@ class ArticleCard extends StatelessWidget {
                           SizedBox(width: 3.w),
                           Text(
                             '${news.likeNum.toList().length}',
-                            style: TextStyle(fontSize: MyFontSize.font10),
+                            style: TextStyle(
+                                fontSize: MyFontSize.font10,
+                                fontFamily: MyFontFamily.pingfangRegular),
                           ),
                         ])
                       ],

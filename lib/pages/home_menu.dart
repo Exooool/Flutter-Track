@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_track/common/style/my_style.dart';
 
 import 'package:flutter_track/pages/discover/discover.dart';
 import 'package:flutter_track/pages/user/user.dart';
@@ -54,31 +55,31 @@ class _HomeMenuState extends State<HomeMenu> {
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 17.5, right: 17.5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Icon(
-              //   icon,
-              //   color: _index == index ? Colors.blue : Colors.white,
-              //   size: 40,
-              // ),
-              showDynamic
-                  ? Image.asset(
-                      dynamic,
-                      height: 50.r,
-                      width: 50.r,
-                    )
-                  : Image.asset(
-                      _index == index ? selected : unselected,
-                      height: 50.r,
-                      width: 50.r,
-                    ),
-              Text(
-                title,
-                style: const TextStyle(
-                    color: Color.fromRGBO(255, 255, 255, 1), fontSize: 10),
-              )
-            ],
+          child: Opacity(
+            opacity: _index == index ? 1 : 0.5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                showDynamic
+                    ? Image.asset(
+                        dynamic,
+                        height: 40.r,
+                        width: 40.r,
+                      )
+                    : Image.asset(
+                        _index == index ? selected : unselected,
+                        height: 40.r,
+                        width: 40.r,
+                      ),
+                Text(
+                  title,
+                  style: TextStyle(
+                      fontFamily: MyFontFamily.pingfangSemibold,
+                      color: MyColor.fontWhite,
+                      fontSize: MyFontSize.font12),
+                )
+              ],
+            ),
           ),
         ));
   }
@@ -88,47 +89,51 @@ class _HomeMenuState extends State<HomeMenu> {
   String i = '1';
   // 导航栏
   Widget navigatorBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          height: 64,
-          width: 320,
-          decoration: BoxDecoration(
-              color: _isNavShow
-                  ? const Color.fromRGBO(43, 43, 43, 0.95)
-                  : const Color.fromRGBO(43, 43, 43, 0.2),
-              borderRadius: const BorderRadius.all(Radius.circular(43.3125))),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _menuItem(
-                    'lib/assets/icons/nav_1.png',
-                    'lib/assets/icons/nav_fill_1.png',
-                    0,
-                    '计划',
-                    'lib/assets/gifs/1 计划.gif'),
-                _menuItem(
-                    'lib/assets/icons/nav_2.png',
-                    'lib/assets/icons/nav_fill_2.png',
-                    1,
-                    '资讯',
-                    'lib/assets/gifs/2 资讯.gif'),
-                _menuItem(
-                    'lib/assets/icons/nav_3.png',
-                    'lib/assets/icons/nav_fill_3.png',
-                    2,
-                    '数据',
-                    'lib/assets/gifs/3 数据.gif'),
-                _menuItem(
-                    'lib/assets/icons/nav_4.png',
-                    'lib/assets/icons/nav_fill_4.png',
-                    3,
-                    '个人',
-                    'lib/assets/gifs/4 个人.gif'),
-              ]),
-        ),
-      ],
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(
+                left: 11.5.w, right: 11.5.w, top: 5.h, bottom: 5.h),
+            decoration: BoxDecoration(
+                color: _isNavShow
+                    ? const Color.fromRGBO(43, 43, 43, 0.95)
+                    : const Color.fromRGBO(43, 43, 43, 0.2),
+                borderRadius: const BorderRadius.all(Radius.circular(43.3125))),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _menuItem(
+                      'lib/assets/icons/nav_1.png',
+                      'lib/assets/icons/nav_fill_1.png',
+                      0,
+                      '计划',
+                      'lib/assets/gifs/1 计划.gif'),
+                  _menuItem(
+                      'lib/assets/icons/nav_2.png',
+                      'lib/assets/icons/nav_fill_2.png',
+                      1,
+                      '资讯',
+                      'lib/assets/gifs/2 资讯.gif'),
+                  _menuItem(
+                      'lib/assets/icons/nav_3.png',
+                      'lib/assets/icons/nav_fill_3.png',
+                      2,
+                      '数据',
+                      'lib/assets/gifs/3 数据.gif'),
+                  _menuItem(
+                      'lib/assets/icons/nav_4.png',
+                      'lib/assets/icons/nav_fill_4.png',
+                      3,
+                      '个人',
+                      'lib/assets/gifs/4 个人.gif'),
+                ]),
+          ),
+        ],
+      ),
     );
   }
 
@@ -147,9 +152,6 @@ class _HomeMenuState extends State<HomeMenu> {
   @override
   Widget build(BuildContext context) {
     loginVerify();
-
-    double _phoneWidth = MediaQuery.of(context).size.width;
-    double distance = (_phoneWidth - 320) / 2;
 
     ScreenUtil.init(
         BoxConstraints(
@@ -172,11 +174,7 @@ class _HomeMenuState extends State<HomeMenu> {
           },
           child: Stack(children: [
             _pageList[_index],
-            Positioned(
-                left: distance,
-                right: distance,
-                bottom: 34,
-                child: navigatorBar())
+            Positioned(bottom: 34.h, child: navigatorBar())
           ]),
         ));
   }

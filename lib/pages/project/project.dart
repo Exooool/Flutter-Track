@@ -29,7 +29,7 @@ class _ProjectPageState extends State<ProjectPage>
   late TabController _tabInteriorController;
 
   // 匹配成功的队列
-  List groupListMatched = [{}];
+  List groupListMatched = [];
   // 正在匹配的队列
   List groupListMatching = [];
   // 60分钟内进行的计划
@@ -40,8 +40,8 @@ class _ProjectPageState extends State<ProjectPage>
   Widget mainTab(String content, {bool show = true}) {
     return show
         ? PublicCard(
-            height: 48.h,
-            width: 124.w,
+            padding: EdgeInsets.only(
+                left: 27.w, right: 27.w, top: 13.h, bottom: 13.h),
             notWhite: true,
             radius: 90.r,
             widget: Center(
@@ -51,8 +51,8 @@ class _ProjectPageState extends State<ProjectPage>
               ),
             ))
         : Container(
-            height: 48.h,
-            width: 124.w,
+            padding: EdgeInsets.only(
+                left: 27.w, right: 27.w, top: 13.h, bottom: 13.h),
             alignment: Alignment.center,
             child: Text(
               content,
@@ -72,7 +72,9 @@ class _ProjectPageState extends State<ProjectPage>
               child: Text(
                 content,
                 style: TextStyle(
-                    fontSize: MyFontSize.font14, color: MyColor.fontBlack),
+                    fontSize: MyFontSize.font14,
+                    color: MyColor.fontBlack,
+                    fontFamily: MyFontFamily.pingfangRegular),
               ),
             ))
         : Container(
@@ -82,7 +84,9 @@ class _ProjectPageState extends State<ProjectPage>
             child: Text(
               content,
               style: TextStyle(
-                  fontSize: MyFontSize.font14, color: MyColor.fontBlackO2),
+                  fontSize: MyFontSize.font14,
+                  color: MyColor.fontBlackO2,
+                  fontFamily: MyFontFamily.pingfangRegular),
             ),
           );
   }
@@ -211,7 +215,7 @@ class _ProjectPageState extends State<ProjectPage>
           margin: EdgeInsets.only(
               top: MediaQueryData.fromWindow(window).padding.top + 12.h),
           child: PublicCard(
-            height: 60.h,
+            padding: EdgeInsets.all(6.r),
             radius: 90.r,
             widget: TabBar(
                 isScrollable: true,
@@ -251,15 +255,20 @@ class _ProjectPageState extends State<ProjectPage>
                           height: 36.h,
                           radius: 90.r,
                           widget: Center(
-                            child: Text(
-                              '即将开始',
-                              style: TextStyle(fontSize: MyFontSize.font14),
-                            ),
+                            child: Text('即将开始',
+                                style: TextStyle(
+                                    fontSize: MyFontSize.font14,
+                                    fontFamily: MyFontFamily.pingfangRegular)),
                           ),
                         ),
                       ),
                       projectList1.isEmpty
-                          ? const Center(child: Text('显示60分钟内将进行的计划'))
+                          ? Center(
+                              child: Text('显示60分钟内将进行的计划',
+                                  style: TextStyle(
+                                      fontSize: MyFontSize.font16,
+                                      fontFamily:
+                                          MyFontFamily.pingfangRegular)))
                           : ListView.builder(
                               shrinkWrap: true,
                               padding: EdgeInsets.zero,
@@ -295,7 +304,9 @@ class _ProjectPageState extends State<ProjectPage>
                           widget: Center(
                             child: Text(
                               '其余计划',
-                              style: TextStyle(fontSize: MyFontSize.font14),
+                              style: TextStyle(
+                                  fontSize: MyFontSize.font14,
+                                  fontFamily: MyFontFamily.pingfangRegular),
                             ),
                           ),
                         ),
@@ -323,9 +334,17 @@ class _ProjectPageState extends State<ProjectPage>
                       projectList2.isEmpty
                           ? Center(
                               child: Column(
-                              children: const [
-                                Text('暂无计划'),
-                                Text('快添加计划试试吧～'),
+                              children: [
+                                Text('暂无计划',
+                                    style: TextStyle(
+                                        fontSize: MyFontSize.font16,
+                                        fontFamily:
+                                            MyFontFamily.pingfangRegular)),
+                                Text('快添加计划试试吧～',
+                                    style: TextStyle(
+                                        fontSize: MyFontSize.font16,
+                                        fontFamily:
+                                            MyFontFamily.pingfangRegular)),
                               ],
                             ))
                           : ListView.builder(
@@ -396,9 +415,17 @@ class _ProjectPageState extends State<ProjectPage>
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
-                                  Text('暂无互助小组'),
-                                  Text('快去添加计划试试吧～')
+                                children: [
+                                  Text('暂无互助小组',
+                                      style: TextStyle(
+                                          fontSize: MyFontSize.font16,
+                                          fontFamily:
+                                              MyFontFamily.pingfangRegular)),
+                                  Text('快去添加计划试试吧～',
+                                      style: TextStyle(
+                                          fontSize: MyFontSize.font16,
+                                          fontFamily:
+                                              MyFontFamily.pingfangRegular))
                                 ],
                               )
                             : ListView.builder(
