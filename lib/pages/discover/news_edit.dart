@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
@@ -20,6 +20,14 @@ class NewsEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQueryData.fromWindow(window).size.width,
+            maxHeight: MediaQueryData.fromWindow(window).size.height),
+        designSize: const Size(414, 896),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     return Scaffold(
       appBar: CustomAppbar(
         'edit',
@@ -78,9 +86,9 @@ class NewsEdit extends StatelessWidget {
           children: [
             PublicCard(
                 radius: 10.r,
-                height: 36.h,
                 margin: EdgeInsets.only(bottom: 12.h),
-                padding: EdgeInsets.only(left: 24.w, right: 24.w),
+                padding: EdgeInsets.only(
+                    left: 24.w, right: 24.w, top: 7.h, bottom: 7.h),
                 widget: Center(
                   child: TextField(
                     onChanged: (value) {
@@ -90,7 +98,8 @@ class NewsEdit extends StatelessWidget {
                       enabled: true,
                       hintText: '请输入你的标题',
                       hintStyle: TextStyle(
-                          fontSize: MyFontSize.font16,
+                          fontSize: MyFontSize.font18,
+                          fontFamily: MyFontFamily.pingfangSemibold,
                           color: MyColor.fontBlackO2),
                     ),
                   ),
@@ -283,6 +292,14 @@ class _TagSelectState extends State<TagSelect> {
   @override
   Widget build(BuildContext context) {
     final arguments = getx.Get.arguments;
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQueryData.fromWindow(window).size.width,
+            maxHeight: MediaQueryData.fromWindow(window).size.height),
+        designSize: const Size(414, 896),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     // print(arguments);
     return Scaffold(
       appBar: CustomAppbar(
@@ -316,7 +333,8 @@ class _TagSelectState extends State<TagSelect> {
             child: Text(
               '请选择您的标签',
               style: TextStyle(
-                  fontSize: MyFontSize.font18, fontWeight: FontWeight.w600),
+                  fontSize: MyFontSize.font18,
+                  fontFamily: MyFontFamily.pingfangSemibold),
             ),
           ),
           Expanded(
@@ -348,7 +366,8 @@ class _TagSelectState extends State<TagSelect> {
                                   child: Text(_tagList[index],
                                       style: TextStyle(
                                           fontSize: MyFontSize.font16,
-                                          fontWeight: FontWeight.w600,
+                                          fontFamily:
+                                              MyFontFamily.pingfangSemibold,
                                           color: MyColor.fontWhite)))),
                         );
                       })))
@@ -374,7 +393,15 @@ class _CoverSelectState extends State<CoverSelect> {
     'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1587685987799-73e5a5ec0878?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=80',
     'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1638913976954-8f7b612867c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=80',
     'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1647591413270-469a0393da0c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzMHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80',
-    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1647591609971-7ebb33c0f98a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0MHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80'
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1647591609971-7ebb33c0f98a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0MHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80',
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1649105425917-fb091911a248?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=80',
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxMXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80',
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1497215728101-856f4ea42174?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwyNXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80',
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1649000808933-1f4aac7cad9a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyOHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80',
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1649084919367-51257e8a9142?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4Nnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80',
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1648997121517-250cbdc74377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5Nnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80',
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1649035075923-9301d4e01044?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNDJ8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80',
+    'https://dogefs.s3.ladydaily.com/~/source/unsplash/photo-1649023000556-f9c784ee48b1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNDV8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80',
   ];
 
   Widget imageItem(String address, int index) {
@@ -455,6 +482,14 @@ class _CoverSelectState extends State<CoverSelect> {
   @override
   Widget build(BuildContext context) {
     final arguments = getx.Get.arguments;
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQueryData.fromWindow(window).size.width,
+            maxHeight: MediaQueryData.fromWindow(window).size.height),
+        designSize: const Size(414, 896),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     print(arguments);
     return Scaffold(
       appBar: CustomAppbar(
@@ -501,7 +536,8 @@ class _CoverSelectState extends State<CoverSelect> {
             child: Text(
               '请选择您的封面',
               style: TextStyle(
-                  fontSize: MyFontSize.font18, fontWeight: FontWeight.w600),
+                  fontSize: MyFontSize.font18,
+                  fontFamily: MyFontFamily.pingfangSemibold),
             ),
           ),
           Expanded(

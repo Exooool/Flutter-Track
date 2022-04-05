@@ -64,7 +64,7 @@ class AlterUserInfo extends StatelessWidget {
         children: <Widget>[
           PublicCard(
               radius: 30.r,
-              height: 48.h,
+              padding: EdgeInsets.only(top: 13.h, bottom: 13.h),
               width: 81.w,
               notWhite: true,
               widget: Center(
@@ -72,15 +72,17 @@ class AlterUserInfo extends StatelessWidget {
                   // 标题
                   title,
                   style: TextStyle(
-                      color: MyColor.white, fontSize: MyFontSize.font16),
+                      fontFamily: MyFontFamily.pingfangSemibold,
+                      color: MyColor.white,
+                      fontSize: MyFontSize.font16),
                 ),
               )),
           const SizedBox(width: 12),
           PublicCard(
               radius: 30.r,
-              height: 48.h,
+              padding: EdgeInsets.only(top: 13.h, bottom: 13.h),
               width: 261.w,
-              widget: TextFormField(
+              widget: TextField(
                 controller: TextEditingController.fromValue(TextEditingValue(
                     // 设置内容
                     text: initString,
@@ -93,12 +95,13 @@ class AlterUserInfo extends StatelessWidget {
                 },
                 style: TextStyle(
                     fontSize: MyFontSize.font16,
-                    fontWeight: FontWeight.w600,
+                    fontFamily: MyFontFamily.pingfangMedium,
                     color: MyColor.fontBlack),
                 textDirection: TextDirection.rtl,
                 decoration: InputDecoration(
                     hintText: '请输入',
                     hintTextDirection: TextDirection.rtl,
+                    isCollapsed: true,
                     hintStyle: TextStyle(
                         fontSize: MyFontSize.font16,
                         fontWeight: FontWeight.w500,
@@ -153,7 +156,7 @@ class AlterUserInfo extends StatelessWidget {
                 child: Text('修改头像',
                     style: TextStyle(
                         fontSize: MyFontSize.font16,
-                        fontWeight: FontWeight.w600)),
+                        fontFamily: MyFontFamily.pingfangMedium)),
               ),
               formRow('昵称', c.userName.value, (value) {
                 // print(value);
@@ -200,6 +203,7 @@ class AlterUserInfo extends StatelessWidget {
                   widget: Text('保存',
                       style: TextStyle(
                           fontSize: MyFontSize.font16,
+                          fontFamily: MyFontFamily.pingfangSemibold,
                           color: MyColor.fontWhite)))
             ],
           );
