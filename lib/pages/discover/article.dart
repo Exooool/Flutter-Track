@@ -178,7 +178,12 @@ class _ArticlePageState extends State<ArticlePage>
                                       ),
                               ),
                               SizedBox(width: 12.w),
-                              Text(news['user_name'])
+                              Text(
+                                news['user_name'],
+                                style: TextStyle(
+                                    fontSize: MyFontSize.font19,
+                                    fontFamily: MyFontFamily.pingfangMedium),
+                              )
                             ],
                           ),
                         ),
@@ -196,6 +201,7 @@ class _ArticlePageState extends State<ArticlePage>
                                 child: Text(
                                   '关注',
                                   style: TextStyle(
+                                      fontFamily: MyFontFamily.pingfangSemibold,
                                       fontSize: MyFontSize.font16,
                                       color: MyColor.fontWhite),
                                 ),
@@ -207,7 +213,9 @@ class _ArticlePageState extends State<ArticlePage>
                       padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
                       child: Text(
                         news['news_title'],
-                        style: TextStyle(fontSize: MyFontSize.font22),
+                        style: TextStyle(
+                            fontSize: MyFontSize.font22,
+                            fontFamily: MyFontFamily.pingfangMedium),
                       ),
                     ),
                     Row(children: [
@@ -219,7 +227,9 @@ class _ArticlePageState extends State<ArticlePage>
                       SizedBox(width: 3.w),
                       Text(
                         news['view_num'].toString(),
-                        style: TextStyle(fontSize: MyFontSize.font10),
+                        style: TextStyle(
+                            fontSize: MyFontSize.font10,
+                            fontFamily: MyFontFamily.sfDisplayRegular),
                       ),
                       Padding(
                           padding: EdgeInsets.only(left: 18.w, right: 12.w),
@@ -233,7 +243,9 @@ class _ArticlePageState extends State<ArticlePage>
                               SizedBox(width: 3.w),
                               Text(
                                 news['comment_num'].toString(),
-                                style: TextStyle(fontSize: MyFontSize.font10),
+                                style: TextStyle(
+                                    fontSize: MyFontSize.font10,
+                                    fontFamily: MyFontFamily.sfDisplayRegular),
                               ),
                             ],
                           )),
@@ -245,7 +257,9 @@ class _ArticlePageState extends State<ArticlePage>
                       SizedBox(width: 3.w),
                       Text(
                         '${jsonDecode(news['like_num']).length}',
-                        style: TextStyle(fontSize: MyFontSize.font10),
+                        style: TextStyle(
+                            fontSize: MyFontSize.font10,
+                            fontFamily: MyFontFamily.sfDisplayRegular),
                       ),
                     ]),
                     Padding(
@@ -253,7 +267,9 @@ class _ArticlePageState extends State<ArticlePage>
                       child: Text(
                         formatDate(DateTime.parse(news['news_time']),
                             [yyyy, '.', mm, '.', dd]),
-                        style: TextStyle(fontSize: MyFontSize.font10),
+                        style: TextStyle(
+                            fontSize: MyFontSize.font10,
+                            fontFamily: MyFontFamily.sfDisplayRegular),
                       ),
                     ),
                     ZefyrEditor(

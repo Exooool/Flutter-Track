@@ -94,7 +94,9 @@ class AddProjectController extends GetxController {
             ),
             Text(
               title,
-              style: TextStyle(fontSize: MyFontSize.font14),
+              style: TextStyle(
+                  fontSize: MyFontSize.font14,
+                  fontFamily: MyFontFamily.pingfangMedium),
             )
           ],
         ),
@@ -118,7 +120,7 @@ class AddProjectController extends GetxController {
                       child: Text('取消',
                           style: TextStyle(
                               foreground: MyFontStyle.textlinearForeground,
-                              fontWeight: FontWeight.w600)),
+                              fontFamily: MyFontFamily.pingfangSemibold)),
                       style: ButtonStyle(
                           padding: MaterialStateProperty.all(
                               const EdgeInsets.only(top: 20, left: 36))),
@@ -131,7 +133,7 @@ class AddProjectController extends GetxController {
                       child: Text('确认',
                           style: TextStyle(
                               foreground: MyFontStyle.textlinearForeground,
-                              fontWeight: FontWeight.w600)),
+                              fontFamily: MyFontFamily.pingfangSemibold)),
                       style: ButtonStyle(
                           padding: MaterialStateProperty.all(
                               const EdgeInsets.only(top: 20, right: 36))),
@@ -162,10 +164,12 @@ class AddProjectController extends GetxController {
                       pickImage();
                       Get.back();
                     },
-                    widget: Image.asset(
-                      'lib/assets/icons/Add.png',
-                      height: 44.r,
-                      width: 44.r,
+                    widget: Center(
+                      child: Image.asset(
+                        'lib/assets/icons/Add.png',
+                        height: 44.r,
+                        width: 44.r,
+                      ),
                     ))
               ],
             ),

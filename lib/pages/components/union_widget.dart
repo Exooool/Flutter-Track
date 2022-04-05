@@ -62,7 +62,7 @@ class UionPainter extends CustomPainter {
   final addHeight = 5.h;
 
   UionPainter(int length, {this.index = 0}) {
-    width = length * 16.sp;
+    width = length * 16;
   }
   @override
   void paint(Canvas canvas, Size size) {

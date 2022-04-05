@@ -267,6 +267,8 @@ class _ProjectPageState extends State<ProjectPage>
                               child: Text('显示60分钟内将进行的计划',
                                   style: TextStyle(
                                       fontSize: MyFontSize.font16,
+                                      foreground:
+                                          MyFontStyle.textlinearForeground,
                                       fontFamily:
                                           MyFontFamily.pingfangRegular)))
                           : ListView.builder(
@@ -338,11 +340,15 @@ class _ProjectPageState extends State<ProjectPage>
                                 Text('暂无计划',
                                     style: TextStyle(
                                         fontSize: MyFontSize.font16,
+                                        foreground:
+                                            MyFontStyle.textlinearForeground,
                                         fontFamily:
                                             MyFontFamily.pingfangRegular)),
                                 Text('快添加计划试试吧～',
                                     style: TextStyle(
                                         fontSize: MyFontSize.font16,
+                                        foreground:
+                                            MyFontStyle.textlinearForeground,
                                         fontFamily:
                                             MyFontFamily.pingfangRegular)),
                               ],
@@ -419,11 +425,15 @@ class _ProjectPageState extends State<ProjectPage>
                                   Text('暂无互助小组',
                                       style: TextStyle(
                                           fontSize: MyFontSize.font16,
+                                          foreground:
+                                              MyFontStyle.textlinearForeground,
                                           fontFamily:
                                               MyFontFamily.pingfangRegular)),
                                   Text('快去添加计划试试吧～',
                                       style: TextStyle(
                                           fontSize: MyFontSize.font16,
+                                          foreground:
+                                              MyFontStyle.textlinearForeground,
                                           fontFamily:
                                               MyFontFamily.pingfangRegular))
                                 ],
@@ -449,9 +459,21 @@ class _ProjectPageState extends State<ProjectPage>
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
-                                  Text('暂无互助小组'),
-                                  Text('快去添加计划试试吧～')
+                                children: [
+                                  Text('暂无互助小组',
+                                      style: TextStyle(
+                                          fontSize: MyFontSize.font16,
+                                          foreground:
+                                              MyFontStyle.textlinearForeground,
+                                          fontFamily:
+                                              MyFontFamily.pingfangRegular)),
+                                  Text('快去添加计划试试吧～',
+                                      style: TextStyle(
+                                          fontSize: MyFontSize.font16,
+                                          foreground:
+                                              MyFontStyle.textlinearForeground,
+                                          fontFamily:
+                                              MyFontFamily.pingfangRegular))
                                 ],
                               )
                             : ListView.builder(

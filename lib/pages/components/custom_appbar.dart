@@ -95,8 +95,8 @@ class CustomAppbar extends AppBar {
                   Text(
                     title,
                     style: TextStyle(
-                        fontWeight: FontWeight.w600,
                         fontSize: MyFontSize.font19,
+                        fontFamily: MyFontFamily.pingfangSemibold,
                         color: MyColor.fontBlack),
                   ),
           centerTitle: true,

@@ -56,13 +56,13 @@ class _ExpansionListState extends State<ExpansionList> {
                   style: TextStyle(
                       color: MyColor.fontBlack,
                       fontSize: MyFontSize.font16,
-                      fontWeight: FontWeight.w600),
+                      fontFamily: MyFontFamily.pingfangSemibold),
                 ),
-                Icon(
+                const Icon(
                   Icons.arrow_drop_down,
-                  size: 28.sp,
+                  size: 28,
                   color: MyColor.fontBlack,
-                )
+                ),
               ],
             ),
           ),

@@ -30,8 +30,8 @@ class AddProject extends StatelessWidget {
       {Widget? component, Function? onChanged, String? value}) {
     return Center(
       child: PublicCard(
-        radius: 30.r,
-        height: 48.h,
+        radius: 90.r,
+        padding: EdgeInsets.only(top: 13.h, bottom: 13.h),
         margin: EdgeInsets.only(bottom: 12.h),
         widget: Padding(
           padding: EdgeInsets.only(left: 24.w, right: 24.w),
@@ -42,7 +42,8 @@ class AddProject extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                    fontSize: MyFontSize.font16, fontWeight: FontWeight.w500),
+                    fontSize: MyFontSize.font16,
+                    fontFamily: MyFontFamily.pingfangMedium),
               ),
               SizedBox(width: 36.w),
               Expanded(
@@ -57,12 +58,15 @@ class AddProject extends StatelessWidget {
                           },
                           style: TextStyle(
                               fontSize: MyFontSize.font16,
-                              fontWeight: FontWeight.w500,
+                              fontFamily: MyFontFamily.pingfangRegular,
                               color: MyColor.fontBlack),
                           textDirection: TextDirection.rtl,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               hintText: '请输入',
-                              hintStyle: TextStyle(color: MyColor.fontBlackO2),
+                              isCollapsed: true,
+                              hintStyle: TextStyle(
+                                  color: MyColor.fontBlackO2,
+                                  fontFamily: MyFontFamily.pingfangRegular),
                               hintTextDirection: TextDirection.rtl,
                               border: InputBorder.none)))
             ],
@@ -76,7 +80,7 @@ class AddProject extends StatelessWidget {
   Widget formSwitch(String on, String off, int value, Function onChange) {
     return ToggleSwitch(
       minWidth: on.length == 1 ? 40.sp : 100.sp,
-      fontSize: MyFontSize.font16,
+      fontSize: 16.sp,
       minHeight: 25.h,
       radiusStyle: true,
       cornerRadius: 60.r,
@@ -288,7 +292,7 @@ class AddProject extends StatelessWidget {
                         child: Text('点击选择头像',
                             style: TextStyle(
                                 fontSize: MyFontSize.font16,
-                                fontWeight: FontWeight.w500)))
+                                fontFamily: MyFontFamily.pingfangMedium)))
                   ],
                 ),
                 // 列表
@@ -375,19 +379,35 @@ class AddProject extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(left: 10.w, right: 10.w),
                       child: formInput('匹配方式',
-                          component: formSwitch('系统匹配', '自行邀请', c.isMatch.value,
-                              (index) {
-                            c.isMatch.value = index;
-                            print('匹配方式${c.isMatch.value}');
-                          })),
+                          component: SizedBox(
+                            height: 26,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              children: [
+                                formSwitch('系统匹配', '自行邀请', c.isMatch.value,
+                                    (index) {
+                                  c.isMatch.value = index;
+                                  print('匹配方式${c.isMatch.value}');
+                                })
+                              ],
+                            ),
+                          )),
                     )),
                 Center(
-                  child: CustomButton(
-                      title: '确定计划',
-                      fontSize: MyFontSize.font16,
-                      height: 48.h,
-                      width: 104.w,
-                      onPressed: () {
+                  child: PublicCard(
+                      radius: 90.r,
+                      notWhite: true,
+                      widget: Text(
+                        '确定计划',
+                        style: TextStyle(
+                            fontSize: MyFontSize.font16,
+                            color: MyColor.fontWhite,
+                            fontFamily: MyFontFamily.pingfangSemibold),
+                      ),
+                      padding: EdgeInsets.only(
+                          top: 13.h, bottom: 13.h, left: 20.w, right: 20.w),
+                      onTap: () {
                         // 集合所有数据
 
                         bool flag = true;

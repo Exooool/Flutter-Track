@@ -123,7 +123,9 @@ class MessagePage extends StatelessWidget {
               onTap: () {
                 print('跳转搜索页');
               },
-              style: TextStyle(fontSize: MyFontSize.font14),
+              style: TextStyle(
+                  fontSize: MyFontSize.font14,
+                  fontFamily: MyFontFamily.pingfangRegular),
               decoration: InputDecoration.collapsed(
                 // isDense: true,
                 enabled: true,
@@ -182,7 +184,7 @@ class MessagePage extends StatelessWidget {
                       title,
                       style: TextStyle(
                           fontSize: MyFontSize.font16,
-                          fontWeight: FontWeight.w600),
+                          fontFamily: MyFontFamily.pingfangSemibold),
                     ),
                     Visibility(
                       visible: subtitle != '',
@@ -191,7 +193,9 @@ class MessagePage extends StatelessWidget {
                         child: Text(subtitle,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: MyFontSize.font12)),
+                            style: TextStyle(
+                                fontSize: MyFontSize.font12,
+                                fontFamily: MyFontFamily.pingfangRegular)),
                       ),
                     )
                   ],
@@ -201,8 +205,8 @@ class MessagePage extends StatelessWidget {
             Text(
               trailing,
               style: TextStyle(
-                fontSize: MyFontSize.font16,
-              ),
+                  fontSize: MyFontSize.font12,
+                  fontFamily: MyFontFamily.sfDisplayRegular),
             )
           ],
         ),

@@ -65,7 +65,7 @@ class ProjectCard extends StatelessWidget {
       String str = '';
       List list = data;
       if (list.length == 7) {
-        str = '每天';
+        str = '每天 ';
       } else {
         for (var i = 0; i < list.length; i++) {
           str += ' ' + week[list[i]];
@@ -117,7 +117,7 @@ class ProjectCard extends StatelessWidget {
                     project.projectTitle,
                     style: TextStyle(
                         fontSize: MyFontSize.font18,
-                        fontWeight: FontWeight.w600,
+                        fontFamily: MyFontFamily.pingfangRegular,
                         color: MyColor.fontBlack),
                   )
                 ],
@@ -141,7 +141,9 @@ class ProjectCard extends StatelessWidget {
                                 height: 44.r, width: 44.r),
                           )),
                       Text('修改计划',
-                          style: TextStyle(fontSize: MyFontSize.font16))
+                          style: TextStyle(
+                              fontSize: MyFontSize.font16,
+                              fontFamily: MyFontFamily.pingfangRegular))
                     ]),
                     SizedBox(width: 24.w),
                     Column(
@@ -160,7 +162,9 @@ class ProjectCard extends StatelessWidget {
                                   height: 44.r, width: 44.r),
                             )),
                         Text('删除计划',
-                            style: TextStyle(fontSize: MyFontSize.font16))
+                            style: TextStyle(
+                                fontSize: MyFontSize.font16,
+                                fontFamily: MyFontFamily.pingfangRegular))
                       ],
                     )
                   ],
@@ -176,7 +180,9 @@ class ProjectCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('对外可见',
-                                style: TextStyle(fontSize: MyFontSize.font16)),
+                                style: TextStyle(
+                                    fontSize: MyFontSize.font16,
+                                    fontFamily: MyFontFamily.pingfangRegular)),
                             CustomCheckBox(
                                 value: project.secret != 'true',
                                 onChanged: (value) {
@@ -193,7 +199,9 @@ class ProjectCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('自己可见',
-                                style: TextStyle(fontSize: MyFontSize.font16)),
+                                style: TextStyle(
+                                    fontSize: MyFontSize.font16,
+                                    fontFamily: MyFontFamily.pingfangRegular)),
                             CustomCheckBox(
                                 value: project.secret == 'true',
                                 onChanged: (value) {
@@ -281,7 +289,7 @@ class ProjectCard extends StatelessWidget {
                           project.projectTitle,
                           style: TextStyle(
                               fontSize: MyFontSize.font18,
-                              fontWeight: FontWeight.w600,
+                              fontFamily: MyFontFamily.pingfangRegular,
                               color: MyColor.fontBlack),
                         ),
                         Row(
@@ -295,16 +303,17 @@ class ProjectCard extends StatelessWidget {
                             type == 1
                                 ? Image.asset(
                                     'lib/assets/icons/Time_fill.png',
-                                    height: 18.r,
-                                    width: 18.r,
+                                    height: 24.r,
+                                    width: 24.r,
                                   )
                                 : Container(),
-                            SizedBox(width: 12.w),
+                            SizedBox(width: type == 0 ? 12.w : 3.w),
                             Text(frequency(),
                                 style: TextStyle(
                                     fontSize: type == 0
                                         ? MyFontSize.font12
                                         : MyFontSize.font14,
+                                    fontFamily: MyFontFamily.pingfangRegular,
                                     color: MyColor.fontBlack))
                           ],
                         )
@@ -325,7 +334,7 @@ class ProjectCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: MyFontSize.font16,
                       color: MyColor.fontBlack,
-                      fontWeight: FontWeight.w600,
+                      fontFamily: MyFontFamily.sfDisplaySemibold,
                     ),
                   ),
                   startAngle: 270.0,

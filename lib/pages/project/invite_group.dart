@@ -112,9 +112,12 @@ class InviteGroup extends StatelessWidget {
                           left: 6.w, right: 6.w, top: 12.h, bottom: 12.h),
                       padding: EdgeInsets.only(
                           left: 20.w, right: 20.w, top: 7.h, bottom: 7.h),
-                      onTap: () {},
+                      onTap: () {
+                        Get.snackbar('提示', '暂时还未开放此功能');
+                      },
                       widget: Text('短信邀请',
                           style: TextStyle(
+                              fontFamily: MyFontFamily.pingfangRegular,
                               fontSize: MyFontSize.font16,
                               color: MyColor.fontWhite))),
                   PublicCard(
@@ -124,9 +127,12 @@ class InviteGroup extends StatelessWidget {
                         left: 6.w, right: 6.w, top: 12.h, bottom: 12.h),
                     padding: EdgeInsets.only(
                         left: 20.w, right: 20.w, top: 7.h, bottom: 7.h),
-                    onTap: () {},
+                    onTap: () {
+                      Get.snackbar('提示', '暂时还未开放此功能');
+                    },
                     widget: Text('复制链接',
                         style: TextStyle(
+                            fontFamily: MyFontFamily.pingfangRegular,
                             fontSize: MyFontSize.font16,
                             color: MyColor.fontWhite)),
                   ),
@@ -134,7 +140,11 @@ class InviteGroup extends StatelessWidget {
               ),
               Text(
                 '最多成立三人小组',
-                style: TextStyle(fontSize: 12.sp, color: MyColor.fontBlackO2),
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: MyColor.fontBlackO2,
+                  fontFamily: MyFontFamily.pingfangRegular,
+                ),
               ),
               Expanded(
                   child: ListView.builder(
@@ -168,7 +178,7 @@ class InviteGroup extends StatelessWidget {
                                 c.focusList[index]['user_name'],
                                 style: TextStyle(
                                     fontSize: MyFontSize.font16,
-                                    fontWeight: FontWeight.w600),
+                                    fontFamily: MyFontFamily.sfDisplaySemibold),
                               ),
                               trailing: Obx(() => CustomCheckBox(
                                   onChanged: (e) {},

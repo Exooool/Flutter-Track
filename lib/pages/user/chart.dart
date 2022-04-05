@@ -62,11 +62,16 @@ class ChartPage extends StatelessWidget {
                         text: TextSpan(children: [
                         TextSpan(
                           text: content.substring(0, idIndex),
-                          style: const TextStyle(color: Colors.black),
+                          style: TextStyle(
+                              fontFamily: MyFontFamily.pingfangRegular,
+                              fontSize: MyFontSize.font16,
+                              color: Colors.black),
                         ),
                         TextSpan(
                             text: '同意请点击此处',
                             style: TextStyle(
+                                fontFamily: MyFontFamily.pingfangRegular,
+                                fontSize: MyFontSize.font16,
                                 foreground: MyFontStyle.textlinearForeground),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
@@ -75,10 +80,24 @@ class ChartPage extends StatelessWidget {
                                     .split('#*');
                                 int projectId = int.parse(l[0]);
                                 int groupId = int.parse(l[1]);
+                                DioUtil().post('/project/acceptInvite', data: {
+                                  'project_id': projectId,
+                                  'group_id': groupId
+                                }, success: (res) {
+                                  print(res);
+                                  if (res['status'] == 2) {
+                                    Get.snackbar('提示', '你已经加入该互助小组，请不要重复点击');
+                                  }
+                                }, error: (error) {
+                                  print(error);
+                                });
                                 print('$projectId,$groupId');
                               })
                       ]))
-                    : Text(content)),
+                    : Text(content,
+                        style: TextStyle(
+                            fontFamily: MyFontFamily.pingfangRegular,
+                            fontSize: MyFontSize.font16))),
           )
         ],
       ),
@@ -107,11 +126,16 @@ class ChartPage extends StatelessWidget {
                         text: TextSpan(children: [
                         TextSpan(
                           text: content.substring(0, idIndex),
-                          style: const TextStyle(color: Colors.black),
+                          style: TextStyle(
+                              fontFamily: MyFontFamily.pingfangRegular,
+                              fontSize: MyFontSize.font16,
+                              color: Colors.black),
                         ),
                         TextSpan(
                             text: '同意请点击此处',
                             style: TextStyle(
+                                fontFamily: MyFontFamily.pingfangRegular,
+                                fontSize: MyFontSize.font16,
                                 foreground: MyFontStyle.textlinearForeground),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
@@ -125,15 +149,19 @@ class ChartPage extends StatelessWidget {
                                   'group_id': groupId
                                 }, success: (res) {
                                   print(res);
+                                  if (res['status'] == 2) {
+                                    Get.snackbar('提示', '你已经加入该互助小组，请不要重复点击');
+                                  }
                                 }, error: (error) {
                                   print(error);
                                 });
                                 print('$projectId,$groupId');
                               })
                       ]))
-                    : Text(
-                        content,
-                      )),
+                    : Text(content,
+                        style: TextStyle(
+                            fontFamily: MyFontFamily.pingfangRegular,
+                            fontSize: MyFontSize.font16))),
           ),
           SizedBox(width: 12.w),
           ClipOval(

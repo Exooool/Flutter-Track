@@ -30,7 +30,6 @@ class _TagSelectorState extends State<TagSelector> {
         child: Center(
           child: widget.isSelected
               ? PublicCard(
-                  height: 36.h,
                   width: 77.w,
                   radius: 30.r,
                   notWhite: true,
@@ -39,7 +38,7 @@ class _TagSelectorState extends State<TagSelector> {
                       widget.title,
                       style: TextStyle(
                           fontSize: MyFontSize.font16,
-                          fontWeight: FontWeight.w600,
+                          fontFamily: MyFontFamily.pingfangSemibold,
                           color: MyColor.fontWhite),
                     ),
                   ),
@@ -48,7 +47,7 @@ class _TagSelectorState extends State<TagSelector> {
                   widget.title,
                   style: TextStyle(
                       fontSize: MyFontSize.font16,
-                      fontWeight: FontWeight.w600,
+                      fontFamily: MyFontFamily.pingfangSemibold,
                       color: MyColor.fontBlack),
                 ),
         ));

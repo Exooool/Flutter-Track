@@ -58,7 +58,9 @@ class HistoryPage extends StatelessWidget {
                     news['user_name'],
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: MyFontSize.font12),
+                    style: TextStyle(
+                        fontSize: MyFontSize.font12,
+                        fontFamily: MyFontFamily.pingfangRegular),
                   ),
                 )
               ],
@@ -66,14 +68,19 @@ class HistoryPage extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 13.w),
-                child: Text(news['news_title'],
-                    softWrap: true,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: MyFontSize.font18,
-                        fontWeight: FontWeight.w500)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(news['news_title'],
+                        softWrap: true,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: MyFontSize.font18,
+                            fontFamily: MyFontFamily.pingfangMedium)),
+                  ],
+                ),
               ),
             ),
           ],

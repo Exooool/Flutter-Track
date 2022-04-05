@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/routes/app_pages.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +17,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // 判断是不是第一次登录
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQueryData.fromWindow(window).size.width,
+            maxHeight: MediaQueryData.fromWindow(window).size.height),
+        designSize: const Size(414, 896),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
 
     return GetMaterialApp(
       // 去除debug标签

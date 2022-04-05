@@ -11,8 +11,10 @@ class CustomDialog extends StatelessWidget {
   final double height;
   final double width;
   final String title;
-  final String content;
+  final String? content;
   final String? subContent;
+  final String? confirmText;
+  final List<Widget>? contentColumn;
   final Function()? onConfirm;
   final Function()? onCancel;
   const CustomDialog(
@@ -20,8 +22,10 @@ class CustomDialog extends StatelessWidget {
       required this.height,
       required this.width,
       required this.title,
-      required this.content,
+      this.contentColumn,
+      this.content,
       this.subContent,
+      this.confirmText,
       this.onConfirm,
       this.onCancel})
       : super(key: key);
@@ -57,6 +61,7 @@ class CustomDialog extends StatelessWidget {
                           radius: 20.r,
                           padding: EdgeInsets.only(top: 48.h, bottom: 36.h),
                           widget: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               // 标题
@@ -67,7 +72,8 @@ class CustomDialog extends StatelessWidget {
                                       fontSize: MyFontSize.font19,
                                       foreground:
                                           MyFontStyle.textlinearForeground,
-                                      fontWeight: FontWeight.w600),
+                                      fontFamily:
+                                          MyFontFamily.pingfangSemibold),
                                 ),
                               ),
 
@@ -79,14 +85,16 @@ class CustomDialog extends StatelessWidget {
                                           fontSize: MyFontSize.font14,
                                           foreground:
                                               MyFontStyle.textlinearForeground,
-                                          fontWeight: FontWeight.w600),
+                                          fontFamily:
+                                              MyFontFamily.pingfangSemibold),
                                       child: Column(
-                                        children: [
-                                          Text(content),
-                                          subContent != null
-                                              ? Text(subContent!)
-                                              : Container()
-                                        ],
+                                        children: contentColumn ??
+                                            [
+                                              Text(content ?? ''),
+                                              subContent != null
+                                                  ? Text(subContent!)
+                                                  : Container()
+                                            ],
                                       ))),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -103,7 +111,9 @@ class CustomDialog extends StatelessWidget {
                                       widget: Text('取消',
                                           style: TextStyle(
                                               color: MyColor.fontWhite,
-                                              fontSize: MyFontSize.font16))),
+                                              fontSize: MyFontSize.font16,
+                                              fontFamily: MyFontFamily
+                                                  .pingfangMedium))),
                                   SizedBox(width: 12.h),
                                   PublicCard(
                                       radius: 90.r,
@@ -114,10 +124,12 @@ class CustomDialog extends StatelessWidget {
                                           right: 24.w,
                                           top: 13.h,
                                           bottom: 13.h),
-                                      widget: Text('确认',
+                                      widget: Text(confirmText ?? '确认',
                                           style: TextStyle(
                                               color: MyColor.fontWhite,
-                                              fontSize: MyFontSize.font16)))
+                                              fontSize: MyFontSize.font16,
+                                              fontFamily:
+                                                  MyFontFamily.pingfangMedium)))
                                 ],
                               )
                             ],

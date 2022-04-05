@@ -31,6 +31,7 @@ class FormDateTimePicker extends StatelessWidget {
   Picker customPicker(
       {required PickerAdapter<dynamic> adapter,
       Function(Picker, List<int>)? onConfirm,
+      Function(Picker, int, List<int>)? onSelect,
       String confirmText = '确定',
       bool hideHeader = false,
       double height = 280,
@@ -39,13 +40,25 @@ class FormDateTimePicker extends StatelessWidget {
         adapter: adapter,
         footer: footer,
         hideHeader: hideHeader,
+        onSelect: (picker, index, selected) =>
+            onSelect != null ? onSelect(picker, index, selected) : () {},
         confirmTextStyle: TextStyle(
             fontSize: MyFontSize.font16,
-            foreground: MyFontStyle.textlinearForeground),
+            foreground: MyFontStyle.textlinearForeground,
+            fontFamily: MyFontFamily.pingfangSemibold),
         cancelTextStyle: TextStyle(
             fontSize: MyFontSize.font16,
-            foreground: MyFontStyle.textlinearForeground),
+            foreground: MyFontStyle.textlinearForeground,
+            fontFamily: MyFontFamily.pingfangSemibold),
         confirmText: confirmText,
+        selectedTextStyle: TextStyle(
+            fontFamily: MyFontFamily.sfDisplaySemibold,
+            fontSize: 23,
+            color: MyColor.fontBlack),
+        textStyle: TextStyle(
+            fontFamily: MyFontFamily.sfDisplaySemibold,
+            fontSize: 20,
+            color: MyColor.fontBlackO2),
         cancelText: '取消',
         containerColor: Colors.transparent,
         selectionOverlay: PublicCard(
@@ -89,6 +102,8 @@ class FormDateTimePicker extends StatelessWidget {
     Map<String, dynamic> frequency = {
       'week': [0, 1, 2, 3, 4, 5, 6]
     };
+
+    String time = '00:00';
 
     weekDaySelector() {
       List<int> tempWeek = List.from(frequency['week'] as List);
@@ -152,18 +167,63 @@ class FormDateTimePicker extends StatelessWidget {
           height: 353.h,
           child: BlurWidget(Column(
             children: [
-              customPicker(
+              Padding(
+                padding: EdgeInsets.only(
+                    left: 36.w, right: 36.w, top: 24.h, bottom: 47.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () => Get.back(),
+                      child: Text(
+                        '取消',
+                        style: TextStyle(
+                            fontSize: MyFontSize.font16,
+                            foreground: MyFontStyle.textlinearForeground,
+                            fontFamily: MyFontFamily.pingfangSemibold),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Get.back();
+                        frequency['time'] = time;
+                        print(frequency);
+                        // 传值到外面
+                        onChange(frequency);
+                      },
+                      child: Text(
+                        '确认',
+                        style: TextStyle(
+                            fontSize: MyFontSize.font16,
+                            foreground: MyFontStyle.textlinearForeground,
+                            fontFamily: MyFontFamily.pingfangSemibold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 80.w, right: 80.w),
+                child: customPicker(
+                  hideHeader: true,
+                  onSelect: (picker, index, selected) {
+                    print(picker.adapter.text);
+                    time = picker.adapter.text.substring(11, 16);
+                    print(time);
+                  },
                   adapter: DateTimePickerAdapter(
                       value: DateTime(2022),
                       maxHour: 24,
                       customColumnType: [3, 4]),
-                  onConfirm: (Picker picker, List value) {
-                    print(picker.adapter.text.substring(11, 16));
-                    frequency['time'] = picker.adapter.text.substring(11, 16);
-                    print(frequency);
-                    // 传值到外面
-                    onChange(frequency);
-                  }).makePicker(),
+                  // onConfirm: (Picker picker, List value) {
+                  //   print(picker.adapter.text.substring(11, 16));
+                  //   frequency['time'] = picker.adapter.text.substring(11, 16);
+                  //   print(frequency);
+                  //   // 传值到外面
+                  //   onChange(frequency);
+                  // }
+                ).makePicker(),
+              ),
               PublicCard(
                   height: 40.h,
                   radius: 90.r,
@@ -193,8 +253,6 @@ class FormDateTimePicker extends StatelessWidget {
         SizedBox(
           height: 300.h,
           child: BlurWidget(Picker(
-                  // confirmTextStyle: customTextStyle,
-                  // cancelTextStyle: customTextStyle,
                   confirmText: '确定',
                   cancelText: '取消',
                   backgroundColor: Colors.transparent,
@@ -206,12 +264,22 @@ class FormDateTimePicker extends StatelessWidget {
                     radius: 90.r,
                     widget: const SizedBox(),
                   ),
+                  selectedTextStyle: TextStyle(
+                      fontFamily: MyFontFamily.pingfangMedium,
+                      fontSize: 23,
+                      color: MyColor.fontBlack),
+                  textStyle: TextStyle(
+                      fontFamily: MyFontFamily.pingfangMedium,
+                      fontSize: 20,
+                      color: MyColor.fontBlackO2),
                   confirmTextStyle: TextStyle(
                       fontSize: MyFontSize.font16,
-                      foreground: MyFontStyle.textlinearForeground),
+                      foreground: MyFontStyle.textlinearForeground,
+                      fontFamily: MyFontFamily.pingfangSemibold),
                   cancelTextStyle: TextStyle(
                       fontSize: MyFontSize.font16,
-                      foreground: MyFontStyle.textlinearForeground),
+                      foreground: MyFontStyle.textlinearForeground,
+                      fontFamily: MyFontFamily.pingfangSemibold),
                   containerColor: Colors.transparent,
                   headerDecoration: const BoxDecoration(
                     color: Colors.transparent,
@@ -238,14 +306,21 @@ class FormDateTimePicker extends StatelessWidget {
             showEndTimePicker(context);
           }
         },
-        child: Text(
-          value == '' || value == null ? '请选择' : value!,
-          textAlign: TextAlign.right,
-          style: value == '' || value == null
-              ? TextStyle(
-                  color: MyColor.fontBlackO2, fontSize: MyFontSize.font16)
-              : TextStyle(
-                  color: MyColor.fontBlack, fontSize: MyFontSize.font16),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Text(
+            value == '' || value == null ? '请选择' : value!,
+            textAlign: TextAlign.right,
+            style: value == '' || value == null
+                ? TextStyle(
+                    color: MyColor.fontBlackO2,
+                    fontSize: MyFontSize.font16,
+                    fontFamily: MyFontFamily.sfDisplayRegular)
+                : TextStyle(
+                    color: MyColor.fontBlack,
+                    fontSize: MyFontSize.font16,
+                    fontFamily: MyFontFamily.sfDisplayRegular),
+          ),
         ));
   }
 }

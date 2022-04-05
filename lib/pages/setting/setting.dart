@@ -8,7 +8,6 @@ import 'package:flutter_track/pages/setting/setting_controller.dart';
 import 'package:flutter_track/pages/user/user_controller.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class SettingPage extends StatelessWidget {
   SettingPage({Key? key}) : super(key: key);
@@ -35,31 +34,44 @@ class SettingPage extends StatelessWidget {
                 style: TextStyle(
                     color: inner ? MyColor.fontWhite : MyColor.fontBlack,
                     fontSize: inner ? MyFontSize.font14 : MyFontSize.font16,
-                    fontWeight: FontWeight.w600),
+                    fontFamily: MyFontFamily.pingfangSemibold),
               )
             ],
           )),
     );
   }
 
-  Widget formSwitch(String on, String off, int value, Function onChange) {
-    return ToggleSwitch(
-      minWidth: on.length == 1 ? 40.sp : 100.sp,
-      fontSize: MyFontSize.font16,
-      minHeight: 25.h,
-      radiusStyle: true,
-      cornerRadius: 60.r,
-      inactiveBgColor: Colors.transparent,
-      activeFgColor: Colors.white,
-      inactiveFgColor: MyColor.fontBlackO2,
-      activeBgColor: const [MyColor.mainColor, MyColor.secondColor],
-      initialLabelIndex: value,
-      totalSwitches: 2,
-      labels: [on, off],
-      onToggle: (index) {
-        onChange(index);
-      },
-    );
+  Widget toggle() {
+    return Obx(() => Row(children: <Widget>[
+          PublicCard(
+              radius: 90.r,
+              padding:
+                  EdgeInsets.only(left: 9.w, right: 9.w, top: 1.h, bottom: 1.h),
+              margin: EdgeInsets.only(left: 9.w),
+              onTap: () => c.private.value = 0,
+              widget: Text('是',
+                  style: TextStyle(
+                      foreground: c.private.value == 0
+                          ? MyFontStyle.textlinearForeground
+                          : null,
+                      color: c.private.value == 1 ? MyColor.fontBlackO2 : null,
+                      fontSize: MyFontSize.font16,
+                      fontFamily: MyFontFamily.pingfangRegular))),
+          PublicCard(
+              radius: 90.r,
+              padding:
+                  EdgeInsets.only(left: 9.w, right: 9.w, top: 1.h, bottom: 1.h),
+              margin: EdgeInsets.only(left: 9.w),
+              onTap: () => c.private.value = 1,
+              widget: Text('否',
+                  style: TextStyle(
+                      foreground: c.private.value == 1
+                          ? MyFontStyle.textlinearForeground
+                          : null,
+                      color: c.private.value == 0 ? MyColor.fontBlackO2 : null,
+                      fontSize: MyFontSize.font16,
+                      fontFamily: MyFontFamily.pingfangRegular)))
+        ]));
   }
 
   @override
@@ -76,10 +88,6 @@ class SettingPage extends StatelessWidget {
           ),
         ),
         title: '设置',
-        ending: InkWell(
-          onTap: () {},
-          child: const Text('保存'),
-        ),
       ),
       body: ListView(
         padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
@@ -100,7 +108,7 @@ class SettingPage extends StatelessWidget {
                           child: Text('手机号码',
                               style: TextStyle(
                                   fontSize: MyFontSize.font14,
-                                  fontWeight: FontWeight.w600,
+                                  fontFamily: MyFontFamily.pingfangMedium,
                                   color: MyColor.fontWhite)),
                         ),
                         notWhite: true),
@@ -142,27 +150,28 @@ class SettingPage extends StatelessWidget {
           ExpansionList(
             title: '隐私设置',
             children: [
-              Row(
-                children: [
-                  PublicCard(
-                    radius: 90.r,
-                    width: 254.w,
-                    padding: EdgeInsets.only(left: 12.w, top: 5.h, bottom: 5.h),
-                    margin: EdgeInsets.only(bottom: 12.h),
-                    widget: Text('对外收藏可见',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            height: 1.5,
-                            fontSize: MyFontSize.font14,
-                            fontWeight: FontWeight.w600,
-                            color: MyColor.fontWhite)),
-                    notWhite: true,
-                  ),
-                  formSwitch('是', '否', c.private.value, (index) {
-                    c.private.value = index;
-                    print('分阶段完成：${c.private.value}');
-                  })
-                ],
+              Padding(
+                padding: EdgeInsets.only(bottom: 12.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                        child: PublicCard(
+                      radius: 90.r,
+                      padding:
+                          EdgeInsets.only(left: 12.w, top: 5.h, bottom: 5.h),
+                      widget: Text('对外收藏可见',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: MyFontSize.font14,
+                              fontFamily: MyFontFamily.pingfangSemibold,
+                              color: MyColor.fontWhite)),
+                      notWhite: true,
+                    )),
+                    toggle()
+                  ],
+                ),
               )
             ],
             headerRadius: BorderRadius.all(Radius.circular(90.r)),

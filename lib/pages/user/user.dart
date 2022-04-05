@@ -30,7 +30,9 @@ class UserPage extends StatelessWidget {
           child: Text(
             title,
             style: TextStyle(
-                fontSize: MyFontSize.font14, color: MyColor.fontWhite),
+                fontFamily: MyFontFamily.pingfangSemibold,
+                fontSize: MyFontSize.font14,
+                color: MyColor.fontWhite),
           ),
         ));
   }
@@ -150,8 +152,8 @@ class UserPage extends StatelessWidget {
                         child: Text(c.user.value.userName,
                             style: TextStyle(
                                 fontSize: MyFontSize.font19,
-                                color: MyColor.mainColor,
-                                fontWeight: FontWeight.w600)),
+                                fontFamily: MyFontFamily.pingfangSemibold,
+                                color: MyColor.mainColor)),
                       ),
 
                       // 粉丝关注
@@ -170,8 +172,10 @@ class UserPage extends StatelessWidget {
                                 ),
                                 SizedBox(width: 5.w),
                                 Text('${c.user.value.focusLength}',
-                                    style:
-                                        TextStyle(fontSize: MyFontSize.font12))
+                                    style: TextStyle(
+                                        fontSize: MyFontSize.font12,
+                                        fontFamily:
+                                            MyFontFamily.sfDisplaySemibold))
                               ],
                             ),
                           ),
@@ -188,13 +192,17 @@ class UserPage extends StatelessWidget {
                                 ),
                                 SizedBox(width: 5.w),
                                 Text('${c.user.value.befocusLength}',
-                                    style:
-                                        TextStyle(fontSize: MyFontSize.font12))
+                                    style: TextStyle(
+                                        fontSize: MyFontSize.font12,
+                                        fontFamily:
+                                            MyFontFamily.sfDisplaySemibold))
                               ],
                             ),
                           )
                         ],
                       ),
+
+                      SizedBox(height: 12.h),
 
                       // 学校
                       // Padding(

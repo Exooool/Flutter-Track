@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
@@ -60,14 +62,23 @@ class MatchGroup extends StatelessWidget {
                   width: 25.r,
                 ))),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset('lib/assets/gifs/匹配中.gif'),
+            Image.asset(
+              'lib/assets/gifs/匹配中.gif',
+              width: MediaQueryData.fromWindow(window).size.width,
+              fit: BoxFit.cover,
+            ),
             Text('正在匹配小组成员',
                 style: TextStyle(
-                    fontWeight: FontWeight.w600, fontSize: MyFontSize.font16)),
+                    fontFamily: MyFontFamily.pingfangMedium,
+                    fontSize: MyFontSize.font16)),
             Text('匹配完成系统将提醒您进入',
                 style: TextStyle(
-                    fontSize: MyFontSize.font12, color: MyColor.fontGrey)),
+                    fontFamily: MyFontFamily.pingfangRegular,
+                    fontSize: MyFontSize.font12,
+                    color: MyColor.fontGrey)),
             PublicCard(
                 radius: 90.r,
                 notWhite: true,
@@ -75,9 +86,12 @@ class MatchGroup extends StatelessWidget {
                 margin: EdgeInsets.only(top: 42.h),
                 padding: EdgeInsets.only(
                     left: 20.w, right: 20.w, top: 13.h, bottom: 13.h),
-                widget: const Text(
+                widget: Text(
                   '返回首页',
-                  style: TextStyle(color: MyColor.fontWhite),
+                  style: TextStyle(
+                      color: MyColor.fontWhite,
+                      fontFamily: MyFontFamily.pingfangSemibold,
+                      fontSize: MyFontSize.font16),
                 ))
           ],
         ));

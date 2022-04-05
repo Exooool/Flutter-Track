@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_track/pages/components/custom_button.dart';
+import 'package:flutter_track/pages/components/custom_checkbox.dart';
+import 'package:flutter_track/pages/components/custom_dialog.dart';
+
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:get/get.dart';
 
@@ -61,13 +61,51 @@ class InformationPage extends StatelessWidget {
     );
   }
 
+  Widget shareCardItem(String title, bool value, Function onTap) {
+    return InkWell(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(title),
+          CustomCheckBox(
+              value: value,
+              onChanged: (value) {
+                onTap(value);
+              })
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppbar(
         'infoPage',
         ending: InkWell(
-          onTap: () {},
+          onTap: () {
+            Get.dialog(
+              CustomDialog(
+                height: 330,
+                width: 318.w,
+                title: '请选择您要分享的板块',
+                onCancel: () {
+                  Get.back();
+                },
+                contentColumn: <Widget>[
+                  shareCardItem('日累计时长', true, (value) {}),
+                  shareCardItem('周累计时长', true, (value) {}),
+                  shareCardItem('月累计时长', true, (value) {}),
+                  shareCardItem('年累计时长', true, (value) {}),
+                ],
+                onConfirm: () {
+                  Get.snackbar('提示', '当前分享功能还未完善');
+                },
+                confirmText: '生成卡片',
+              ),
+              barrierColor: Colors.transparent,
+            );
+          },
           child: Image.asset(
             'lib/assets/icons/Out.png',
             height: 25.r,
@@ -96,7 +134,7 @@ class InformationPage extends StatelessWidget {
                         Expanded(
                             child: PublicCard(
                           radius: 10.r,
-                          height: 42.h,
+                          padding: EdgeInsets.only(top: 11.h, bottom: 11.h),
                           widget: Row(
                             children: [
                               const SizedBox(width: 24),
@@ -108,7 +146,7 @@ class InformationPage extends StatelessWidget {
                                     fontSize: MyFontSize.font16),
                               ),
                               Text(
-                                'Lv ',
+                                'Lv',
                                 style: TextStyle(
                                     color: MyColor.fontBlack,
                                     fontFamily: MyFontFamily.sfDisplayBold,
@@ -122,12 +160,30 @@ class InformationPage extends StatelessWidget {
                                     fontSize: MyFontSize.font20),
                               ),
                               Expanded(
-                                  child: LinearPercentIndicator(
+                                  child: Stack(
+                                children: [
+                                  LinearPercentIndicator(
+                                      lineHeight: 6,
                                       percent: (c.user.value.exp % 1000) / 1000,
                                       barRadius: const Radius.circular(48),
+                                      backgroundColor: Colors.transparent,
                                       // backgroundColor: Colors.transparent,
                                       linearGradient:
-                                          MyWidgetStyle.mainLinearGradient))
+                                          MyWidgetStyle.mainLinearGradient),
+                                  Container(
+                                    height: 6,
+                                    margin: const EdgeInsets.only(
+                                        left: 10, right: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(18),
+                                      border: Border.all(
+                                          color: MyColor.mainColor, width: 2),
+                                      // gradient:
+                                      //     MyWidgetStyle.mainLinearGradient,
+                                    ),
+                                  )
+                                ],
+                              ))
                             ],
                           ),
                         )),
@@ -171,40 +227,52 @@ class InformationPage extends StatelessWidget {
                             SizedBox(height: 10.h),
                             Image.asset(
                               c.clock(),
-                              height: 154.r,
-                              width: 154.r,
+                              height: 154,
+                              width: 154,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text('${c.nowDatStudyTime.value ~/ 60}',
                                     style: TextStyle(
                                         fontSize: MyFontSize.font28,
+                                        fontFamily:
+                                            MyFontFamily.sfDisplaySemibold,
                                         fontWeight: FontWeight.w600)),
                                 Text('小时',
                                     style: TextStyle(
                                         fontSize: MyFontSize.font14,
+                                        fontFamily:
+                                            MyFontFamily.pingfangSemibold,
                                         fontWeight: FontWeight.w600)),
                                 Text('${c.nowDatStudyTime.value % 60}',
                                     style: TextStyle(
                                         fontSize: MyFontSize.font28,
+                                        fontFamily:
+                                            MyFontFamily.sfDisplaySemibold,
                                         fontWeight: FontWeight.w600)),
                                 Text('分钟',
                                     style: TextStyle(
                                         fontSize: MyFontSize.font14,
+                                        fontFamily:
+                                            MyFontFamily.pingfangSemibold,
                                         fontWeight: FontWeight.w600))
                               ],
                             ),
-                            Text('已超越80%的用户',
-                                style: TextStyle(fontSize: MyFontSize.font12))
+                            Text('已超越0%的用户',
+                                style: TextStyle(
+                                  fontSize: MyFontSize.font12,
+                                  fontFamily: MyFontFamily.pingfangRegular,
+                                ))
                           ],
                         ),
                       )
-                    ], title: '今日累计', height: 276.h),
+                    ], title: '今日累计', height: 276),
 
                     SizedBox(height: 24.h),
                     UnionWidget(
-                        height: 300.h,
+                        height: 360.h,
                         index: c.dataBarIndex.value,
                         children: [
                           DefaultTextStyle(
@@ -217,6 +285,8 @@ class InformationPage extends StatelessWidget {
                                       children: [
                                         Text('平均每天',
                                             style: TextStyle(
+                                                fontFamily:
+                                                    MyFontFamily.pingfangMedium,
                                                 fontSize: MyFontSize.font12)),
                                         Row(
                                           children: [
@@ -224,29 +294,31 @@ class InformationPage extends StatelessWidget {
                                                 '${c.averDayStudyTime.value ~/ 60}',
                                                 style: TextStyle(
                                                     fontSize: MyFontSize.font28,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
+                                                    fontFamily: MyFontFamily
+                                                        .sfDisplaySemibold)),
                                             Text('小时',
                                                 style: TextStyle(
                                                     fontSize: MyFontSize.font14,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
+                                                    fontFamily: MyFontFamily
+                                                        .pingfangSemibold)),
                                             Text(
                                                 '${c.averDayStudyTime.value % 60}',
                                                 style: TextStyle(
                                                     fontSize: MyFontSize.font28,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
+                                                    fontFamily: MyFontFamily
+                                                        .sfDisplaySemibold)),
                                             Text('分钟',
                                                 style: TextStyle(
                                                     fontSize: MyFontSize.font14,
-                                                    fontWeight:
-                                                        FontWeight.w600))
+                                                    fontFamily: MyFontFamily
+                                                        .pingfangSemibold))
                                           ],
                                         ),
                                         Text('2022年1月16号至1月22号',
                                             style: TextStyle(
-                                                fontSize: MyFontSize.font12))
+                                                fontSize: MyFontSize.font12,
+                                                fontFamily: MyFontFamily
+                                                    .pingfangMedium))
                                       ],
                                     )),
                           Container(
@@ -255,13 +327,19 @@ class InformationPage extends StatelessWidget {
                             // 解决方法修改echarts源码 在它的build方法中的webview构造函数中添加以下代码
                             // backgroundColor: Colors.transparent
                             child: c.averDayStudyTime.value == 0
-                                ? const Center(
-                                    child: Text('你还没有学习过，快去创建一个计划吧'),
+                                ? Center(
+                                    child: Text(
+                                      '你还没有学习过，快去创建一个计划吧',
+                                      style: TextStyle(
+                                          fontFamily:
+                                              MyFontFamily.pingfangMedium,
+                                          fontSize: MyFontSize.font16),
+                                    ),
                                   )
                                 : Echarts(
                                     option: c.getData(),
                                   ),
-                            height: 200.h,
+                            height: 220.h,
                           ),
                         ],
                         title: '数据呈现',

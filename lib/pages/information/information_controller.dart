@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/model/user_model.dart';
@@ -17,6 +16,8 @@ class InformationController extends GetxController {
   final List weekListCN = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
   final DateTime now = DateTime.now();
   RxList rankList = [].obs;
+  // 分享卡片
+  RxList shareList = [true, true, true].obs;
 
   final List clockList = [
     '1.png',
@@ -82,6 +83,7 @@ class InformationController extends GetxController {
 
       studyList.forEach((key, value) {
         DateTime dateTime = DateTime.parse(key);
+        // print(dateTime.difference(now).inDays.abs());
         if (dateTime.difference(now).inDays.abs() < 1) {
           nowDatStudyTime.value = value;
         }

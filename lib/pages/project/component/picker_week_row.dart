@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_track/common/style/my_style.dart';
 
 import '../../components/custom_checkbox.dart';
 
@@ -30,7 +31,8 @@ class _PickerWeekRowState extends State<PickerWeekRow> {
           children: [
             Text(
               widget.text,
-              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+              style: TextStyle(
+                  fontFamily: MyFontFamily.pingfangMedium, fontSize: 16),
             ),
             CustomCheckBox(
                 value: widget.value,

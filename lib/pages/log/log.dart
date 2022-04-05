@@ -12,7 +12,6 @@ import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../components/custom_button.dart';
 import 'package:jverify/jverify.dart';
 
 class RegPageAndLogPage extends StatefulWidget {
@@ -59,13 +58,16 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
             children: <Widget>[
               Text(
                 '其他账号登录',
-                style: TextStyle(fontSize: 12.sp),
+                style: TextStyle(
+                    fontSize: MyFontSize.font12,
+                    color: MyColor.fontGrey,
+                    fontFamily: MyFontFamily.pingfangRegular),
               ),
               SizedBox(height: 12.h),
               Container(
                 width: 160.w,
-                height: 2.h,
-                color: const Color.fromRGBO(158, 158, 158, 1),
+                height: 1.h,
+                color: MyColor.fontGrey,
               ),
             ],
           ),
@@ -165,9 +167,9 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                       ),
                     ),
                     PublicCard(
-                      height: 60.h,
+                      padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
                       width: 300.w,
-                      radius: 30.r,
+                      radius: 90.r,
                       widget: Row(
                         children: <Widget>[
                           Container(
@@ -177,25 +179,33 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                                 '+86',
                                 style: TextStyle(
                                     fontSize: MyFontSize.font16,
+                                    fontFamily: MyFontFamily.sfDisplayRegular,
                                     foreground:
-                                        MyFontStyle.textlinearForeground),
+                                        MyFontStyle.textlinearForegroundO2),
                               ),
                             ),
                           ),
-                          Container(
-                            height: 38.5.h,
-                            width: 2.w,
-                            decoration: const BoxDecoration(
-                                gradient: MyWidgetStyle.mainLinearGradient),
+                          Opacity(
+                            opacity: 0.2,
+                            child: Container(
+                              height: 38.5.h,
+                              width: 2.w,
+                              decoration: const BoxDecoration(
+                                  gradient: MyWidgetStyle.mainLinearGradient),
+                            ),
                           ),
                           Container(
-                            padding: EdgeInsets.only(left: 42.w),
+                            padding: EdgeInsets.only(left: 35.w),
                             width: 198.w,
                             child: TextField(
                               maxLength: 11,
                               focusNode: _focusNodeUserName,
                               // 弹出数字软键盘
                               keyboardType: TextInputType.number,
+                              style: TextStyle(
+                                  fontSize: MyFontSize.font16,
+                                  fontFamily: MyFontFamily.pingfangRegular,
+                                  foreground: MyFontStyle.textlinearForeground),
 
                               // 限制输入为数字
                               inputFormatters: [
@@ -205,12 +215,12 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                                   // maxLength设置长度后在左下角出现的计时器字符
                                   counterText: '',
                                   // labelText: '手机',
-                                  hintText: '请输入手机号',
+                                  hintText: '请输入手机号码',
                                   hintStyle: TextStyle(
                                       fontSize: MyFontSize.font16,
-                                      fontWeight: FontWeight.w400,
+                                      fontFamily: MyFontFamily.pingfangRegular,
                                       foreground:
-                                          MyFontStyle.textlinearForegroundO5),
+                                          MyFontStyle.textlinearForegroundO2),
                                   border: InputBorder.none),
                               onChanged: (value) {
                                 _number = value;
@@ -220,13 +230,22 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                         ],
                       ),
                     ),
-                    CustomButton(
-                      title: '验证码登录',
-                      height: 60.h,
+                    PublicCard(
+                      radius: 90.r,
                       width: 300.w,
-                      fontSize: MyFontSize.font16,
+                      notWhite: true,
+                      padding: EdgeInsets.only(top: 19.h, bottom: 19.h),
                       margin: EdgeInsets.only(top: 24.h, bottom: 24.h),
-                      onPressed: () async {
+                      widget: Center(
+                        child: Text(
+                          '获取验证码',
+                          style: TextStyle(
+                              fontSize: MyFontSize.font16,
+                              color: MyColor.white,
+                              fontFamily: MyFontFamily.pingfangSemibold),
+                        ),
+                      ),
+                      onTap: () async {
                         // 验证手机号码
                         if (GetUtils.isPhoneNumber(_number) &&
                             _number.length == 11) {
@@ -259,13 +278,22 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                         }
                       },
                     ),
-                    CustomButton(
-                      title: '本机号码一键登录',
-                      height: 60.h,
+                    PublicCard(
+                      radius: 90.r,
                       width: 300.w,
-                      fontSize: MyFontSize.font16,
+                      notWhite: true,
+                      padding: EdgeInsets.only(top: 19.h, bottom: 19.h),
                       margin: const EdgeInsets.all(0),
-                      onPressed: () {
+                      widget: Center(
+                        child: Text(
+                          '本机号码一键登录',
+                          style: TextStyle(
+                              fontSize: MyFontSize.font16,
+                              color: MyColor.white,
+                              fontFamily: MyFontFamily.pingfangSemibold),
+                        ),
+                      ),
+                      onTap: () {
                         logAuth();
                       },
                     ),
@@ -387,6 +415,8 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
         }, error: (error) {
           Get.snackbar('提示', error);
         });
+      } else {
+        Get.snackbar('提示', '一键登录失败，请检查网络问题，不要连接wifi热点进行登录');
       }
 
       // api请求验证token

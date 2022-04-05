@@ -63,13 +63,13 @@ class _HomeMenuState extends State<HomeMenu> {
                 showDynamic
                     ? Image.asset(
                         dynamic,
-                        height: 40.r,
-                        width: 40.r,
+                        height: 40,
+                        width: 40,
                       )
                     : Image.asset(
                         _index == index ? selected : unselected,
-                        height: 40.r,
-                        width: 40.r,
+                        height: 40,
+                        width: 40,
                       ),
                 Text(
                   title,

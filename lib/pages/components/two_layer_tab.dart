@@ -38,10 +38,10 @@ class _TwoLayerTabState extends State<TwoLayerTab>
   // tab按钮
   Widget customTab(String title, double opcity, bool inner, {String? nums}) {
     return Opacity(
-      opacity: 0.8,
+      opacity: opcity,
       child: Container(
-        height: 36.h,
-        width: 75.w,
+        padding:
+            EdgeInsets.only(left: 10.w, right: 10.w, top: 8.h, bottom: 8.h),
         alignment: Alignment.center,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10.r)),
@@ -56,7 +56,7 @@ class _TwoLayerTabState extends State<TwoLayerTab>
     for (var i = 0; i < list.length; i++) {
       if (list[i]['nums'] == null) {
         result.add(customTab(list[i]['title'],
-            _tabInteriorController.index == i ? 1 : 0.5, true));
+            _tabInteriorController.index == i ? 0.8 : 0.2, true));
       } else {
         result.add(customTab(
             list[i]['title'], _tabInteriorController.index == i ? 1 : 0.5, true,
@@ -113,9 +113,13 @@ class _TwoLayerTabState extends State<TwoLayerTab>
             : BoxDecoration(
                 gradient: MyWidgetStyle.secondLinearGradient,
                 borderRadius: BorderRadius.all(Radius.circular(10.r))),
-        child: Text(title,
-            style: TextStyle(
-                fontSize: MyFontSize.font16, fontWeight: FontWeight.w600)),
+        child: Opacity(
+          opacity: _tabExteriorController.index == index ? 1 : 0.2,
+          child: Text(title,
+              style: TextStyle(
+                  fontSize: MyFontSize.font16,
+                  fontFamily: MyFontFamily.pingfangSemibold)),
+        ),
       ),
     );
   }

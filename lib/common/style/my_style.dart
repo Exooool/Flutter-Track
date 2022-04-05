@@ -20,19 +20,19 @@ class MyColor {
 }
 
 class MyFontSize {
-  static double font32 = 32.sp;
-  static double font30 = 30.sp;
-  static double font28 = 28.sp;
-  static double font26 = 26.sp;
-  static double font22 = 22.sp;
-  static double font20 = 20.sp;
-  static double font19 = 19.sp;
-  static double font18 = 18.sp;
-  static double font16 = 16.sp;
-  static double font14 = 14.sp;
-  static double font12 = 12.sp;
-  static double font10 = 10.sp;
-  static double font9 = 9.sp;
+  static double font32 = 32;
+  static double font30 = 30;
+  static double font28 = 28;
+  static double font26 = 26;
+  static double font22 = 22;
+  static double font20 = 20;
+  static double font19 = 19;
+  static double font18 = 18;
+  static double font16 = 16;
+  static double font14 = 14;
+  static double font12 = 12;
+  static double font10 = 10;
+  static double font9 = 9;
 }
 
 class MyFontFamily {
@@ -41,15 +41,16 @@ class MyFontFamily {
   static String pingfangSemibold = 'PingFangSemibold';
   static String sfDisplaySemibold = 'SFDisplaySemibold';
   static String sfDisplayBold = 'SFDisplayBold';
+  static String sfDisplayRegular = 'SFDisplayRegular';
 }
 
 class MyFontStyle {
   static TextStyle projectTabUnSelected = TextStyle(
-      fontSize: MyFontSize.font14,
+      fontSize: MyFontSize.font16,
       fontFamily: MyFontFamily.pingfangRegular,
       foreground: MyFontStyle.textlinearForeground);
   static TextStyle projectTabSelected = TextStyle(
-      fontSize: MyFontSize.font14,
+      fontSize: MyFontSize.font16,
       fontFamily: MyFontFamily.pingfangRegular,
       color: MyColor.fontWhite);
   // 数据页 排行榜标题
@@ -74,16 +75,16 @@ class MyFontStyle {
       const Offset(1, 30),
       <Color>[
         const Color.fromRGBO(107, 101, 244, 1),
-        const Color.fromRGBO(51, 84, 244, 1)
+        const Color.fromRGBO(51, 84, 244, 1),
       ],
     );
-  static Paint textlinearForegroundO5 = Paint()
+  static Paint textlinearForegroundO2 = Paint()
     ..shader = ui.Gradient.linear(
       const Offset(0, 10),
       const Offset(1, 30),
       <Color>[
-        const Color.fromRGBO(107, 101, 244, 0.5),
-        const Color.fromRGBO(51, 84, 244, 0.5)
+        const Color.fromRGBO(107, 101, 244, 0.2),
+        const Color.fromRGBO(51, 84, 244, 0.2)
       ],
     );
 }

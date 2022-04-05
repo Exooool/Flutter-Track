@@ -34,7 +34,9 @@ class _SingleTimeState extends State<SingleTime> {
           child: Text(
             title,
             style: TextStyle(
-                fontSize: MyFontSize.font16, color: MyColor.fontWhite),
+                fontSize: MyFontSize.font16,
+                color: MyColor.fontWhite,
+                fontFamily: MyFontFamily.pingfangMedium),
           ),
         ),
         height: 36.h,
@@ -57,8 +59,10 @@ class _SingleTimeState extends State<SingleTime> {
                 onTap: () => Get.back(),
                 child: Text(
                   '取消',
-                  style:
-                      TextStyle(foreground: MyFontStyle.textlinearForeground),
+                  style: TextStyle(
+                      fontSize: MyFontSize.font16,
+                      foreground: MyFontStyle.textlinearForeground,
+                      fontFamily: MyFontFamily.pingfangSemibold),
                 ),
               ),
               InkWell(
@@ -75,8 +79,10 @@ class _SingleTimeState extends State<SingleTime> {
                 },
                 child: Text(
                   '确认',
-                  style:
-                      TextStyle(foreground: MyFontStyle.textlinearForeground),
+                  style: TextStyle(
+                      fontSize: MyFontSize.font16,
+                      foreground: MyFontStyle.textlinearForeground,
+                      fontFamily: MyFontFamily.pingfangSemibold),
                 ),
               ),
             ],
