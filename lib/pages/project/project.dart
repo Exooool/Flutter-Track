@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -111,7 +112,7 @@ class _ProjectPageState extends State<ProjectPage>
 
   _getProject() {
     DioUtil().post('/project/get', success: (res) {
-      print('计划列表$res');
+      // print('计划列表$res');
 
       // 清空数据 然后请求替换数据
       projectList1 = [];
@@ -120,8 +121,28 @@ class _ProjectPageState extends State<ProjectPage>
       DateTime now = DateTime.now();
       List list = res['data'];
       for (var i = 0; i < list.length; i++) {
-        DateTime time = DateTime.parse(list[i]['create_time']);
-        // print(time.difference(now).inHours);
+        Map m = jsonDecode(list[i]['stage_list'])[0];
+        DateTime time;
+        if (m.isNotEmpty) {
+          // print(m['frequency']['time']);
+          time = DateTime(
+              now.year,
+              now.month,
+              now.day,
+              int.parse(m['frequency']['time'].substring(0, 2)),
+              int.parse(m['frequency']['time'].substring(3, 5)));
+        } else {
+          Map temp = jsonDecode(list[i]['frequency']);
+          time = DateTime(
+              now.year,
+              now.month,
+              now.day,
+              int.parse(temp['time'].substring(0, 2)),
+              int.parse(temp['time'].substring(3, 5)));
+          // print(temp['time']);
+        }
+
+        print(time.difference(now).inHours);
         // 判断创建时间是否小于一个小时，小于放在projectlist1，否则放在projectlist2
         if (time.difference(now).inHours.abs() < 1) {
           projectList1.add(list[i]);
@@ -313,26 +334,6 @@ class _ProjectPageState extends State<ProjectPage>
                           ),
                         ),
                       ),
-                      // ElevatedButton(
-                      //     onPressed: () {
-                      //       jpush.getRegistrationID().then((rid) {
-                      //         print("当前设备的rid： ${rid}");
-                      //       });
-                      //       var fireDate = DateTime.fromMillisecondsSinceEpoch(
-                      //           DateTime.now().millisecondsSinceEpoch + 3000);
-                      //       var localNotification = LocalNotification(
-                      //           id: 234,
-                      //           title: "本地推送",
-                      //           buildId: 1,
-                      //           content:
-                      //               "😁 随便写点内容，时间 ${DateTime.now().toIso8601String()}",
-                      //           fireTime: DateTime.now(), // 立即发送
-                      //           subtitle: "副标题 123456",
-                      //           extra: {"myInfo": "推送信息balabla"} // 携带数据
-                      //           );
-                      //       jpush.sendLocalNotification(localNotification);
-                      //     },
-                      //     child: Text('123')),
                       projectList2.isEmpty
                           ? Center(
                               child: Column(

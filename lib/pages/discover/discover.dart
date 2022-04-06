@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
-import 'package:flutter_track/pages/components/article_card.dart';
+
 import 'package:flutter_track/pages/components/public_card.dart';
 
 import 'package:flutter_track/pages/components/drag_grid.dart';
@@ -122,7 +122,11 @@ class _DiscoverPageState extends State<DiscoverPage>
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.only(top: 30.h, bottom: 30.h),
-                    child: const Text('长按拖动排序'),
+                    child: Text('长按拖动排序',
+                        style: TextStyle(
+                            fontSize: MyFontSize.font14,
+                            color: MyColor.fontGrey,
+                            fontFamily: MyFontFamily.pingfangMedium)),
                   ),
                   DragGrid(dragList: _tabList, callback: () {}),
                   PublicCard(
@@ -159,6 +163,15 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQueryData.fromWindow(window).size.width,
+            maxHeight: MediaQueryData.fromWindow(window).size.height),
+        designSize: const Size(414, 896),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

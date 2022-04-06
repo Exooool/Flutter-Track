@@ -171,25 +171,45 @@ class ArticleCard extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 16.w),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(10.r)),
-                        child: Image.network(
-                          news.newsImg,
-                          width: 158.w,
-                          height: 110.h,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                              'lib/assets/images/404.jpg',
-                              width: 158.w,
-                              height: 110.h,
-                              fit: BoxFit.cover,
-                            );
-                          },
-                        ),
-                      )
+                      news.content != ''
+                          ? ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.r)),
+                              child: Image.network(
+                                news.newsImg,
+                                width: 158.w,
+                                height: 110.h,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'lib/assets/images/404.jpg',
+                                    width: 158.w,
+                                    height: 110.h,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ),
+                            )
+                          : const SizedBox()
                     ],
                   ),
+                  news.content == ''
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                          child: Image.network(
+                            news.newsImg,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                'lib/assets/images/404.jpg',
+                                width: 158.w,
+                                height: 110.h,
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          ),
+                        )
+                      : const SizedBox(),
                   SizedBox(height: 15.h),
                   Padding(
                     padding: EdgeInsets.only(right: 49.w),

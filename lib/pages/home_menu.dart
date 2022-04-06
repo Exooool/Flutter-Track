@@ -150,9 +150,13 @@ class _HomeMenuState extends State<HomeMenu> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     loginVerify();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQueryData.fromWindow(window).size.width,

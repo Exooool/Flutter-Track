@@ -4,6 +4,7 @@ import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/model/project_model.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:flutter_track/pages/components/custom_checkbox.dart';
+import 'package:flutter_track/pages/components/custom_dialog.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/project/project_study.dart';
 import 'package:get/get.dart';
@@ -56,6 +57,39 @@ class ProjectCard extends StatelessWidget {
     // print(project.stageList);
     // print(project.endTime);
     // print('当前时间: $now，现在处于$nowStage/$totalStage');
+  }
+
+  // 检查是否到了可以学习的时间
+  bool checkTime() {
+    DateTime now = DateTime.now();
+    Map m = project.stageList[0];
+    DateTime time;
+    if (m.isNotEmpty) {
+      // print(m['frequency']['time']);
+      time = DateTime(
+          now.year,
+          now.month,
+          now.day,
+          int.parse(m['frequency']['time'].substring(0, 2)),
+          int.parse(m['frequency']['time'].substring(3, 5)));
+    } else {
+      Map temp = project.frequency;
+      time = DateTime(
+          now.year,
+          now.month,
+          now.day,
+          int.parse(temp['time'].substring(0, 2)),
+          int.parse(temp['time'].substring(3, 5)));
+      // print(temp['time']);
+    }
+
+    print(time.difference(now).inHours);
+    // 判断创建时间是否小于一个小时，小于放在projectlist1，否则放在projectlist2
+    if (time.difference(now).inHours.abs() < 1) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   String frequency() {
@@ -225,8 +259,26 @@ class ProjectCard extends StatelessWidget {
         height: 72.h,
         radius: 90.r,
         onTap: () {
-          if (type == 0) {
+          // 判断是否到达了指定时间
+          if (type == 0 && checkTime()) {
             Get.to(() => ProjectStudy(), arguments: {'project': project});
+          } else {
+            Get.dialog(
+              CustomDialog(
+                height: 330.h,
+                width: 318.w,
+                title: '提示',
+                content: '还没有到你规定的学习时间！',
+                subContent: '还不能进行学习！',
+                onCancel: () {
+                  Get.back();
+                },
+                onConfirm: () {
+                  Get.back();
+                },
+              ),
+              barrierColor: Colors.transparent,
+            );
           }
         },
         onLongPress: () {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,6 +26,7 @@ class _ArticlePageState extends State<ArticlePage>
   Map news = {};
   int nowUserId = 00;
   late int newsId;
+  bool isFocus = false;
 
   // 动画参数
   late AnimationController controller;
@@ -63,12 +65,12 @@ class _ArticlePageState extends State<ArticlePage>
     DioUtil().post('/news/view', data: {'news_id': newsId}, success: (res) {
       print(res['data'][0]);
 
+      news = res['data'][0];
+      _controller = ZefyrController(
+          NotusDocument.fromJson(jsonDecode(news['news_content'])));
+      isfocus();
       if (mounted) {
-        setState(() {
-          news = res['data'][0];
-          _controller = ZefyrController(
-              NotusDocument.fromJson(jsonDecode(news['news_content'])));
-        });
+        setState(() {});
       }
     }, error: (error) {
       print(error);
@@ -76,13 +78,29 @@ class _ArticlePageState extends State<ArticlePage>
 
     // 获取当前用户id
     DioUtil().get('/users/id', success: (res) {
-      print(res);
+      // print(res);
 
       if (mounted) {
         setState(() {
           nowUserId = res['user_id'];
         });
       }
+    }, error: (error) {
+      print(error);
+    });
+  }
+
+  // 查询是否关注
+  isfocus() {
+    DioUtil().post('/users/isFocus', data: {'other_user_id': news['user_id']},
+        success: (res) {
+      // print(res);
+      if (res.length != 0) {
+        isFocus = true;
+      } else {
+        isFocus = false;
+      }
+      setState(() {});
     }, error: (error) {
       print(error);
     });
@@ -120,6 +138,15 @@ class _ArticlePageState extends State<ArticlePage>
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQueryData.fromWindow(window).size.width,
+            maxHeight: MediaQueryData.fromWindow(window).size.height),
+        designSize: const Size(414, 896),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
+
     return Scaffold(
       appBar: CustomAppbar(
         '',
@@ -189,23 +216,37 @@ class _ArticlePageState extends State<ArticlePage>
                         ),
                         Visibility(
                           visible: news['user_id'] == nowUserId ? false : true,
-                          child: PublicCard(
-                              radius: 90.r,
-                              padding: EdgeInsets.only(
-                                  left: 20.w,
-                                  right: 20.w,
-                                  top: 6.h,
-                                  bottom: 6.h),
-                              notWhite: true,
-                              widget: Center(
-                                child: Text(
-                                  '关注',
-                                  style: TextStyle(
-                                      fontFamily: MyFontFamily.pingfangSemibold,
-                                      fontSize: MyFontSize.font16,
-                                      color: MyColor.fontWhite),
-                                ),
-                              )),
+                          child: Opacity(
+                            opacity: isFocus ? 0.5 : 1,
+                            child: PublicCard(
+                                radius: 90.r,
+                                onTap: () {
+                                  DioUtil().post('/users/focus',
+                                      data: {'other_user_id': news['user_id']},
+                                      success: (res) {
+                                    print(res);
+                                    isfocus();
+                                  }, error: (error) {
+                                    print(error);
+                                  });
+                                },
+                                padding: EdgeInsets.only(
+                                    left: 20.w,
+                                    right: 20.w,
+                                    top: 6.h,
+                                    bottom: 6.h),
+                                notWhite: true,
+                                widget: Center(
+                                  child: Text(
+                                    '关注',
+                                    style: TextStyle(
+                                        fontFamily:
+                                            MyFontFamily.pingfangSemibold,
+                                        fontSize: MyFontSize.font16,
+                                        color: MyColor.fontWhite),
+                                  ),
+                                )),
+                          ),
                         )
                       ],
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_track/pages/components/custom_appbar.dart';
@@ -16,6 +17,7 @@ import 'package:get/get.dart';
 class UserPage extends StatelessWidget {
   UserPage({Key? key}) : super(key: key);
   final UserController c = Get.put(UserController());
+  final EasyRefreshController _controller = EasyRefreshController();
 
   // 侧边按钮
   Widget slideButton(String title, Function() onTap) {
@@ -36,6 +38,8 @@ class UserPage extends StatelessWidget {
           ),
         ));
   }
+
+  Future _onRefresh() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -120,29 +124,6 @@ class UserPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          // Positioned(
-                          //   right: 0,
-                          //   bottom: 0,
-                          //   child: PublicCard(
-                          //       radius: 90.r,
-                          //       height: 30.h,
-                          //       width: 61.w,
-                          //       notWhite: true,
-                          //       widget: Row(
-                          //         mainAxisAlignment: MainAxisAlignment.center,
-                          //         crossAxisAlignment: CrossAxisAlignment.center,
-                          //         children: <Widget>[
-                          //           Text('等级 Lv',
-                          //               style: TextStyle(
-                          //                   color: MyColor.fontWhite,
-                          //                   fontSize: MyFontSize.font12)),
-                          //           Text('${c.user.value.exp ~/ 1000}',
-                          //               style: TextStyle(
-                          //                   color: MyColor.fontWhite,
-                          //                   fontSize: MyFontSize.font16))
-                          //         ],
-                          //       )),
-                          // )
                         ],
                       ),
 
@@ -203,16 +184,6 @@ class UserPage extends StatelessWidget {
                       ),
 
                       SizedBox(height: 12.h),
-
-                      // 学校
-                      // Padding(
-                      //   padding: EdgeInsets.only(top: 6.h, bottom: 6.h),
-                      //   child: Text(c.user.value.college,
-                      //       style: TextStyle(
-                      //           fontSize: MyFontSize.font12,
-                      //           color: MyColor.mainColor,
-                      //           fontWeight: FontWeight.w600)),
-                      // ),
 
                       // 历史记录 我的消息
                       Row(
