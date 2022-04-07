@@ -96,7 +96,7 @@ class FocusList extends StatelessWidget {
     return Scaffold(
         appBar: CustomAppbar(
           '',
-          title: '我的关注',
+          title: c.type == 0 ? '我的关注' : '我的粉丝',
           leading: InkWell(
             onTap: () => Get.back(),
             child: Image.asset(

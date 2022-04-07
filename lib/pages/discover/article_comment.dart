@@ -48,24 +48,27 @@ class ArticleComment extends StatelessWidget {
               ClipOval(
                   child: data['user_img'] == ''
                       ? Image.asset('lib/assets/images/defaultUserImg.png',
-                          height: 56.r, width: 56.r)
+                          height: 56.r, width: 56.r, fit: BoxFit.cover)
                       : Image.network(data['user_img'],
-                          height: 56.r, width: 56.r)),
+                          height: 56.r, width: 56.r, fit: BoxFit.cover)),
               SizedBox(width: 12.w),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(data['user_name'],
+                  Text(
+                      data['user_id'] == c.arguments['user_id']
+                          ? data['user_name'] + '(作者)'
+                          : data['user_name'],
                       style: TextStyle(
                           fontSize: MyFontSize.font16,
-                          fontWeight: FontWeight.w600)),
+                          fontFamily: MyFontFamily.pingfangSemibold)),
                   SizedBox(
                       width: 220.w,
                       child: Text(data['content'],
                           style: TextStyle(
                               fontSize: MyFontSize.font12,
-                              fontWeight: FontWeight.w400)))
+                              fontFamily: MyFontFamily.pingfangRegular)))
                 ],
               ),
             ],
@@ -74,7 +77,8 @@ class ArticleComment extends StatelessWidget {
               formatDate(DateTime.parse(data['comment_time']),
                   [yyyy, '.', mm, '.', dd]),
               style: TextStyle(
-                  fontSize: MyFontSize.font12, fontWeight: FontWeight.w400))
+                  fontSize: MyFontSize.font12,
+                  fontFamily: MyFontFamily.sfDisplayRegular))
         ],
       ),
     );
@@ -123,11 +127,14 @@ class ArticleComment extends StatelessWidget {
                             c.comment.value = value;
                           },
                           controller: controller,
-                          style: TextStyle(fontSize: MyFontSize.font16),
+                          style: TextStyle(
+                              fontSize: MyFontSize.font16,
+                              fontFamily: MyFontFamily.pingfangRegular),
                           decoration: InputDecoration.collapsed(
                               hintText: '请输入你的内容',
-                              hintStyle:
-                                  TextStyle(fontSize: MyFontSize.font16)),
+                              hintStyle: TextStyle(
+                                  fontSize: MyFontSize.font16,
+                                  fontFamily: MyFontFamily.pingfangRegular)),
                         ),
                       )),
                       PublicCard(
@@ -158,7 +165,8 @@ class ArticleComment extends StatelessWidget {
                             '发布',
                             style: TextStyle(
                                 fontSize: MyFontSize.font16,
-                                color: MyColor.fontWhite),
+                                color: MyColor.fontWhite,
+                                fontFamily: MyFontFamily.pingfangRegular),
                           ))
                     ],
                   ),

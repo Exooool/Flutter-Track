@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 
 import 'package:flutter_track/pages/discover/discover.dart';
+import 'package:flutter_track/pages/project/project_controller.dart';
 import 'package:flutter_track/pages/user/user.dart';
 import 'package:flutter_track/pages/project/project.dart';
 import 'package:flutter_track/pages/information/information.dart';
+import 'package:flutter_track/pages/user/user_controller.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,14 +46,19 @@ class _HomeMenuState extends State<HomeMenu> {
             _index = index;
             Vibrate.feedback(FeedbackType.light);
             showDynamic = true;
-            Timer.periodic(const Duration(seconds: 2), (timer) {
-              timer.cancel();
-              showDynamic = false;
-              print(showDynamic);
-              setState(() {});
-            });
+            setState(() {});
             print(showDynamic);
           });
+          if (index == 3) {
+            UserController u = Get.find();
+            u.getUserInfo();
+          } else if (index == 0) {
+            ProjectController p = Get.put(ProjectController());
+
+            if (p.initialized) {
+              p.getInfo();
+            }
+          }
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 17.5, right: 17.5),
@@ -61,11 +68,7 @@ class _HomeMenuState extends State<HomeMenu> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 showDynamic
-                    ? Image.asset(
-                        dynamic,
-                        height: 40,
-                        width: 40,
-                      )
+                    ? Image(image: AssetImage(dynamic), height: 40, width: 40)
                     : Image.asset(
                         _index == index ? selected : unselected,
                         height: 40,

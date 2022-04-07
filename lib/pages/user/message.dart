@@ -166,10 +166,10 @@ class MessagePage extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                         )
-                      : ClipOval(
-                          child: Image.asset(
-                            img,
-                            fit: BoxFit.cover,
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: ClipOval(
+                            child: Image.asset(img),
                           ),
                         ),
                 ),

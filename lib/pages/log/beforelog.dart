@@ -19,15 +19,15 @@ class _BeforeLogState extends State<BeforeLog> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     controller =
-        AnimationController(duration: const Duration(seconds: 8), vsync: this)
+        AnimationController(duration: const Duration(seconds: 7), vsync: this)
           ..addListener(() {
             setState(() {});
           });
 
     opacityAnimation = Tween(begin: 1.0, end: 0.0).animate(
-        CurvedAnimation(parent: controller, curve: const Interval(5 / 6, 1)));
-    scaleAnimation = Tween(begin: 1.0, end: 0.7).animate(CurvedAnimation(
-        parent: controller, curve: const Interval(4 / 6, 5 / 6)));
+        CurvedAnimation(parent: controller, curve: const Interval(5.8 / 6, 1)));
+    scaleAnimation = Tween(begin: 1.0, end: 0.65).animate(CurvedAnimation(
+        parent: controller, curve: const Interval(4.8 / 6, 5.8 / 6)));
     controller.forward();
   }
 

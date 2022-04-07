@@ -114,6 +114,7 @@ class NewsSearch extends StatelessWidget {
                 hintText: '搜一搜',
                 hintStyle: TextStyle(
                     fontSize: MyFontSize.font14,
+                    color: MyColor.fontBlackO2,
                     fontFamily: MyFontFamily.pingfangRegular),
               ),
             ))

@@ -13,12 +13,15 @@ class DioUtil {
   late Dio dio;
 
   //服务器ip
-  static const String baseUrl = 'http://10.0.2.2:3000';
-  static const String imgBaseUrl = 'http://10.0.2.2';
-  static const String socketUrl = 'http://10.0.2.2:3001';
+  // static const String baseUrl = 'http://10.0.2.2:3000';
+  // static const String imgBaseUrl = 'http://10.0.2.2';
+  // static const String socketUrl = 'http://10.0.2.2:3001';
   // static const String baseUrl = 'http://119.91.27.93:3000';
   // static const String imgBaseUrl = 'http://119.91.27.93';
   // static const String socketUrl = 'http://119.91.27.93:3001';
+  static const String baseUrl = 'http://track.levani.cn:3000';
+  static const String imgBaseUrl = 'http://track.levani.cn';
+  static const String socketUrl = 'http://track.levani.cn:3001';
   BaseOptions options = BaseOptions();
 
   DioUtil() {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:flutter_track/pages/project/project_controller.dart';
 import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 
@@ -47,6 +48,7 @@ class MatchGroupController extends GetxController {
 class MatchGroup extends StatelessWidget {
   MatchGroup({Key? key}) : super(key: key);
   final MatchGroupController c = Get.put(MatchGroupController());
+  final ProjectController p = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +57,7 @@ class MatchGroup extends StatelessWidget {
             leading: InkWell(
                 onTap: () {
                   Get.back();
+                  p.getInfo();
                 },
                 child: Image.asset(
                   'lib/assets/icons/Refund_back.png',
@@ -82,7 +85,10 @@ class MatchGroup extends StatelessWidget {
             PublicCard(
                 radius: 90.r,
                 notWhite: true,
-                onTap: () => Get.back(),
+                onTap: () {
+                  Get.back();
+                  p.getInfo();
+                },
                 margin: EdgeInsets.only(top: 42.h),
                 padding: EdgeInsets.only(
                     left: 20.w, right: 20.w, top: 13.h, bottom: 13.h),

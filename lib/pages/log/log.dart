@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'dart:ui';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/log/beforelog.dart';
 import 'package:flutter_track/service/service.dart';
@@ -252,6 +252,24 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                           print(_number);
                           // Get.toNamed('/verify');
 
+                          Get.dialog(Material(
+                            color: Colors.transparent,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SpinKitFoldingCube(
+                                  color: Colors.white,
+                                  size: 50.0,
+                                ),
+                                SizedBox(height: 10.h),
+                                const Text(
+                                  '加载中',
+                                  style: TextStyle(color: Colors.white),
+                                )
+                              ],
+                            ),
+                          ));
+
                           var data = {
                             "mobile": _number,
                             "sign_id": "",
@@ -261,6 +279,7 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                           DioUtil().logPost('https://api.sms.jpush.cn/v1/codes',
                               data: data, success: (res) {
                             print(res);
+                            Get.back();
                             if (res['msg_id'] != null) {
                               Get.toNamed('/verify', arguments: {
                                 "msg_id": res['msg_id'],
@@ -271,7 +290,8 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                               Get.snackbar('提示', '验证码发送失败');
                             }
                           }, error: (error) {
-                            Get.snackbar('提示', error);
+                            Get.back();
+                            Get.snackbar('提示', '$error');
                           });
                         } else {
                           Get.snackbar('提示', '手机号格式不正确');
@@ -297,7 +317,30 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                         logAuth();
                       },
                     ),
-                    thirdPartyLog()
+                    thirdPartyLog(),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 34.h),
+                      child: RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  fontSize: MyFontSize.font12,
+                                  fontFamily: MyFontFamily.pingfangRegular,
+                                  color: MyColor.fontGrey),
+                              children: [
+                            const TextSpan(text: '登录即同意'),
+                            TextSpan(
+                                text: '《注册协议》',
+                                style: TextStyle(
+                                    foreground:
+                                        MyFontStyle.textlinearForeground)),
+                            const TextSpan(text: '以及'),
+                            TextSpan(
+                                text: '《隐私政策》',
+                                style: TextStyle(
+                                    foreground:
+                                        MyFontStyle.textlinearForeground))
+                          ])),
+                    )
                   ],
                 ),
               ),
@@ -413,7 +456,7 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
             Get.snackbar('提示', '一键登录错误，请重试');
           }
         }, error: (error) {
-          Get.snackbar('提示', error);
+          Get.snackbar('提示', '$error');
         });
       } else {
         Get.snackbar('提示', '一键登录失败，请检查网络问题，不要连接wifi热点进行登录');

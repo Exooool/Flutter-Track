@@ -50,12 +50,16 @@ class _GroupCardState extends State<GroupCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(projectName,
-                      style: TextStyle(fontSize: MyFontSize.font18)),
+                      style: TextStyle(
+                          fontSize: MyFontSize.font18,
+                          fontFamily: MyFontFamily.pingfangSemibold)),
                   Row(
                     children: [
                       // Text('在线 ', style: TextStyle(fontSize: MyFontSize.font12)),
-                      Text('每天23:30',
-                          style: TextStyle(fontSize: MyFontSize.font12))
+                      Text('每天$frequency',
+                          style: TextStyle(
+                              fontSize: MyFontSize.font12,
+                              fontFamily: MyFontFamily.pingfangRegular))
                     ],
                   )
                 ],
@@ -113,18 +117,24 @@ class _GroupCardState extends State<GroupCard> {
             margin: EdgeInsets.only(
                 left: 24.w, right: 24.w, top: 10.h, bottom: 10.h),
             widget: widget.type
-                ? SizedBox(
-                    height: 48.r,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: widget.userList.length,
-                        itemBuilder: (context, index) {
-                          return mathcedUserItem(
-                              index,
-                              widget.userList[index]['user_img'],
-                              widget.userList[index]['project_title'],
-                              widget.userList[index]['frequency']);
-                        }),
+                ? Row(
+                    children: <Widget>[
+                      mathcedUserItem(
+                          0,
+                          widget.userList[0]['user_img'],
+                          widget.userList[0]['project_title'],
+                          widget.userList[0]['frequency']),
+                      mathcedUserItem(
+                          1,
+                          widget.userList[1]['user_img'],
+                          widget.userList[1]['project_title'],
+                          widget.userList[1]['frequency']),
+                      mathcedUserItem(
+                          2,
+                          widget.userList[2]['user_img'],
+                          widget.userList[2]['project_title'],
+                          widget.userList[2]['frequency'])
+                    ],
                   )
                 : Row(
                     children: <Widget>[

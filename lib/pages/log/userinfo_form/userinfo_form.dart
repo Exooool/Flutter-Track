@@ -466,7 +466,11 @@ class _SexSelectorState extends State<SexSelector> {
                         opacity: sexIndex == 0 ? 1 : 0.5,
                         child: Column(
                           children: [
-                            Image.asset('lib/assets/images/male.png'),
+                            Image.asset('lib/assets/images/male.png',
+                                width: MediaQueryData.fromWindow(window)
+                                        .size
+                                        .width /
+                                    2),
                             Text('男生',
                                 style: TextStyle(
                                     fontSize: MyFontSize.font16,
@@ -483,7 +487,11 @@ class _SexSelectorState extends State<SexSelector> {
                         opacity: sexIndex == 1 ? 1 : 0.5,
                         child: Column(
                           children: [
-                            Image.asset('lib/assets/images/female.png'),
+                            Image.asset('lib/assets/images/female.png',
+                                width: MediaQueryData.fromWindow(window)
+                                        .size
+                                        .width /
+                                    2),
                             Text('女生',
                                 style: TextStyle(
                                     fontSize: MyFontSize.font16,

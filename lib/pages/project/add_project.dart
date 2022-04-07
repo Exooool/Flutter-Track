@@ -11,6 +11,7 @@ import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/project/component/single_time.dart';
 import 'package:flutter_track/pages/project/invite_group.dart';
 import 'package:flutter_track/pages/project/match_group.dart';
+import 'package:flutter_track/pages/project/project_controller.dart';
 import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 
@@ -515,6 +516,8 @@ class AddProject extends StatelessWidget {
                               print('请求成功,服务端返回:$res');
                               if (res['status'] == 0) {
                                 Get.back();
+                                final ProjectController p = Get.find();
+                                p.getInfo();
                                 Get.snackbar('提示', '计划添加成功');
                               }
                             }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 
 import 'package:flutter_track/service/service.dart';
@@ -79,7 +80,18 @@ class _VerifyPageState extends State<VerifyPage> {
     // print(arguments);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppbar('log', title: '验证码'),
+      appBar: CustomAppbar(
+        'log',
+        title: '验证码',
+        leading: InkWell(
+          onTap: () => Get.back(),
+          child: Image.asset(
+            'lib/assets/icons/Refund_back.png',
+            height: 25.r,
+            width: 25.r,
+          ),
+        ),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -119,9 +131,28 @@ class _VerifyPageState extends State<VerifyPage> {
               arguments['code'] = _code;
               print(arguments);
 
+              Get.dialog(Material(
+                color: Colors.transparent,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SpinKitFoldingCube(
+                      color: Colors.white,
+                      size: 50.0,
+                    ),
+                    SizedBox(height: 10.h),
+                    const Text(
+                      '加载中',
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
+                ),
+              ));
+
               DioUtil().verify('/login/messageVerify', data: arguments,
                   success: (res) async {
                 print(res);
+                Get.back();
                 if (res['is_valid']) {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
@@ -135,10 +166,11 @@ class _VerifyPageState extends State<VerifyPage> {
                     Get.offAllNamed('/home');
                   }
                 } else {
+                  Get.back();
                   Get.snackbar('提示', '验证码错误');
                 }
               }, error: (error) {
-                Get.snackbar('提示', error);
+                Get.snackbar('提示', '$error');
               });
             },
           ),

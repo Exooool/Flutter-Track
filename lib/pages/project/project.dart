@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:flutter_track/pages/project/project_controller.dart';
+// import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:flutter_track/model/project_model.dart';
 import 'package:flutter_track/pages/components/group_card.dart';
 import 'package:flutter_track/pages/components/project_card.dart';
@@ -24,19 +24,12 @@ class ProjectPage extends StatefulWidget {
 
 class _ProjectPageState extends State<ProjectPage>
     with TickerProviderStateMixin {
+  ProjectController c = Get.put(ProjectController());
   // 外层tab的controller
   late TabController _tabExteriorController;
   // 内层tab的controller
   late TabController _tabInteriorController;
 
-  // 匹配成功的队列
-  List groupListMatched = [];
-  // 正在匹配的队列
-  List groupListMatching = [];
-  // 60分钟内进行的计划
-  List projectList1 = [];
-  // 其余计划
-  List projectList2 = [];
   // 自定义tab样式
   Widget mainTab(String content, {bool show = true}) {
     return show
@@ -101,101 +94,13 @@ class _ProjectPageState extends State<ProjectPage>
         margin: EdgeInsets.only(top: 24.h),
         widget: InkWell(
           onTap: () {
-            Navigator.pushNamed(context, '/add_project');
+            Get.toNamed('/add_project');
           },
           child: Center(
             child: Image.asset('lib/assets/icons/Add.png',
                 height: 44.r, width: 44.r),
           ),
         ));
-  }
-
-  _getProject() {
-    DioUtil().post('/project/get', success: (res) {
-      // print('计划列表$res');
-
-      // 清空数据 然后请求替换数据
-      projectList1 = [];
-      projectList2 = [];
-
-      DateTime now = DateTime.now();
-      List list = res['data'];
-      for (var i = 0; i < list.length; i++) {
-        Map m = jsonDecode(list[i]['stage_list'])[0];
-        DateTime time;
-        if (m.isNotEmpty) {
-          // print(m['frequency']['time']);
-          time = DateTime(
-              now.year,
-              now.month,
-              now.day,
-              int.parse(m['frequency']['time'].substring(0, 2)),
-              int.parse(m['frequency']['time'].substring(3, 5)));
-        } else {
-          Map temp = jsonDecode(list[i]['frequency']);
-          time = DateTime(
-              now.year,
-              now.month,
-              now.day,
-              int.parse(temp['time'].substring(0, 2)),
-              int.parse(temp['time'].substring(3, 5)));
-          // print(temp['time']);
-        }
-
-        print(time.difference(now).inHours);
-        // 判断创建时间是否小于一个小时，小于放在projectlist1，否则放在projectlist2
-        if (time.difference(now).inHours.abs() < 1) {
-          projectList1.add(list[i]);
-        } else {
-          projectList2.add(list[i]);
-        }
-      }
-      if (mounted) {
-        setState(() {});
-      }
-    }, error: (error) {
-      print(error);
-    });
-  }
-
-  // 获取互助小组信息
-  _getGroup() {
-    DioUtil().get('/project/group/get', success: (res) {
-      print('互助小组信息$res');
-      List groupInfo = res['data'];
-      Map<int, List> m = {};
-      // 对获取的数据进行解析
-      // 解析到map中
-      for (int i = 0; i < groupInfo.length; i++) {
-        if (m[groupInfo[i]['group_id']] == null) {
-          List l = [];
-          l.add(groupInfo[i]);
-          m[groupInfo[i]['group_id']] = l;
-        } else {
-          m[groupInfo[i]['group_id']]!.add(groupInfo[i]);
-        }
-      }
-      // 在通过map的key的list类型的长度来判断是不是在匹配中
-      debugPrint('----------------------');
-      // 格式化列表
-      groupListMatched = [];
-      groupListMatching = [];
-      for (int i = 0; i < m.length; i++) {
-        if (m[m.keys.toList()[i]]!.length < 3) {
-          groupListMatching.add(m[m.keys.toList()[i]]);
-        } else {
-          groupListMatched.add(m[m.keys.toList()[i]]);
-        }
-      }
-      if (mounted) {
-        setState(() {});
-      }
-      debugPrint('匹配成功列表：$groupListMatched');
-      debugPrint('匹配中列表：$groupListMatching');
-      // print(m);
-    }, error: (error) {
-      print(error);
-    });
   }
 
   @override
@@ -205,31 +110,29 @@ class _ProjectPageState extends State<ProjectPage>
         TabController(length: 2, vsync: this, initialIndex: 0);
     _tabInteriorController =
         TabController(length: 2, vsync: this, initialIndex: 0);
-    _getProject();
-    _getGroup();
   }
 
   @override
   Widget build(BuildContext context) {
-    final JPush jpush = JPush();
-    jpush.applyPushAuthority();
-    jpush.setup(
-      appKey: "7c512da646446cc69f9c55a5", // 极光中的appkey
-      channel: "theChannel",
-      production: false,
-      debug: true,
-    );
-    jpush.addEventHandler(
-        onReceiveNotification: (Map<String, dynamic> message) async {
-      debugPrint("接收到推送: $message");
-    }, onOpenNotification: (Map<String, dynamic> message) async {
-      debugPrint("通过点击推送进入app: $message");
-    }, onReceiveMessage: (Map<String, dynamic> message) async {
-      debugPrint("接收到自定义消息: $message");
-    }, onReceiveNotificationAuthorization:
-            (Map<String, dynamic> message) async {
-      debugPrint("通知权限状态: $message");
-    });
+    // final JPush jpush = JPush();
+    // jpush.applyPushAuthority();
+    // jpush.setup(
+    //   appKey: "7c512da646446cc69f9c55a5", // 极光中的appkey
+    //   channel: "theChannel",
+    //   production: false,
+    //   debug: true,
+    // );
+    // jpush.addEventHandler(
+    //     onReceiveNotification: (Map<String, dynamic> message) async {
+    //   debugPrint("接收到推送: $message");
+    // }, onOpenNotification: (Map<String, dynamic> message) async {
+    //   debugPrint("通过点击推送进入app: $message");
+    // }, onReceiveMessage: (Map<String, dynamic> message) async {
+    //   debugPrint("接收到自定义消息: $message");
+    // }, onReceiveNotificationAuthorization:
+    //         (Map<String, dynamic> message) async {
+    //   debugPrint("通知权限状态: $message");
+    // });
     return Column(
       children: <Widget>[
         Container(
@@ -255,255 +158,261 @@ class _ProjectPageState extends State<ProjectPage>
                 ]),
           ),
         ),
-        Expanded(
-            child: TabBarView(
-                // 禁止滑动
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _tabExteriorController,
-                children: <Widget>[
-              // 计划列表
-              Stack(
-                children: [
-                  ListView(
-                    physics: const BouncingScrollPhysics(),
-                    padding: EdgeInsets.only(
-                        top: 35.h, left: 24.w, right: 24.w, bottom: 150.h),
-                    children: [
-                      Center(
-                        child: PublicCard(
-                          margin: EdgeInsets.only(bottom: 20.h),
-                          width: 96.w,
-                          height: 36.h,
-                          radius: 90.r,
-                          widget: Center(
-                            child: Text('即将开始',
-                                style: TextStyle(
-                                    fontSize: MyFontSize.font14,
-                                    fontFamily: MyFontFamily.pingfangRegular)),
-                          ),
-                        ),
-                      ),
-                      projectList1.isEmpty
-                          ? Center(
-                              child: Text('显示60分钟内将进行的计划',
+        GetBuilder<ProjectController>(builder: (_) {
+          return Expanded(
+              child: TabBarView(
+                  // 禁止滑动
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _tabExteriorController,
+                  children: <Widget>[
+                // 计划列表
+                Stack(
+                  children: [
+                    ListView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: EdgeInsets.only(
+                          top: 35.h, left: 24.w, right: 24.w, bottom: 150.h),
+                      children: [
+                        Center(
+                          child: PublicCard(
+                            margin: EdgeInsets.only(bottom: 20.h),
+                            width: 96.w,
+                            height: 36.h,
+                            radius: 90.r,
+                            widget: Center(
+                              child: Text('即将开始',
                                   style: TextStyle(
-                                      fontSize: MyFontSize.font16,
-                                      foreground:
-                                          MyFontStyle.textlinearForeground,
+                                      fontSize: MyFontSize.font14,
                                       fontFamily:
-                                          MyFontFamily.pingfangRegular)))
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.zero,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: projectList1.length,
-                              itemBuilder: (context, index) {
-                                return ProjectCard(
-                                  Project.fromMap(projectList1[index]),
-                                  delete: (list) {
-                                    DioUtil().post('/project/remove', data: {
-                                      'project_id': list[0],
-                                      'group_id': list[1]
-                                    }, success: (res) {
-                                      print(res);
-
-                                      _getProject();
-                                      _getGroup();
-                                      Get.snackbar('提示', '删除成功');
-                                    }, error: (error) {
-                                      Get.snackbar('提示', error);
-                                    });
-                                  },
-                                  change: () {},
-                                  type: 0,
-                                );
-                              }),
-                      Center(
-                        child: PublicCard(
-                          margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
-                          radius: 90.r,
-                          width: 96.w,
-                          height: 36.h,
-                          widget: Center(
-                            child: Text(
-                              '其余计划',
-                              style: TextStyle(
-                                  fontSize: MyFontSize.font14,
-                                  fontFamily: MyFontFamily.pingfangRegular),
+                                          MyFontFamily.pingfangRegular)),
                             ),
                           ),
                         ),
-                      ),
-                      projectList2.isEmpty
-                          ? Center(
-                              child: Column(
-                              children: [
-                                Text('暂无计划',
+                        c.projectList1.isEmpty
+                            ? Center(
+                                child: Text('显示60分钟内将进行的计划',
                                     style: TextStyle(
                                         fontSize: MyFontSize.font16,
                                         foreground:
                                             MyFontStyle.textlinearForeground,
                                         fontFamily:
-                                            MyFontFamily.pingfangRegular)),
-                                Text('快添加计划试试吧～',
-                                    style: TextStyle(
-                                        fontSize: MyFontSize.font16,
-                                        foreground:
-                                            MyFontStyle.textlinearForeground,
-                                        fontFamily:
-                                            MyFontFamily.pingfangRegular)),
-                              ],
-                            ))
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.zero,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: projectList2.length,
-                              itemBuilder: (context, index) {
-                                return ProjectCard(
-                                  Project.fromMap(projectList2[index]),
-                                  delete: (list) {
-                                    DioUtil().post('/project/remove', data: {
-                                      'project_id': list[0],
-                                      'group_id': list[1]
-                                    }, success: (res) {
-                                      print(res);
+                                            MyFontFamily.pingfangRegular)))
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: c.projectList1.length,
+                                itemBuilder: (context, index) {
+                                  return ProjectCard(
+                                    Project.fromMap(c.projectList1[index]),
+                                    delete: (list) {
+                                      DioUtil().post('/project/remove', data: {
+                                        'project_id': list[0],
+                                        'group_id': list[1]
+                                      }, success: (res) {
+                                        print(res);
 
-                                      _getProject();
-                                      _getGroup();
-                                      Get.snackbar('提示', '删除成功');
-                                    }, error: (error) {
-                                      Get.snackbar('提示', error);
-                                    });
-                                  },
-                                  change: () {},
-                                  type: 0,
-                                );
-                              }),
-                      Center(child: projectAddButton()),
-                    ],
-                  ),
-                ],
-              ),
+                                        c.getProject();
+                                        c.getGroup();
+                                        Get.back();
+                                        Get.snackbar('提示', '删除成功');
+                                      }, error: (error) {
+                                        Get.snackbar('提示', error);
+                                      });
+                                    },
+                                    change: () {},
+                                    type: 0,
+                                  );
+                                }),
+                        Center(
+                          child: PublicCard(
+                            margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
+                            radius: 90.r,
+                            width: 96.w,
+                            height: 36.h,
+                            widget: Center(
+                              child: Text(
+                                '其余计划',
+                                style: TextStyle(
+                                    fontSize: MyFontSize.font14,
+                                    fontFamily: MyFontFamily.pingfangRegular),
+                              ),
+                            ),
+                          ),
+                        ),
+                        c.projectList2.isEmpty
+                            ? Center(
+                                child: Column(
+                                children: [
+                                  Text('暂无计划',
+                                      style: TextStyle(
+                                          fontSize: MyFontSize.font16,
+                                          foreground:
+                                              MyFontStyle.textlinearForeground,
+                                          fontFamily:
+                                              MyFontFamily.pingfangRegular)),
+                                  Text('快添加计划试试吧～',
+                                      style: TextStyle(
+                                          fontSize: MyFontSize.font16,
+                                          foreground:
+                                              MyFontStyle.textlinearForeground,
+                                          fontFamily:
+                                              MyFontFamily.pingfangRegular)),
+                                ],
+                              ))
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: c.projectList2.length,
+                                itemBuilder: (context, index) {
+                                  return ProjectCard(
+                                    Project.fromMap(c.projectList2[index]),
+                                    delete: (list) {
+                                      DioUtil().post('/project/remove', data: {
+                                        'project_id': list[0],
+                                        'group_id': list[1]
+                                      }, success: (res) {
+                                        print(res);
 
-              // 互助小组
-              Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 60.h,
-                    child: TabBar(
-                      isScrollable: true,
-                      onTap: (e) {
-                        setState(() {});
-                      },
-                      indicator: const BoxDecoration(color: Colors.transparent),
-                      indicatorWeight: 0,
-                      labelPadding: EdgeInsets.only(left: 6.w, right: 6.w),
-                      controller: _tabInteriorController,
-                      tabs: [
-                        subTab('匹配成功',
-                            show: _tabInteriorController.index == 0
-                                ? true
-                                : false),
-                        subTab('匹配中',
-                            show: _tabInteriorController.index == 1
-                                ? true
-                                : false),
+                                        c.getProject();
+                                        c.getGroup();
+                                        Get.back();
+                                        Get.snackbar('提示', '删除成功');
+                                      }, error: (error) {
+                                        Get.snackbar('提示', error);
+                                      });
+                                    },
+                                    change: () {},
+                                    type: 0,
+                                  );
+                                }),
+                        Center(child: projectAddButton()),
                       ],
                     ),
-                  ),
-                  Expanded(
-                      child: TabBarView(
-                          // 禁止滑动
-                          physics: const NeverScrollableScrollPhysics(),
-                          controller: _tabInteriorController,
-                          children: <Widget>[
-                        groupListMatched.isEmpty
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text('暂无互助小组',
-                                      style: TextStyle(
-                                          fontSize: MyFontSize.font16,
-                                          foreground:
-                                              MyFontStyle.textlinearForeground,
-                                          fontFamily:
-                                              MyFontFamily.pingfangRegular)),
-                                  Text('快去添加计划试试吧～',
-                                      style: TextStyle(
-                                          fontSize: MyFontSize.font16,
-                                          foreground:
-                                              MyFontStyle.textlinearForeground,
-                                          fontFamily:
-                                              MyFontFamily.pingfangRegular))
-                                ],
-                              )
-                            : ListView.builder(
-                                padding: EdgeInsets.zero,
-                                itemCount: groupListMatched.length,
-                                itemBuilder: (context, index) {
-                                  return GroupCard(groupListMatched[index],
-                                      delete: (groupId) {
-                                    DioUtil().post('/project/group/remove',
-                                        data: {'group_id': groupId},
-                                        success: (res) {
-                                      print(res);
-                                    }, error: (error) {
-                                      print(error);
-                                    });
+                  ],
+                ),
 
-                                    _getGroup();
-                                  });
-                                }),
-                        groupListMatching.isEmpty
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text('暂无互助小组',
-                                      style: TextStyle(
-                                          fontSize: MyFontSize.font16,
-                                          foreground:
-                                              MyFontStyle.textlinearForeground,
-                                          fontFamily:
-                                              MyFontFamily.pingfangRegular)),
-                                  Text('快去添加计划试试吧～',
-                                      style: TextStyle(
-                                          fontSize: MyFontSize.font16,
-                                          foreground:
-                                              MyFontStyle.textlinearForeground,
-                                          fontFamily:
-                                              MyFontFamily.pingfangRegular))
-                                ],
-                              )
-                            : ListView.builder(
-                                padding: EdgeInsets.zero,
-                                itemCount: groupListMatching.length,
-                                itemBuilder: (context, index) {
-                                  return GroupCard(
-                                    groupListMatching[index],
-                                    delete: (groupId) {
+                // 互助小组
+                Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 60.h,
+                      child: TabBar(
+                        isScrollable: true,
+                        onTap: (e) {
+                          setState(() {});
+                        },
+                        indicator:
+                            const BoxDecoration(color: Colors.transparent),
+                        indicatorWeight: 0,
+                        labelPadding: EdgeInsets.only(left: 6.w, right: 6.w),
+                        controller: _tabInteriorController,
+                        tabs: [
+                          subTab('匹配成功',
+                              show: _tabInteriorController.index == 0
+                                  ? true
+                                  : false),
+                          subTab('匹配中',
+                              show: _tabInteriorController.index == 1
+                                  ? true
+                                  : false),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                        child: TabBarView(
+                            // 禁止滑动
+                            physics: const NeverScrollableScrollPhysics(),
+                            controller: _tabInteriorController,
+                            children: <Widget>[
+                          c.groupListMatched.isEmpty
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('暂无互助小组',
+                                        style: TextStyle(
+                                            fontSize: MyFontSize.font16,
+                                            foreground: MyFontStyle
+                                                .textlinearForeground,
+                                            fontFamily:
+                                                MyFontFamily.pingfangRegular)),
+                                    Text('快去添加计划试试吧～',
+                                        style: TextStyle(
+                                            fontSize: MyFontSize.font16,
+                                            foreground: MyFontStyle
+                                                .textlinearForeground,
+                                            fontFamily:
+                                                MyFontFamily.pingfangRegular))
+                                  ],
+                                )
+                              : ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  itemCount: c.groupListMatched.length,
+                                  itemBuilder: (context, index) {
+                                    return GroupCard(c.groupListMatched[index],
+                                        delete: (groupId) {
                                       DioUtil().post('/project/group/remove',
                                           data: {'group_id': groupId},
                                           success: (res) {
                                         print(res);
-                                        if (res['status'] == 0) {
-                                          Get.snackbar('提示', '删除成功');
-                                        }
                                       }, error: (error) {
-                                        Get.snackbar('提示', error);
+                                        print(error);
                                       });
 
-                                      _getGroup();
-                                    },
-                                    type: false,
-                                  );
-                                }),
-                      ]))
-                ],
-              ),
-            ])),
+                                      c.getGroup();
+                                    });
+                                  }),
+                          c.groupListMatching.isEmpty
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('暂无互助小组',
+                                        style: TextStyle(
+                                            fontSize: MyFontSize.font16,
+                                            foreground: MyFontStyle
+                                                .textlinearForeground,
+                                            fontFamily:
+                                                MyFontFamily.pingfangRegular)),
+                                    Text('快去添加计划试试吧～',
+                                        style: TextStyle(
+                                            fontSize: MyFontSize.font16,
+                                            foreground: MyFontStyle
+                                                .textlinearForeground,
+                                            fontFamily:
+                                                MyFontFamily.pingfangRegular))
+                                  ],
+                                )
+                              : ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  itemCount: c.groupListMatching.length,
+                                  itemBuilder: (context, index) {
+                                    return GroupCard(
+                                      c.groupListMatching[index],
+                                      delete: (groupId) {
+                                        DioUtil().post('/project/group/remove',
+                                            data: {'group_id': groupId},
+                                            success: (res) {
+                                          print(res);
+                                          if (res['status'] == 0) {
+                                            Get.snackbar('提示', '删除成功');
+                                          }
+                                        }, error: (error) {
+                                          Get.snackbar('提示', error);
+                                        });
+
+                                        c.getGroup();
+                                      },
+                                      type: false,
+                                    );
+                                  }),
+                        ]))
+                  ],
+                ),
+              ]));
+        }),
       ],
     );
   }

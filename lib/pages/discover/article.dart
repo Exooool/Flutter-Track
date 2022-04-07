@@ -221,6 +221,7 @@ class _ArticlePageState extends State<ArticlePage>
                             child: PublicCard(
                                 radius: 90.r,
                                 onTap: () {
+                                  // 关注用户
                                   DioUtil().post('/users/focus',
                                       data: {'other_user_id': news['user_id']},
                                       success: (res) {

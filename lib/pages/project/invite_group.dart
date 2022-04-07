@@ -4,6 +4,7 @@ import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
 import 'package:flutter_track/pages/components/custom_checkbox.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:flutter_track/pages/project/project_controller.dart';
 import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 
@@ -48,6 +49,7 @@ class InviteGroup extends StatelessWidget {
   InviteGroup({Key? key}) : super(key: key);
 
   final InviteGroupController c = Get.put(InviteGroupController());
+  final ProjectController p = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,10 @@ class InviteGroup extends StatelessWidget {
           'inviteGroup',
           title: '邀请好友',
           leading: InkWell(
-            onTap: () => Get.back(),
+            onTap: () {
+              Get.back();
+              p.getInfo();
+            },
             child: Image.asset(
               'lib/assets/icons/Refund_back.png',
               height: 25.r,
@@ -71,6 +76,13 @@ class InviteGroup extends StatelessWidget {
 
               print('被邀请人：$list');
 
+              if (list.isEmpty) {
+                Get.snackbar('提示', '你没有邀请任何人');
+                Get.back();
+                p.getInfo();
+                return;
+              }
+
               if (c.groupId.value != 0) {
                 DioUtil().post('/project/invite', data: {
                   'invite': list,
@@ -81,6 +93,7 @@ class InviteGroup extends StatelessWidget {
                   print(res);
                   if (res['status'] == 0) {
                     Get.back();
+                    p.getInfo();
                     Get.snackbar('提示', '邀请成功');
                   } else {
                     Get.snackbar('提示', '邀请失败' + res);

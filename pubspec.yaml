@@ -54,7 +54,7 @@ dependencies:
   # 极光认证
   jverify: ^2.2.4
   # 极光推送
-  jpush_flutter: ^2.2.3
+  # jpush_flutter: ^2.2.3
   # 富文本编辑器
   zefyrka: ^1.1.1
   # 可重新排列的表格

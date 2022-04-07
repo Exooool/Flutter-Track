@@ -74,7 +74,11 @@ class UserPage extends StatelessWidget {
               SizedBox(width: 10.w),
               InkWell(
                 onTap: () {
-                  Get.toNamed('/setting');
+                  if (c.user.value.userId == -1) {
+                    Get.snackbar('提示', '加载失败');
+                  } else {
+                    Get.toNamed('/setting');
+                  }
                 },
                 child: Image.asset(
                   'lib/assets/icons/Setting_fill.png',

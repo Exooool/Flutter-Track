@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
+import 'package:flutter_track/pages/components/custom_dialog.dart';
 import 'package:flutter_track/pages/components/expansion_list.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/setting/setting_controller.dart';
@@ -182,10 +183,25 @@ class SettingPage extends StatelessWidget {
           itemRow('关于我们', inner: false),
           itemRow('意见反馈', inner: false),
           itemRow('联系我们', inner: false),
-          itemRow('退出登陆', inner: false, onTap: () async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setString('token', '');
-            Get.offAllNamed('/log');
+          itemRow('退出登录', inner: false, onTap: () {
+            Get.dialog(
+              CustomDialog(
+                height: 330.h,
+                width: 318.w,
+                title: '提示',
+                content: '你确定要退出登录吗？',
+                onCancel: () {
+                  Get.back();
+                },
+                onConfirm: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.setString('token', '');
+                  Get.offAllNamed('/log');
+                },
+              ),
+              barrierColor: Colors.transparent,
+            );
           }),
         ],
       ),

@@ -45,8 +45,9 @@ class InformationPage extends StatelessWidget {
               ClipOval(
                 child: img == ''
                     ? Image.asset('lib/assets/images/defaultUserImg.png',
-                        height: 36.r, width: 36.r)
-                    : Image.network(img, height: 36.r, width: 36.r),
+                        height: 36.r, width: 36.r, fit: BoxFit.cover)
+                    : Image.network(img,
+                        height: 36.r, width: 36.r, fit: BoxFit.cover),
               ),
               SizedBox(width: 12.w),
               Text(userName, style: MyFontStyle.rankUser)

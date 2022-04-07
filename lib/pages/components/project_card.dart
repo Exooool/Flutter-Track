@@ -7,6 +7,8 @@ import 'package:flutter_track/pages/components/custom_checkbox.dart';
 import 'package:flutter_track/pages/components/custom_dialog.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/project/project_study.dart';
+import 'package:flutter_track/pages/user/user_controller.dart';
+import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -19,10 +21,27 @@ class ProjectCard extends StatelessWidget {
   late int projectLength;
   late Function? delete;
   late Function? change;
+
   ProjectCard(this.project,
       {Key? key, required this.type, this.delete, this.change})
       : super(key: key);
 
+  // 设置对外或对自己可见
+  setSecret(secret) {
+    DioUtil().post('/project/secret',
+        data: {'secret': secret, 'project_id': project.projectId},
+        success: (res) {
+      print(res);
+      Get.back();
+      Get.snackbar('提示', '修改成功');
+      UserController u = Get.find();
+      u.getUserInfo();
+    }, error: (error) {
+      print(error);
+    });
+  }
+
+  // 检查当前处于那个阶段
   checkStage() {
     int totalStage = project.stageList.length;
     nowStage = totalStage;
@@ -117,6 +136,7 @@ class ProjectCard extends StatelessWidget {
   }
 
   Widget longPressDialog() {
+    bool secret = project.secret == 'true';
     return SizedBox(
       height: 266.h,
       child: BlurWidget(Column(
@@ -147,13 +167,18 @@ class ProjectCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 17.w),
-                  Text(
-                    project.projectTitle,
-                    style: TextStyle(
-                        fontSize: MyFontSize.font18,
-                        fontFamily: MyFontFamily.pingfangRegular,
-                        color: MyColor.fontBlack),
-                  )
+                  SizedBox(
+                    width: 200.w,
+                    child: Text(
+                      project.projectTitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: MyFontSize.font18,
+                          fontFamily: MyFontFamily.pingfangRegular,
+                          color: MyColor.fontBlack),
+                    ),
+                  ),
                 ],
               )),
           type == 0
@@ -207,6 +232,10 @@ class ProjectCard extends StatelessWidget {
                   children: <Widget>[
                     PublicCard(
                         radius: 90.r,
+                        onTap: () {
+                          print('设置为对外可见');
+                          setSecret('false');
+                        },
                         margin: EdgeInsets.only(
                             left: 36.w, right: 36.w, bottom: 12.h),
                         padding: EdgeInsets.only(left: 12.w, right: 12.w),
@@ -218,7 +247,7 @@ class ProjectCard extends StatelessWidget {
                                     fontSize: MyFontSize.font16,
                                     fontFamily: MyFontFamily.pingfangRegular)),
                             CustomCheckBox(
-                                value: project.secret != 'true',
+                                value: !secret,
                                 onChanged: (value) {
                                   print(value);
                                 })
@@ -226,6 +255,10 @@ class ProjectCard extends StatelessWidget {
                         )),
                     PublicCard(
                         radius: 90.r,
+                        onTap: () {
+                          print('设置为自己可见');
+                          setSecret('true');
+                        },
                         margin: EdgeInsets.only(
                             left: 36.w, right: 36.w, bottom: 12.h),
                         padding: EdgeInsets.only(left: 12.w, right: 12.w),
@@ -237,7 +270,7 @@ class ProjectCard extends StatelessWidget {
                                     fontSize: MyFontSize.font16,
                                     fontFamily: MyFontFamily.pingfangRegular)),
                             CustomCheckBox(
-                                value: project.secret == 'true',
+                                value: secret,
                                 onChanged: (value) {
                                   print(value);
                                 })
@@ -262,7 +295,7 @@ class ProjectCard extends StatelessWidget {
           // 判断是否到达了指定时间
           if (type == 0 && checkTime()) {
             Get.to(() => ProjectStudy(), arguments: {'project': project});
-          } else {
+          } else if (type == 0 && !checkTime()) {
             Get.dialog(
               CustomDialog(
                 height: 330.h,
@@ -337,12 +370,17 @@ class ProjectCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          project.projectTitle,
-                          style: TextStyle(
-                              fontSize: MyFontSize.font18,
-                              fontFamily: MyFontFamily.pingfangRegular,
-                              color: MyColor.fontBlack),
+                        SizedBox(
+                          width: 200.w,
+                          child: Text(
+                            project.projectTitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: MyFontSize.font18,
+                                fontFamily: MyFontFamily.pingfangRegular,
+                                color: MyColor.fontBlack),
+                          ),
                         ),
                         Row(
                           children: <Widget>[
