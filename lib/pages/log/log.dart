@@ -74,10 +74,9 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
           SizedBox(
             height: 15.h,
           ),
-          SizedBox(
-            width: 160.w,
+          Center(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 InkWell(
                   onTap: not,
@@ -87,6 +86,7 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                     width: 28.r,
                   ),
                 ),
+                SizedBox(width: 14.w),
                 InkWell(
                   onTap: not,
                   child: Image.asset(
@@ -95,6 +95,7 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                     width: 28.r,
                   ),
                 ),
+                SizedBox(width: 14.w),
                 InkWell(
                   onTap: not,
                   child: Image.asset(
@@ -103,6 +104,7 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                     width: 28.r,
                   ),
                 ),
+                SizedBox(width: 14.w),
                 InkWell(
                   onTap: not,
                   child: Image.asset(

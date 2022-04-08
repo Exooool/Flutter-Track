@@ -166,10 +166,11 @@ class _VerifyPageState extends State<VerifyPage> {
                     Get.offAllNamed('/home');
                   }
                 } else {
-                  Get.back();
+                  
                   Get.snackbar('提示', '验证码错误');
                 }
               }, error: (error) {
+                Get.back();
                 Get.snackbar('提示', '$error');
               });
             },

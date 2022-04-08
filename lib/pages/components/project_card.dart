@@ -371,7 +371,7 @@ class ProjectCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(
-                          width: 200.w,
+                          width: 190.w,
                           child: Text(
                             project.projectTitle,
                             maxLines: 1,
