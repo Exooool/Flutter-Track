@@ -256,8 +256,8 @@ class ProjectStudy extends StatelessWidget {
               return Stack(
                 children: <Widget>[
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      SizedBox(height: 160.h),
                       // 倒计时界面
                       Center(
                         child: Stack(

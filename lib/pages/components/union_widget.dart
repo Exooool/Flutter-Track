@@ -409,6 +409,8 @@ class UnionWidget extends StatelessWidget {
                         children: <Widget>[
                           Container(
                               margin: EdgeInsets.only(right: 24.w),
+                              width: title.length * 16,
+                              alignment: Alignment.center,
                               child: Text(
                                 title,
                                 style: TextStyle(

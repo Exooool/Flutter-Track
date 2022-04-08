@@ -21,7 +21,11 @@ class RegPageAndLogPage extends StatefulWidget {
   _RegPageAndLogPageState createState() => _RegPageAndLogPageState();
 }
 
-class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
+class _RegPageAndLogPageState extends State<RegPageAndLogPage>
+    with TickerProviderStateMixin {
+  // 动画控制
+  late AnimationController controller;
+  late Animation<double> opacityAnimation;
   //焦点
   final FocusNode _focusNodeUserName = FocusNode();
   final FocusNode _focusNodePassWord = FocusNode();
@@ -123,7 +127,15 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    // controller =
+    //     AnimationController(duration: const Duration(seconds: 12), vsync: this)
+    //       ..addListener(() {
+    //         setState(() {});
+    //       });
+
+    // opacityAnimation = Tween(begin: 0.0, end: 1.0).animate(
+    //     CurvedAnimation(parent: controller, curve: const Interval(1 / 2, 1)));
+    // controller.forward();
   }
 
   @override
@@ -160,16 +172,16 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage> {
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.only(
-                        top: 68.h,
+                        top: 60.h,
                       ),
                       child: Image.asset(
                         'lib/assets/images/logo.png',
-                        height: 330.r,
-                        width: 330.r,
+                        height: 355.r,
+                        width: 355.r,
                       ),
                     ),
                     PublicCard(
-                      padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
+                      padding: EdgeInsets.only(bottom: 5.h),
                       width: 300.w,
                       radius: 90.r,
                       widget: Row(

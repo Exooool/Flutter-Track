@@ -65,7 +65,6 @@ class MatchGroup extends StatelessWidget {
                   width: 25.r,
                 ))),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Image.asset(
