@@ -7,6 +7,7 @@ import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
 
 import 'package:flutter_track/pages/components/custom_button.dart';
+import 'package:flutter_track/pages/components/custom_dialog.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/project/component/single_time.dart';
 import 'package:flutter_track/pages/project/invite_group.dart';
@@ -54,6 +55,17 @@ class AddProject extends StatelessWidget {
                           child: component,
                         )
                       : TextField(
+                          controller: TextEditingController.fromValue(
+                              TextEditingValue(
+                                  // 设置内容
+                                  text: value ?? '',
+                                  // 保持光标在最后
+                                  selection: TextSelection.fromPosition(
+                                      TextPosition(
+                                          affinity: TextAffinity.downstream,
+                                          offset: value == null
+                                              ? 0
+                                              : value.length)))),
                           onChanged: (value) {
                             onChanged!(value);
                           },
@@ -411,40 +423,10 @@ class AddProject extends StatelessWidget {
                       onTap: () {
                         // 集合所有数据
 
-                        bool flag = true;
+                        bool flag = c.checkInfo();
                         String endTime = c.endTime.value;
 
                         // 进行数据验证
-                        if (c.projectTitle.value == '') {
-                          flag = false;
-                        } else if (c.isDivide.value == 0) {
-                          // 判断分阶段的情况
-                          for (var i = 0; i < c.stageList.length; i++) {
-                            if (c.stageList[i]['content'] == null ||
-                                c.stageList[i]['content'] == '' ||
-                                c.imgUrl.value == '' ||
-                                c.stageList[i]['endTime'] == '' ||
-                                c.stageList[i]['endTime'] == null ||
-                                c.stageList[i]['singleTime'] == null ||
-                                c.stageList[i]['frequency'] == null ||
-                                c.stageList[i]['reminderTime'] == 9) {
-                              flag = false;
-                            }
-                          }
-                          endTime = c.stageList[c.stageList.length - 1]
-                                  ['endTime'] ??
-                              '';
-                        } else {
-                          c.stageList.value = [{}];
-                          // 判断不分阶段
-                          if (c.endTime.value == '' ||
-                              c.singleTime['type'] == null ||
-                              c.frequency['week'] == null ||
-                              c.imgUrl.value == '' ||
-                              c.reminderTime.value == 9) {
-                            flag = false;
-                          }
-                        }
 
                         // 统一
                         var data = {
@@ -488,43 +470,27 @@ class AddProject extends StatelessWidget {
                           ));
 
                           // 添加计划
-                          DioUtil().post('/project/add', data: data,
-                              success: (res) {
-                            print(res);
-                            // 是否加入互助小组 0 是 1 否
-                            if (c.isJoin.value == 0) {
-                              // 选择匹配模式 0 系统匹配 1 自行邀请
-                              if (c.isMatch.value == 0) {
-                                // 关闭加载动画
-                                Get.back();
-                                Get.off(() => MatchGroup(), arguments: {
-                                  'project_id': res['data']['project_id'],
-                                  'frequency': matchFrequency
-                                });
-                              } else {
-                                // 关闭加载动画
-                                Get.back();
-                                Get.off(() => InviteGroup(), arguments: {
-                                  'project_id': res['data']['project_id'],
-                                  'frequency': matchFrequency
-                                });
-                              }
-                            } else {
-                              // 关闭加载动画
-                              Get.back();
-                              // 不加入互助小组
-                              print('请求成功,服务端返回:$res');
-                              if (res['status'] == 0) {
-                                Get.back();
-                                final ProjectController p = Get.find();
-                                p.getInfo();
-                                Get.snackbar('提示', '计划添加成功');
-                              }
-                            }
-                          }, error: (error) {
-                            Get.snackbar('提示', error);
-                            print(error);
-                          });
+
+                          if (c.projectId == null) {
+                            c.addProject(data, matchFrequency);
+                          } else {
+                            Get.dialog(
+                              CustomDialog(
+                                height: 330.h,
+                                width: 318.w,
+                                title: '提示',
+                                content: '修改计划会重置所有数据！',
+                                subContent: '如果有互助小组会退出原小组！',
+                                onCancel: () {
+                                  Get.back();
+                                },
+                                onConfirm: () {
+                                  c.alterProject(data, matchFrequency);
+                                },
+                              ),
+                              barrierColor: Colors.transparent,
+                            );
+                          }
                         } else {
                           Get.snackbar('提示', '请输入信息');
                         }

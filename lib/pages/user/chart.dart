@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 // import 'package:flutter_track/model/user_model.dart';
 import 'package:flutter_track/pages/components/custom_appbar.dart';
+import 'package:flutter_track/pages/components/custom_dialog.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/user/message.dart';
 import 'package:flutter_track/service/service.dart';
@@ -27,6 +28,67 @@ class ChartPage extends StatelessWidget {
   final TextEditingController controller = TextEditingController();
   final MessagePageController o = Get.find();
   // final ChartPageController c = Get.put(ChartPageController());
+
+  inviteText(idIndex, content) {
+    return RichText(
+        text: TextSpan(children: [
+      TextSpan(
+        text: content.substring(0, idIndex),
+        style: TextStyle(
+            fontFamily: MyFontFamily.pingfangRegular,
+            fontSize: MyFontSize.font16,
+            color: Colors.black),
+      ),
+      TextSpan(
+          text: '同意请点击此处',
+          style: TextStyle(
+              fontFamily: MyFontFamily.pingfangRegular,
+              fontSize: MyFontSize.font16,
+              foreground: MyFontStyle.textlinearForeground),
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              List l =
+                  content.substring(idIndex + 2, content.length).split('#*');
+              int projectId = int.parse(l[0]);
+              int groupId = int.parse(l[1]);
+
+              // 接受邀请提示
+              Get.dialog(
+                CustomDialog(
+                  height: 330.h,
+                  width: 318.w,
+                  title: '提示',
+                  content: '你确定要加入该互助小组嘛？',
+                  subContent: '加入即会为你自动创建一个计划！',
+                  onCancel: () {
+                    Get.back();
+                  },
+                  onConfirm: () {
+                    DioUtil().post('/project/acceptInvite',
+                        data: {'project_id': projectId, 'group_id': groupId},
+                        success: (res) {
+                      print(res);
+                      Get.back();
+                      if (res['status'] == 2) {
+                        Get.snackbar('提示', '你已经加入该互助小组，请不要重复点击');
+                      } else if (res['status'] == 1) {
+                        Get.snackbar('提示', '该互助小组不存在');
+                      } else if (res['status'] == 3) {
+                        Get.snackbar('提示', '该互助小组人数已满');
+                      } else {
+                        Get.snackbar('提示', '加入小组成功');
+                      }
+                    }, error: (error) {
+                      print(error);
+                    });
+                    print('$projectId,$groupId');
+                  },
+                ),
+                barrierColor: Colors.transparent,
+              );
+            })
+    ]));
+  }
 
   Widget fromChart(String content, String img) {
     int idIndex = content.indexOf('#*');
@@ -58,42 +120,7 @@ class ChartPage extends StatelessWidget {
                 padding: EdgeInsets.only(
                     top: 6.r, bottom: 6.r, left: 12.r, right: 12.r),
                 widget: content.contains('#*')
-                    ? RichText(
-                        text: TextSpan(children: [
-                        TextSpan(
-                          text: content.substring(0, idIndex),
-                          style: TextStyle(
-                              fontFamily: MyFontFamily.pingfangRegular,
-                              fontSize: MyFontSize.font16,
-                              color: Colors.black),
-                        ),
-                        TextSpan(
-                            text: '同意请点击此处',
-                            style: TextStyle(
-                                fontFamily: MyFontFamily.pingfangRegular,
-                                fontSize: MyFontSize.font16,
-                                foreground: MyFontStyle.textlinearForeground),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                List l = content
-                                    .substring(idIndex + 2, content.length)
-                                    .split('#*');
-                                int projectId = int.parse(l[0]);
-                                int groupId = int.parse(l[1]);
-                                DioUtil().post('/project/acceptInvite', data: {
-                                  'project_id': projectId,
-                                  'group_id': groupId
-                                }, success: (res) {
-                                  print(res);
-                                  if (res['status'] == 2) {
-                                    Get.snackbar('提示', '你已经加入该互助小组，请不要重复点击');
-                                  }
-                                }, error: (error) {
-                                  print(error);
-                                });
-                                print('$projectId,$groupId');
-                              })
-                      ]))
+                    ? inviteText(idIndex, content)
                     : Text(content,
                         style: TextStyle(
                             fontFamily: MyFontFamily.pingfangRegular,
@@ -122,42 +149,7 @@ class ChartPage extends StatelessWidget {
                 padding: EdgeInsets.only(
                     top: 6.r, bottom: 6.r, left: 12.r, right: 12.r),
                 widget: content.contains('#*')
-                    ? RichText(
-                        text: TextSpan(children: [
-                        TextSpan(
-                          text: content.substring(0, idIndex),
-                          style: TextStyle(
-                              fontFamily: MyFontFamily.pingfangRegular,
-                              fontSize: MyFontSize.font16,
-                              color: Colors.black),
-                        ),
-                        TextSpan(
-                            text: '同意请点击此处',
-                            style: TextStyle(
-                                fontFamily: MyFontFamily.pingfangRegular,
-                                fontSize: MyFontSize.font16,
-                                foreground: MyFontStyle.textlinearForeground),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                List l = content
-                                    .substring(idIndex + 2, content.length)
-                                    .split('#*');
-                                int projectId = int.parse(l[0]);
-                                int groupId = int.parse(l[1]);
-                                DioUtil().post('/project/acceptInvite', data: {
-                                  'project_id': projectId,
-                                  'group_id': groupId
-                                }, success: (res) {
-                                  print(res);
-                                  if (res['status'] == 2) {
-                                    Get.snackbar('提示', '你已经加入该互助小组，请不要重复点击');
-                                  }
-                                }, error: (error) {
-                                  print(error);
-                                });
-                                print('$projectId,$groupId');
-                              })
-                      ]))
+                    ? inviteText(idIndex, content)
                     : Text(content,
                         style: TextStyle(
                             fontFamily: MyFontFamily.pingfangRegular,

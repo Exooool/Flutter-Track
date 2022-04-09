@@ -159,45 +159,28 @@ class ArticleCard extends StatelessWidget {
                               ],
                             ),
                             SizedBox(height: 8.h),
-                            Text(
-                              news.content,
-                              maxLines: 5,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: MyFontSize.font12,
-                                  fontFamily: MyFontFamily.pingfangRegular),
-                            )
+                            Visibility(
+                                visible: news.content != '',
+                                child: Text(
+                                  news.content,
+                                  maxLines: 5,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: MyFontSize.font12,
+                                      fontFamily: MyFontFamily.pingfangRegular),
+                                ))
                           ],
                         ),
                       ),
                       SizedBox(width: 16.w),
-                      news.content != ''
-                          ? ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.r)),
-                              child: Image.network(
-                                news.newsImg,
-                                width: 158.w,
-                                height: 110.h,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Image.asset(
-                                    'lib/assets/images/404.jpg',
-                                    width: 158.w,
-                                    height: 110.h,
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                              ),
-                            )
-                          : const SizedBox()
-                    ],
-                  ),
-                  news.content == ''
-                      ? ClipRRect(
+                      Visibility(
+                        visible: news.content != '',
+                        child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(10.r)),
                           child: Image.network(
                             news.newsImg,
+                            width: 158.w,
+                            height: 110.h,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return Image.asset(
@@ -208,8 +191,29 @@ class ArticleCard extends StatelessWidget {
                               );
                             },
                           ),
-                        )
-                      : const SizedBox(),
+                        ),
+                      )
+                    ],
+                  ),
+
+                  Visibility(
+                    visible: news.content == '',
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                      child: Image.network(
+                        news.newsImg,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'lib/assets/images/404.jpg',
+                            width: 158.w,
+                            height: 110.h,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 15.h),
                   Padding(
                     padding: EdgeInsets.only(right: 49.w),

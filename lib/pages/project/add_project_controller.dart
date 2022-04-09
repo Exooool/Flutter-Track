@@ -1,16 +1,24 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_track/common/style/my_style.dart';
+import 'package:flutter_track/model/project_model.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:flutter_track/pages/project/project_controller.dart';
 import 'package:flutter_track/service/service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart' as dio;
 
-class AddProjectController extends GetxController {
-  XFile? image;
+import 'invite_group.dart';
+import 'match_group.dart';
 
+class AddProjectController extends GetxController {
+  // 修改计划时需要
+  // 计划id
+  int? projectId;
+  // 互助小组id
+  int? groupId;
   // 表单数据
   // 截止时间
   var endTime = ''.obs;
@@ -29,7 +37,7 @@ class AddProjectController extends GetxController {
   // 提醒时间 9没有值 表示没有填写
   var reminderTime = 9.obs;
   // 阶段
-  var stageList = [{}].obs;
+  RxList stageList = [].obs;
 
   // 对stageList数组进行修改并刷新组件方法
   stageListMethod(index, key, value) {
@@ -176,5 +184,157 @@ class AddProjectController extends GetxController {
           ),
         ),
         barrierColor: Colors.transparent);
+  }
+
+  // 检查填入信息完整性
+
+  bool checkInfo() {
+    bool flag = true;
+    if (projectTitle.value == '') {
+      flag = false;
+    } else if (isDivide.value == 0) {
+      // 判断分阶段的情况
+      for (var i = 0; i < stageList.length; i++) {
+        if (stageList[i]['content'] == null ||
+            stageList[i]['content'] == '' ||
+            imgUrl.value == '' ||
+            stageList[i]['endTime'] == '' ||
+            stageList[i]['endTime'] == null ||
+            stageList[i]['singleTime'] == null ||
+            stageList[i]['frequency'] == null ||
+            stageList[i]['reminderTime'] == 9) {
+          flag = false;
+        }
+      }
+      endTime.value = stageList[stageList.length - 1]['endTime'] ?? '';
+    } else {
+      stageList.value = [{}];
+      // 判断不分阶段
+      if (endTime.value == '' ||
+          singleTime['type'] == null ||
+          frequency['week'] == null ||
+          imgUrl.value == '' ||
+          reminderTime.value == 9) {
+        flag = false;
+      }
+    }
+
+    return flag;
+  }
+
+  // 添加计划
+  addProject(data, matchFrequency) {
+    DioUtil().post('/project/add', data: data, success: (res) {
+      print(res);
+      // 关闭加载动画
+      Get.back();
+      // 是否加入互助小组 0 是 1 否
+      if (isJoin.value == 0) {
+        // 选择匹配模式 0 系统匹配 1 自行邀请
+        if (isMatch.value == 0) {
+          Get.off(() => MatchGroup(), arguments: {
+            'project_id': res['data']['project_id'],
+            'frequency': matchFrequency
+          });
+        } else {
+          Get.off(() => InviteGroup(), arguments: {
+            'project_id': res['data']['project_id'],
+            'frequency': matchFrequency
+          });
+        }
+      } else {
+        // 不加入互助小组
+        print('请求成功,服务端返回:$res');
+        if (res['status'] == 0) {
+          Get.back();
+          final ProjectController p = Get.find();
+          p.getInfo();
+          Get.snackbar('提示', '计划添加成功');
+        }
+      }
+    }, error: (error) {
+      Get.snackbar('提示', error);
+      // print(error);
+    });
+  }
+
+  // 修改计划
+  alterProject(data, matchFrequency) {
+    // 如果有小组  就退出之前加入的互助小组
+    if (groupId != null) {
+      DioUtil().post('/project/group/remove', data: {'group_id': groupId},
+          success: (res) {
+        print(res);
+        if (res['status'] == 0) {
+          print('原互助小组退出成功');
+        }
+      }, error: (error) {
+        Get.snackbar('提示', '$error');
+      });
+    }
+
+    data['project_id'] = projectId;
+
+    DioUtil().post('/project/update', data: data, success: (res) {
+      print(res);
+      // 关闭加载动画
+      Get.back();
+      // 是否加入互助小组 0 是 1 否
+      if (isJoin.value == 0) {
+        // 选择匹配模式 0 系统匹配 1 自行邀请
+        if (isMatch.value == 0) {
+          Get.off(() => MatchGroup(), arguments: {
+            'project_id': projectId,
+            'frequency': matchFrequency
+          });
+        } else {
+          Get.off(() => InviteGroup(), arguments: {
+            'project_id': projectId,
+            'frequency': matchFrequency
+          });
+        }
+      } else {
+        // 不加入互助小组
+        print('请求成功,服务端返回:$res');
+        if (res['status'] == 0) {
+          Get.back();
+          final ProjectController p = Get.find();
+          p.getInfo();
+          Get.snackbar('提示', '计划修改成功');
+        }
+      }
+    }, error: (error) {
+      Get.snackbar('提示', error);
+      // print(error);
+    });
+  }
+
+  alterInit() {
+    final Project? project = Get.arguments;
+    if (project == null) return;
+    // print(project.stageList);
+    imgUrl.value = project.projectImg;
+    projectTitle.value = project.projectTitle;
+    projectId = project.projectId;
+    groupId = project.groupId;
+    isDivide.value = project.stageList[0].isEmpty ? 1 : 0;
+    isJoin.value = project.groupId != null ? 0 : 1;
+    if (isDivide.value == 0) {
+      stageList.value = project.stageList;
+    } else {
+      endTime.value = project.endTime.substring(0, 10);
+      singleTime.value = project.singleTime;
+      frequency.value = project.frequency;
+      reminderTime.value = project.remainderTime;
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    stageList.add({});
+    alterInit();
+    // print(groupId);
+    // print(projectId);
   }
 }

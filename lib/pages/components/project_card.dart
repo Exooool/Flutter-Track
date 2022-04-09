@@ -19,11 +19,11 @@ class ProjectCard extends StatelessWidget {
   late String stage;
   late int nowStage;
   late int projectLength;
-  late Function? delete;
-  late Function? change;
+  final Function? delete;
+  final Function? alter;
 
   ProjectCard(this.project,
-      {Key? key, required this.type, this.delete, this.change})
+      {Key? key, required this.type, this.delete, this.alter})
       : super(key: key);
 
   // 设置对外或对自己可见
@@ -191,8 +191,8 @@ class ProjectCard extends StatelessWidget {
                           height: 72.r,
                           width: 72.r,
                           onTap: () {
-                            change!(project.projectId);
                             Get.back();
+                            alter!(project);
                           },
                           margin: EdgeInsets.only(bottom: 8.h),
                           widget: Center(
@@ -418,9 +418,9 @@ class ProjectCard extends StatelessWidget {
                   radius: 36.r,
                   lineWidth: 10.r,
                   percent:
-                      (project.studyTime.length ~/ projectLength).toDouble(),
+                      (project.studyTime.length / projectLength).toDouble(),
                   center: Text(
-                    "${(project.studyTime.length ~/ projectLength) * 100}%",
+                    "${(project.studyTime.length * 100 ~/ projectLength)}%",
                     style: TextStyle(
                       fontSize: MyFontSize.font16,
                       color: MyColor.fontBlack,

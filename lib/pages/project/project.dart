@@ -214,13 +214,16 @@ class _ProjectPageState extends State<ProjectPage>
 
                                         c.getProject();
                                         c.getGroup();
-                                        Get.back();
+
                                         Get.snackbar('提示', '删除成功');
                                       }, error: (error) {
                                         Get.snackbar('提示', error);
                                       });
                                     },
-                                    change: () {},
+                                    alter: (Project project) {
+                                      Get.toNamed('/add_project',
+                                          arguments: project);
+                                    },
                                     type: 0,
                                   );
                                 }),
@@ -277,13 +280,16 @@ class _ProjectPageState extends State<ProjectPage>
 
                                         c.getProject();
                                         c.getGroup();
-                                        Get.back();
+
                                         Get.snackbar('提示', '删除成功');
                                       }, error: (error) {
                                         Get.snackbar('提示', error);
                                       });
                                     },
-                                    change: () {},
+                                    alter: (Project project) {
+                                      Get.toNamed('/add_project',
+                                          arguments: project);
+                                    },
                                     type: 0,
                                   );
                                 }),

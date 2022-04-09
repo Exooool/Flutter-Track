@@ -189,7 +189,7 @@ class MessagePage extends StatelessWidget {
                     Visibility(
                       visible: subtitle != '',
                       child: SizedBox(
-                        width: 240.w,
+                        width: 200.w,
                         child: Text(subtitle,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
