@@ -6,14 +6,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 import 'package:flutter_track/pages/components/blur_widget.dart';
 
-import 'package:flutter_track/pages/components/custom_button.dart';
 import 'package:flutter_track/pages/components/custom_dialog.dart';
 import 'package:flutter_track/pages/components/public_card.dart';
 import 'package:flutter_track/pages/project/component/single_time.dart';
-import 'package:flutter_track/pages/project/invite_group.dart';
-import 'package:flutter_track/pages/project/match_group.dart';
-import 'package:flutter_track/pages/project/project_controller.dart';
-import 'package:flutter_track/service/service.dart';
+
 import 'package:get/get.dart';
 
 import 'package:toggle_switch/toggle_switch.dart';
@@ -149,7 +145,7 @@ class AddProject extends StatelessWidget {
         Stack(
           children: [
             Container(
-              margin: EdgeInsets.only(bottom: 12.h),
+              // margin: EdgeInsets.only(bottom: 12.h),
               alignment: Alignment.center,
               child: Text(
                 c.stageCH[stage],

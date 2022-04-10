@@ -77,7 +77,7 @@ class InviteGroup extends StatelessWidget {
               print('被邀请人：$list');
 
               if (list.isEmpty) {
-                Get.snackbar('提示', '你没有邀请任何人');
+                Get.snackbar('提示', '您没有邀请任何人');
                 Get.back();
                 p.getInfo();
                 return;

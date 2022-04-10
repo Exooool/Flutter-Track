@@ -217,7 +217,7 @@ class InformationPage extends StatelessWidget {
 
                                   c.getInformation();
                                 } else {
-                                  Get.snackbar('提示', '你已经签到过了');
+                                  Get.snackbar('提示', '您已经签到过了');
                                 }
                               }),
                         )
@@ -335,7 +335,7 @@ class InformationPage extends StatelessWidget {
                             child: c.averDayStudyTime.value == 0
                                 ? Center(
                                     child: Text(
-                                      '你还没有学习过，快去创建一个计划吧',
+                                      '您还没有学习过，快去创建一个计划吧',
                                       style: TextStyle(
                                           fontFamily:
                                               MyFontFamily.pingfangMedium,

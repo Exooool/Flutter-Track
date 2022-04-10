@@ -58,8 +58,8 @@ class ChartPage extends StatelessWidget {
                   height: 330.h,
                   width: 318.w,
                   title: '提示',
-                  content: '你确定要加入该互助小组嘛？',
-                  subContent: '加入即会为你自动创建一个计划！',
+                  content: '您确定要加入该互助小组嘛？',
+                  subContent: '加入即会为您自动创建一个计划！',
                   onCancel: () {
                     Get.back();
                   },
@@ -70,7 +70,7 @@ class ChartPage extends StatelessWidget {
                       print(res);
                       Get.back();
                       if (res['status'] == 2) {
-                        Get.snackbar('提示', '你已经加入该互助小组，请不要重复点击');
+                        Get.snackbar('提示', '您已经加入该互助小组，请不要重复点击');
                       } else if (res['status'] == 1) {
                         Get.snackbar('提示', '该互助小组不存在');
                       } else if (res['status'] == 3) {
@@ -213,7 +213,7 @@ class ChartPage extends StatelessWidget {
                     onSubmitted: (value) => submit(),
                     decoration: InputDecoration.collapsed(
                       enabled: true,
-                      hintText: '请输入你的内容',
+                      hintText: '请输入您的内容',
                       hintStyle: TextStyle(
                           fontSize: MyFontSize.font16,
                           color: MyColor.fontBlackO2),

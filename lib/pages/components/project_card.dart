@@ -301,7 +301,7 @@ class ProjectCard extends StatelessWidget {
                 height: 330.h,
                 width: 318.w,
                 title: '提示',
-                content: '还没有到你规定的学习时间！',
+                content: '还没有到您规定的学习时间！',
                 subContent: '还不能进行学习！',
                 onCancel: () {
                   Get.back();
