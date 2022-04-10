@@ -51,19 +51,14 @@ class AddProject extends StatelessWidget {
                           child: component,
                         )
                       : TextField(
-                          controller: TextEditingController.fromValue(
-                              TextEditingValue(
-                                  // 设置内容
-                                  text: value ?? '',
-                                  // 保持光标在最后
-                                  selection: TextSelection.fromPosition(
-                                      TextPosition(
-                                          affinity: TextAffinity.downstream,
-                                          offset: value == null
-                                              ? 0
-                                              : value.length)))),
-                          onChanged: (value) {
-                            onChanged!(value);
+                          controller:
+                              TextEditingController.fromValue(TextEditingValue(
+                            // 设置内容
+                            text: value ?? '',
+                            // 保持光标在最后
+                          )),
+                          onChanged: (v) {
+                            onChanged!(v);
                           },
                           style: TextStyle(
                               fontSize: MyFontSize.font16,
@@ -335,6 +330,7 @@ class AddProject extends StatelessWidget {
                       child: Column(
                         children: <Widget>[
                           ListView.builder(
+                              padding: EdgeInsets.zero,
                               shrinkWrap: true, //范围内进行包裹（内容多高ListView就多高）
                               physics:
                                   const NeverScrollableScrollPhysics(), //禁止滚动
