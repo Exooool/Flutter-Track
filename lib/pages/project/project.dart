@@ -334,9 +334,11 @@ class _ProjectPageState extends State<ProjectPage>
                             children: <Widget>[
                           c.groupListMatched.isEmpty
                               ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
+                                    SizedBox(
+                                      height: 280.h,
+                                    ),
                                     Text('暂无互助小组',
                                         style: TextStyle(
                                             fontSize: MyFontSize.font16,
@@ -372,9 +374,11 @@ class _ProjectPageState extends State<ProjectPage>
                                   }),
                           c.groupListMatching.isEmpty
                               ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
+                                    SizedBox(
+                                      height: 280.h,
+                                    ),
                                     Text('暂无互助小组',
                                         style: TextStyle(
                                             fontSize: MyFontSize.font16,
