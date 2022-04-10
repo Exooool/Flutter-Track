@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_track/pages/components/custom_checkbox.dart';
 import 'package:flutter_track/pages/components/custom_dialog.dart';
 
 import 'package:flutter_track/pages/components/public_card.dart';
+import 'package:flutter_track/pages/user/user_model.dart';
 import 'package:get/get.dart';
 
 import 'information_controller.dart';
@@ -21,15 +24,9 @@ class InformationPage extends StatelessWidget {
 
   InformationPage({Key? key}) : super(key: key);
 
-  // 排行榜数据
-  final rankingListData = [
-    {
-      'userName',
-    }
-  ];
-
   // 排行榜
-  Widget rankingList(int index, String img, String userName, String school) {
+  Widget rankingList(
+      int index, int userId, String img, String userName, String school) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       child: Row(
@@ -42,13 +39,21 @@ class InformationPage extends StatelessWidget {
                 child: Text('$index.', style: MyFontStyle.rankTitle),
               ),
               SizedBox(width: 22.w),
-              ClipOval(
-                child: img == ''
-                    ? Image.asset('lib/assets/images/defaultUserImg.png',
-                        height: 36.r, width: 36.r, fit: BoxFit.cover)
-                    : Image.network(img,
-                        height: 36.r, width: 36.r, fit: BoxFit.cover),
-              ),
+              InkWell(
+                  onTap: () {
+                    print(userId);
+                    if (userId != c.user.value.userId) {
+                      Get.to(() => UserModelPage(),
+                          arguments: {'query_user_id': userId});
+                    }
+                  },
+                  child: ClipOval(
+                    child: img == ''
+                        ? Image.asset('lib/assets/images/defaultUserImg.png',
+                            height: 36.r, width: 36.r, fit: BoxFit.cover)
+                        : Image.network(img,
+                            height: 36.r, width: 36.r, fit: BoxFit.cover),
+                  )),
               SizedBox(width: 12.w),
               Text(userName, style: MyFontStyle.rankUser)
             ],
@@ -372,6 +377,7 @@ class InformationPage extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 return rankingList(
                                     index + 1,
+                                    c.rankList[index]['user_id'],
                                     c.rankList[index]['user_img'],
                                     c.rankList[index]['user_name'],
                                     c.rankList[index]['college']);
