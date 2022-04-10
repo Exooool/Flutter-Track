@@ -304,6 +304,7 @@ class AddProjectController extends GetxController {
         }
       }
     }, error: (error) {
+      Get.back();
       Get.snackbar('提示', error);
       // print(error);
     });

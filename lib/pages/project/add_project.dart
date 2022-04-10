@@ -469,11 +469,11 @@ class AddProject extends StatelessWidget {
                             ),
                           ));
 
-                          // 添加计划
-
                           if (c.projectId == null) {
+                            // 添加计划
                             c.addProject(data, matchFrequency);
                           } else {
+                            // 修改计划
                             Get.dialog(
                               CustomDialog(
                                 height: 330.h,
@@ -485,6 +485,7 @@ class AddProject extends StatelessWidget {
                                   Get.back();
                                 },
                                 onConfirm: () {
+                                  Get.back();
                                   c.alterProject(data, matchFrequency);
                                 },
                               ),
