@@ -51,12 +51,16 @@ class AddProject extends StatelessWidget {
                           child: component,
                         )
                       : TextField(
-                          controller:
-                              TextEditingController.fromValue(TextEditingValue(
-                            // 设置内容
-                            text: value ?? '',
-                            // 保持光标在最后
-                          )),
+                          controller: TextEditingController.fromValue(
+                              TextEditingValue(
+                                  // 设置内容
+                                  text: value ?? '',
+                                  // 保持光标在最后
+                                  selection: TextSelection.fromPosition(
+                                      TextPosition(
+                                          offset: value == null
+                                              ? 0
+                                              : value.length)))),
                           onChanged: (v) {
                             onChanged!(v);
                           },
@@ -140,7 +144,7 @@ class AddProject extends StatelessWidget {
         Stack(
           children: [
             Container(
-              // margin: EdgeInsets.only(bottom: 12.h),
+              margin: EdgeInsets.only(bottom: 12.h),
               alignment: Alignment.center,
               child: Text(
                 c.stageCH[stage],
