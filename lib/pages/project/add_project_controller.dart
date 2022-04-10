@@ -31,7 +31,7 @@ class AddProjectController extends GetxController {
   // 匹配方式
   var isMatch = 0.obs;
   // 标题
-  var projectTitle = ''.obs;
+  var projectTitle = '';
   // 频率
   var frequency = {}.obs;
   // 提醒时间 9没有值 表示没有填写
@@ -190,7 +190,7 @@ class AddProjectController extends GetxController {
 
   bool checkInfo() {
     bool flag = true;
-    if (projectTitle.value == '') {
+    if (projectTitle == '') {
       flag = false;
     } else if (isDivide.value == 0) {
       // 判断分阶段的情况
@@ -315,7 +315,7 @@ class AddProjectController extends GetxController {
     if (project == null) return;
     // print(project.stageList);
     imgUrl.value = project.projectImg;
-    projectTitle.value = project.projectTitle;
+    projectTitle = project.projectTitle;
     projectId = project.projectId;
     groupId = project.groupId;
     isDivide.value = project.stageList[0].isEmpty ? 1 : 0;

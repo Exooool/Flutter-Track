@@ -51,6 +51,7 @@ class AddProject extends StatelessWidget {
                           child: component,
                         )
                       : TextField(
+                          keyboardType: TextInputType.text,
                           controller: TextEditingController.fromValue(
                               TextEditingValue(
                                   // 设置内容
@@ -304,8 +305,8 @@ class AddProject extends StatelessWidget {
                   ],
                 ),
                 // 列表
-                formInput('计划名称', value: c.projectTitle.value, onChanged: (e) {
-                  c.projectTitle.value = e;
+                formInput('计划名称', value: c.projectTitle, onChanged: (e) {
+                  c.projectTitle = e;
                 }),
                 formInput('分阶段完成',
                     component: formSwitch('是', '否', c.isDivide.value, (index) {
@@ -429,7 +430,7 @@ class AddProject extends StatelessWidget {
                           'project_img': c.imgUrl.value,
                           'end_time': endTime,
                           'single_time': jsonEncode(c.singleTime),
-                          'project_title': c.projectTitle.value,
+                          'project_title': c.projectTitle,
                           'frequency': jsonEncode(c.frequency),
                           'remainder_time': c.reminderTime.value,
                           'stage_list': jsonEncode(c.stageList)
@@ -450,20 +451,22 @@ class AddProject extends StatelessWidget {
                           print(matchFrequency);
 
                           // 加载动画
-                          Get.dialog(Material(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SpinKitFoldingCube(
-                                  color: Colors.white,
-                                  size: 50.0,
+                          Get.dialog(
+                              Material(
+                                color: Colors.transparent,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SpinKitFoldingCube(
+                                      color: Colors.white,
+                                      size: 50.0,
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    const Text('加载中')
+                                  ],
                                 ),
-                                SizedBox(height: 10.h),
-                                const Text('加载中')
-                              ],
-                            ),
-                          ));
+                              ),
+                              barrierColor: Colors.transparent);
 
                           if (c.projectId == null) {
                             // 添加计划
@@ -478,6 +481,7 @@ class AddProject extends StatelessWidget {
                                 content: '修改计划会重置所有数据！',
                                 subContent: '如果有互助小组会退出原小组！',
                                 onCancel: () {
+                                  Get.back();
                                   Get.back();
                                 },
                                 onConfirm: () {
