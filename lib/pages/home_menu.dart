@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_track/common/style/my_style.dart';
 
 import 'package:flutter_track/pages/discover/discover.dart';
+import 'package:flutter_track/pages/information/information_controller.dart';
 import 'package:flutter_track/pages/project/project_controller.dart';
 import 'package:flutter_track/pages/user/user.dart';
 import 'package:flutter_track/pages/project/project.dart';
@@ -58,6 +59,9 @@ class _HomeMenuState extends State<HomeMenu> {
             if (p.initialized) {
               p.getInfo();
             }
+          } else if (index == 2) {
+            InformationController i = Get.find();
+            i.getInformation();
           }
         },
         child: Padding(
