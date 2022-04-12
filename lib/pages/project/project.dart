@@ -114,6 +114,14 @@ class _ProjectPageState extends State<ProjectPage>
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQueryData.fromWindow(window).size.width,
+            maxHeight: MediaQueryData.fromWindow(window).size.height),
+        designSize: const Size(414, 896),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     // final JPush jpush = JPush();
     // jpush.applyPushAuthority();
     // jpush.setup(
@@ -171,7 +179,7 @@ class _ProjectPageState extends State<ProjectPage>
                     ListView(
                       physics: const BouncingScrollPhysics(),
                       padding: EdgeInsets.only(
-                          top: 35.h, left: 24.w, right: 24.w, bottom: 150.h),
+                          top: 20.h, left: 24.w, right: 24.w, bottom: 150.h),
                       children: [
                         Center(
                           child: PublicCard(
@@ -302,7 +310,8 @@ class _ProjectPageState extends State<ProjectPage>
                 // 互助小组
                 Column(
                   children: <Widget>[
-                    SizedBox(
+                    Container(
+                      padding: EdgeInsets.only(top: 20.h),
                       height: 60.h,
                       child: TabBar(
                         isScrollable: true,

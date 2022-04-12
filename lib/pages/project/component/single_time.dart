@@ -121,25 +121,33 @@ class _SingleTimeState extends State<SingleTime> {
             height: 36.h,
             width: 76.w,
             radius: 90.r,
-            widget: TextField(
-                textAlign: TextAlign.center,
-                maxLength: 4,
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  if (value != '') {
-                    customTime = int.parse(value);
-                  } else {
-                    customTime = 0;
-                  }
-                },
-                // 限制输入为数字
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                style: TextStyle(
-                    fontSize: MyFontSize.font16,
-                    fontWeight: FontWeight.w500,
-                    foreground: MyFontStyle.textlinearForeground),
-                decoration: const InputDecoration(
-                    border: InputBorder.none, counterText: '')),
+            widget: Center(
+              child: TextField(
+                  onTap: () {
+                    singleTime = 5;
+                    setState(() {});
+                  },
+                  textAlign: TextAlign.center,
+                  maxLength: 4,
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    if (value != '') {
+                      customTime = int.parse(value);
+                    } else {
+                      customTime = 0;
+                    }
+                  },
+                  // 限制输入为数字
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  style: TextStyle(
+                      fontSize: MyFontSize.font16,
+                      fontWeight: FontWeight.w500,
+                      foreground: MyFontStyle.textlinearForeground),
+                  decoration: const InputDecoration(
+                      isCollapsed: true,
+                      border: InputBorder.none,
+                      counterText: '')),
+            ),
           ),
         ),
         Center(
