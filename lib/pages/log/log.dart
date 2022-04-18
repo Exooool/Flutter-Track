@@ -264,7 +264,6 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage>
                         if (GetUtils.isPhoneNumber(_number) &&
                             _number.length == 11) {
                           print(_number);
-                          // Get.toNamed('/verify');
 
                           Get.dialog(Material(
                             color: Colors.transparent,
@@ -284,12 +283,13 @@ class _RegPageAndLogPageState extends State<RegPageAndLogPage>
                             ),
                           ));
 
+                          // 集成极光API的多个参数
                           var data = {
                             "mobile": _number,
                             "sign_id": "",
                             "temp_id": "1"
                           };
-
+                          // 访问极光API 获取手机验证码
                           DioUtil().logPost('https://api.sms.jpush.cn/v1/codes',
                               data: data, success: (res) {
                             print(res);

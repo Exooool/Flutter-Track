@@ -35,7 +35,7 @@ class InformationPage extends StatelessWidget {
           Row(
             children: [
               SizedBox(
-                width: 25.w,
+                width: 30.w,
                 child: Text('$index.', style: MyFontStyle.rankTitle),
               ),
               SizedBox(width: 22.w),
@@ -132,7 +132,8 @@ class InformationPage extends StatelessWidget {
                 )
               : ListView(
                   physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.only(left: 24.w, right: 24.w),
+                  padding:
+                      EdgeInsets.only(left: 24.w, right: 24.w, bottom: 50.h),
                   children: <Widget>[
                     // 等级显示及签到按钮
                     Row(

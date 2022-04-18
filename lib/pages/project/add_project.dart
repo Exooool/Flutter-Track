@@ -423,9 +423,7 @@ class AddProject extends StatelessWidget {
                         bool flag = c.checkInfo();
                         String endTime = c.endTime.value;
 
-                        // 进行数据验证
-
-                        // 统一
+                        // 统一数据
                         var data = {
                           'project_img': c.imgUrl.value,
                           'end_time': endTime,

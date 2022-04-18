@@ -81,7 +81,7 @@ class FocusList extends StatelessWidget {
                 padding: EdgeInsets.only(
                     left: 35.w, right: 35.w, top: 10.h, bottom: 10.h),
                 widget: Text(
-                  '取关',
+                  c.type == 0 ? '取关' : '回关',
                   style: TextStyle(
                       fontSize: MyFontSize.font16, color: MyColor.fontWhite),
                 )),

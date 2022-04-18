@@ -453,7 +453,7 @@ class _SexSelectorState extends State<SexSelector> {
         body: Stack(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 220.h),
+              padding: EdgeInsets.only(top: 160.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
