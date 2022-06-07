@@ -227,14 +227,14 @@ class MessagePage extends StatelessWidget {
               width: 25.r,
             ),
           ),
-          ending: InkWell(
-            onTap: () {},
-            child: Image.asset(
-              'lib/assets/icons/Trash.png',
-              height: 25.r,
-              width: 25.r,
-            ),
-          ),
+          // ending: InkWell(
+          //   onTap: () {},
+          //   child: Image.asset(
+          //     'lib/assets/icons/Trash.png',
+          //     height: 25.r,
+          //     width: 25.r,
+          //   ),
+          // ),
         ),
         body: GetBuilder<MessagePageController>(builder: (_) {
           return ListView(

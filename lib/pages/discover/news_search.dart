@@ -230,43 +230,43 @@ class NewsSearch extends StatelessWidget {
                     fontFamily: MyFontFamily.pingfangMedium)),
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(bottom: 12.h),
-          child: Text('建议搜索',
-              style: TextStyle(
-                  fontSize: MyFontSize.font16,
-                  fontFamily: MyFontFamily.pingfangSemibold)),
-          alignment: Alignment.centerLeft,
-        ),
-        GridView.count(
-          shrinkWrap: true,
-          crossAxisCount: 2,
-          childAspectRatio: 6.0,
-          padding: const EdgeInsets.all(0),
-          children: <Widget>[
-            suggestionItem('在校时期养成学习好习...'),
-            suggestionItem('浅谈职业目标的重要性'),
-            suggestionItem('大学生拖延症现象的学...'),
-            suggestionItem('如何有效坚持自己的目标'),
-            suggestionItem('有关提高学习能力的电影'),
-            suggestionItem('兼职与投入学习的利弊'),
-            suggestionItem('读完这本《学习高手》...'),
-            suggestionItem('疫情防范的正确方式'),
-          ],
-        ),
-        SizedBox(height: 24.h),
-        PublicCard(
-            radius: 90.r,
-            onTap: () {
-              Get.snackbar('提示', '暂不支持');
-            },
-            padding:
-                EdgeInsets.only(left: 12.w, right: 12.w, top: 5.h, bottom: 5.h),
-            widget: Text('换一换',
-                style: TextStyle(
-                    fontSize: MyFontSize.font12,
-                    color: MyColor.fontGrey,
-                    fontFamily: MyFontFamily.pingfangRegular)))
+        // Container(
+        //   margin: EdgeInsets.only(bottom: 12.h),
+        //   child: Text('建议搜索',
+        //       style: TextStyle(
+        //           fontSize: MyFontSize.font16,
+        //           fontFamily: MyFontFamily.pingfangSemibold)),
+        //   alignment: Alignment.centerLeft,
+        // ),
+        // GridView.count(
+        //   shrinkWrap: true,
+        //   crossAxisCount: 2,
+        //   childAspectRatio: 6.0,
+        //   padding: const EdgeInsets.all(0),
+        //   children: <Widget>[
+        //     suggestionItem('在校时期养成学习好习...'),
+        //     suggestionItem('浅谈职业目标的重要性'),
+        //     suggestionItem('大学生拖延症现象的学...'),
+        //     suggestionItem('如何有效坚持自己的目标'),
+        //     suggestionItem('有关提高学习能力的电影'),
+        //     suggestionItem('兼职与投入学习的利弊'),
+        //     suggestionItem('读完这本《学习高手》...'),
+        //     suggestionItem('疫情防范的正确方式'),
+        //   ],
+        // ),
+        // SizedBox(height: 24.h),
+        // PublicCard(
+        //     radius: 90.r,
+        //     onTap: () {
+        //       Get.snackbar('提示', '暂不支持');
+        //     },
+        //     padding:
+        //         EdgeInsets.only(left: 12.w, right: 12.w, top: 5.h, bottom: 5.h),
+        //     widget: Text('换一换',
+        //         style: TextStyle(
+        //             fontSize: MyFontSize.font12,
+        //             color: MyColor.fontGrey,
+        //             fontFamily: MyFontFamily.pingfangRegular)))
       ],
     );
   }
